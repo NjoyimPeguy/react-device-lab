@@ -20,7 +20,6 @@ const requiredFiles = [
   "docs/images/device-lab-dark.png",
   "docs/images/device-lab-light.png",
   "docs/images/device-lab-narrow.png",
-  "docs/security.md",
   "docs/theming.md",
 ];
 
@@ -34,7 +33,6 @@ const requiredReadmeLinks = [
   "docs/frameworks.md",
   "docs/iframe-and-bridge.md",
   "RELEASING.md",
-  "docs/security.md",
   "docs/theming.md",
   "CONTRIBUTING.md",
   "LICENSE",
@@ -43,6 +41,21 @@ const requiredReadmeLinks = [
 
 for (const path of requiredFiles) {
   await access(resolve(root, path));
+}
+
+try {
+  await access(resolve(root, "docs/security.md"));
+  throw new Error("Security guidance must live only in root SECURITY.md.");
+} catch (error) {
+  if (
+    error instanceof Error &&
+    "code" in error &&
+    error.code === "ENOENT"
+  ) {
+    // Expected: root SECURITY.md is the single canonical security document.
+  } else {
+    throw error;
+  }
 }
 
 const readme = await readFile(resolve(root, "README.md"), "utf8");

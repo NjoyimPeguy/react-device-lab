@@ -63,7 +63,7 @@ export function PreviewRoute() {
 
 The target URL must permit framing. For production targets, configure a narrow
 Content Security Policy `frame-ancestors` allow-list and review the
-[iframe security guide](docs/security.md).
+[security policy and iframe guidance](SECURITY.md).
 
 ## Destinations and controlled state
 
@@ -126,7 +126,7 @@ Portal component closures still run in the host JavaScript realm. Read
 - [Accessibility](docs/accessibility.md)
 - [Vite, Next.js, and SSR integration](docs/frameworks.md)
 - [Browser support](docs/browser-support.md)
-- [Iframe security](docs/security.md) and [security policy](SECURITY.md)
+- [Security policy and iframe guidance](SECURITY.md)
 - [Device data and update policy](docs/device-data.md)
 - [Device skins and visual fidelity](docs/device-frames.md)
 - [Release process](RELEASING.md)
