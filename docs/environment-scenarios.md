@@ -23,18 +23,43 @@ Integrated documents receive product-neutral `data-rdl-*` attributes,
 the same configuration only after installing the bridge.
 
 ```css
+:root {
+  --app-safe-top: var(
+    --rdl-safe-area-inset-top,
+    env(safe-area-inset-top, 0px)
+  );
+  --app-safe-right: var(
+    --rdl-safe-area-inset-right,
+    env(safe-area-inset-right, 0px)
+  );
+  --app-safe-bottom: var(
+    --rdl-safe-area-inset-bottom,
+    env(safe-area-inset-bottom, 0px)
+  );
+  --app-safe-left: var(
+    --rdl-safe-area-inset-left,
+    env(safe-area-inset-left, 0px)
+  );
+}
+
 .page {
   padding:
-    var(--rdl-safe-area-inset-top, 0)
-    var(--rdl-safe-area-inset-right, 0)
-    var(--rdl-safe-area-inset-bottom, 0)
-    var(--rdl-safe-area-inset-left, 0);
+    var(--app-safe-top)
+    var(--app-safe-right)
+    var(--app-safe-bottom)
+    var(--app-safe-left);
 }
 
 html[data-rdl-virtual-keyboard="true"] .composer {
   margin-bottom: var(--rdl-virtual-keyboard-height, 0);
 }
 ```
+
+Keep edge-to-edge backgrounds on the full viewport and apply these insets to
+foreground content and fixed controls. React Device Lab intentionally does not
+shrink the iframe or add padding to an arbitrary target document: either action
+would change application layout without its consent, and shrinking the iframe
+would make the tested viewport dimensions inaccurate.
 
 These values are useful for deterministic component states and layout
 occlusion testing. The package also hides scrollbar chrome in integrated touch

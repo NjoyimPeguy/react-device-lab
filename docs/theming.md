@@ -10,6 +10,7 @@ affected:
 ```css
 .preview-host {
   --rdl-accent: #6d4aff;
+  --rdl-accent-text: #5635e7;
   --rdl-accent-contrast: #ffffff;
   --rdl-canvas: #f7f5fb;
   --rdl-stage: #f1eef8;
@@ -39,6 +40,12 @@ Keep focus contrast and target sizes intact when customizing. Package variables
 style the workspace and authored shell; they do not inject a product theme into
 a cross-origin target. Use the environment color-scheme scenario or the target’s
 own theme API for application content.
+
+Use `--rdl-accent` for filled controls and strong decorative marks. Set
+`--rdl-accent-text` separately for small text on package surfaces; it must retain
+at least 4.5:1 contrast in both themes. `--rdl-text-muted` is also used for small
+metadata, so test it against both `--rdl-surface` and
+`--rdl-surface-raised`.
 
 `--rdl-stage`, `--rdl-frame-outline`, and `--rdl-frame-shadow-color` work
 together to preserve the device silhouette. Keep the stage visibly separate

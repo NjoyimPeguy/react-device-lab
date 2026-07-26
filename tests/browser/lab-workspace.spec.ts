@@ -102,6 +102,73 @@ test.describe("lab workspace layout and keyboard access", () => {
     ).toBe(true);
   });
 
+  test("generic demo keeps interactive content inside configured safe areas", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(
+      "http://127.0.0.1:4175/?theme=light&device=iphone-17-pro",
+    );
+    const iframe = page.locator(
+      'iframe[title="iPhone 17 Pro application preview"]',
+    );
+    await expect(iframe).toBeVisible();
+
+    const clearance = await iframe.evaluate((element) => {
+      if (!(element instanceof HTMLIFrameElement)) {
+        throw new TypeError("Expected a preview iframe.");
+      }
+      const targetWindow = element.contentWindow;
+      const targetDocument = element.contentDocument;
+      const root = targetDocument?.documentElement;
+      const brand = targetDocument?.querySelector(".brand");
+      const headerAction = targetDocument?.querySelector("header button");
+      const navigationActions = [
+        ...(targetDocument?.querySelectorAll("nav button") ?? []),
+      ];
+      if (
+        !targetWindow ||
+        !root ||
+        !brand ||
+        !headerAction ||
+        navigationActions.length === 0
+      ) {
+        throw new Error("Expected the integrated demo shell.");
+      }
+      const rootStyle = targetWindow.getComputedStyle(root);
+      const topInset = Number.parseFloat(
+        rootStyle.getPropertyValue("--rdl-safe-area-inset-top"),
+      );
+      const bottomInset = Number.parseFloat(
+        rootStyle.getPropertyValue("--rdl-safe-area-inset-bottom"),
+      );
+
+      return {
+        topInset,
+        bottomInset,
+        foregroundTop: Math.min(
+          brand.getBoundingClientRect().top,
+          headerAction.getBoundingClientRect().top,
+        ),
+        navigationBottom: Math.max(
+          ...navigationActions.map(
+            (action) => action.getBoundingClientRect().bottom,
+          ),
+        ),
+        viewportHeight: targetWindow.innerHeight,
+      };
+    });
+
+    expect(clearance.topInset).toBeGreaterThan(0);
+    expect(clearance.bottomInset).toBeGreaterThan(0);
+    expect(clearance.foregroundTop).toBeGreaterThanOrEqual(
+      clearance.topInset,
+    );
+    expect(clearance.navigationBottom).toBeLessThanOrEqual(
+      clearance.viewportHeight - clearance.bottomInset,
+    );
+  });
+
   test("keyboard controls expose visible focus and operate native selection", async ({
     page,
   }) => {

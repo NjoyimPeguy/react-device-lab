@@ -371,7 +371,7 @@ export function PreviewConfigurationPanel({
           </select>
         </label>
         <fieldset className="rdl-scenario-grid">
-          <legend>Safe-area visualization insets</legend>
+          <legend>Safe-area insets</legend>
           {(["top", "right", "bottom", "left"] as const).map((edge) => (
             <label className="rdl-field" key={edge}>
               {edge[0]?.toLocaleUpperCase("en")}

@@ -1,6 +1,7 @@
 :root {
   color-scheme: light dark;
   --rdl-accent: #3d5afe;
+  --rdl-accent-text: #2e3ad1;
   --rdl-accent-contrast: #ffffff;
   --rdl-canvas: oklch(0.992 0.002 255);
   --rdl-stage: oklch(0.946 0.004 260);
@@ -8,7 +9,7 @@
   --rdl-surface-raised: oklch(0.955 0.005 260);
   --rdl-border: rgb(0 0 0 / 10%);
   --rdl-text: #0b1524;
-  --rdl-text-muted: #6b7280;
+  --rdl-text-muted: #5f6877;
   --rdl-focus: #0b1524;
   --rdl-danger: #b4524b;
   --rdl-frame-outline: rgb(11 21 36 / 20%);
@@ -24,6 +25,7 @@
 [data-rdl-theme="dark"] {
   color-scheme: dark;
   --rdl-accent: #3d5afe;
+  --rdl-accent-text: #93a4ff;
   --rdl-accent-contrast: #ffffff;
   --rdl-canvas: oklch(0.146 0.007 280);
   --rdl-stage: oklch(0.233 0.01 280);
@@ -31,7 +33,7 @@
   --rdl-surface-raised: oklch(0.204 0.009 280);
   --rdl-border: rgb(255 255 255 / 11%);
   --rdl-text: #f4f6fb;
-  --rdl-text-muted: #7a8598;
+  --rdl-text-muted: #8b95a8;
   --rdl-focus: #f4f6fb;
   --rdl-danger: #de8b85;
   --rdl-frame-outline: rgb(255 255 255 / 34%);
@@ -474,7 +476,7 @@
 }
 
 .rdl-metadata__title span {
-  color: var(--rdl-accent);
+  color: var(--rdl-accent-text);
   font-size: 0.6875rem;
   font-weight: 750;
   text-transform: capitalize;
