@@ -6,6 +6,7 @@ import { createPreviewEnvironment } from "../environment/configuration.js";
 import { useControllableState } from "../hooks/useControllableState.js";
 import type {
   DeviceCategory,
+  DeviceOrientation,
   DevicePreset,
   ViewportDimensions,
 } from "../types/device.js";
@@ -73,7 +74,10 @@ function createCustomPreset(
   };
 }
 
-function suggestedEnvironment(device: DevicePreset): PreviewEnvironment {
+function suggestedEnvironment(
+  device: DevicePreset,
+  orientation: DeviceOrientation,
+): PreviewEnvironment {
   const top =
     device.frame.cutout === "dynamic-island"
       ? 59
@@ -92,6 +96,11 @@ function suggestedEnvironment(device: DevicePreset): PreviewEnvironment {
       : device.input.touch
         ? 24
         : 0;
+  const safeArea =
+    orientation === "landscape" &&
+    (device.category === "phone" || device.category === "foldable")
+      ? { top: 0, right: top, bottom, left: top }
+      : { top, right: 0, bottom, left: 0 };
   return createPreviewEnvironment({
     pointer: device.input.pointer,
     hover: device.input.hover,
@@ -100,12 +109,24 @@ function suggestedEnvironment(device: DevicePreset): PreviewEnvironment {
       geolocation: "prompt",
       notifications: "prompt",
     },
-    safeArea: { top, right: 0, bottom, left: 0 },
+    safeArea,
     virtualKeyboard: {
       visible: false,
       height: device.input.touch ? 300 : 0,
     },
   });
+}
+
+function sameSafeArea(
+  left: PreviewEnvironment["safeArea"],
+  right: PreviewEnvironment["safeArea"],
+): boolean {
+  return (
+    left.top === right.top &&
+    left.right === right.right &&
+    left.bottom === right.bottom &&
+    left.left === right.left
+  );
 }
 
 function findDevice(
@@ -176,7 +197,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     useControllableState<PreviewEnvironment>({
       value: props.environment,
       defaultValue: (() => {
-        const suggested = suggestedEnvironment(initialDevice);
+        const suggested = suggestedEnvironment(initialDevice, orientation);
         return createPreviewEnvironment({
           ...suggested,
           ...props.defaultEnvironment,
@@ -200,22 +221,40 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       })(),
       onChange: props.onEnvironmentChange,
     });
-  const automaticEnvironmentDeviceId = useRef(initialDevice.id);
+  const automaticEnvironmentProfile = useRef(
+    `${initialDevice.id}:${orientation}`,
+  );
+  const automaticSafeArea = useRef<
+    PreviewEnvironment["safeArea"] | null
+  >(
+    props.defaultEnvironment?.safeArea === undefined
+      ? suggestedEnvironment(initialDevice, orientation).safeArea
+      : null,
+  );
   useEffect(() => {
+    const profile = `${selectedDevice.id}:${orientation}`;
     if (
       props.environment !== undefined ||
-      automaticEnvironmentDeviceId.current === selectedDevice.id
+      automaticEnvironmentProfile.current === profile
     ) {
       return;
     }
-    automaticEnvironmentDeviceId.current = selectedDevice.id;
-    const suggested = suggestedEnvironment(selectedDevice);
+    automaticEnvironmentProfile.current = profile;
+    const suggested = suggestedEnvironment(selectedDevice, orientation);
+    const useSuggestedSafeArea =
+      automaticSafeArea.current !== null &&
+      sameSafeArea(environment.safeArea, automaticSafeArea.current);
+    automaticSafeArea.current = useSuggestedSafeArea
+      ? suggested.safeArea
+      : null;
     setEnvironment(
       createPreviewEnvironment({
         ...environment,
         pointer: selectedDevice.input.pointer,
         hover: selectedDevice.input.hover,
-        safeArea: suggested.safeArea,
+        safeArea: useSuggestedSafeArea
+          ? suggested.safeArea
+          : environment.safeArea,
         virtualKeyboard: {
           ...environment.virtualKeyboard,
           height: suggested.virtualKeyboard.height,
@@ -224,6 +263,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     );
   }, [
     environment,
+    orientation,
     props.environment,
     selectedDevice,
     setEnvironment,

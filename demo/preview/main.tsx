@@ -143,19 +143,21 @@ function App() {
         {view === "activity" ? <Activity /> : null}
       </main>
       <nav aria-label="Primary">
-        {VIEWS.map((item) => (
-          <button
-            aria-current={view === item ? "page" : undefined}
-            key={item}
-            onClick={() => navigate(item)}
-            type="button"
-          >
-            <span aria-hidden="true">
-              {item === "overview" ? "⌂" : item === "components" ? "◇" : "↻"}
-            </span>
-            {item[0]?.toLocaleUpperCase("en")}{item.slice(1)}
-          </button>
-        ))}
+        <div className="nav-actions">
+          {VIEWS.map((item) => (
+            <button
+              aria-current={view === item ? "page" : undefined}
+              key={item}
+              onClick={() => navigate(item)}
+              type="button"
+            >
+              <span aria-hidden="true">
+                {item === "overview" ? "⌂" : item === "components" ? "◇" : "↻"}
+              </span>
+              {item[0]?.toLocaleUpperCase("en")}{item.slice(1)}
+            </button>
+          ))}
+        </div>
       </nav>
     </div>
   );

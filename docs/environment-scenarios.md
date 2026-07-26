@@ -61,6 +61,10 @@ shrink the iframe or add padding to an arbitrary target document: either action
 would change application layout without its consent, and shrinking the iframe
 would make the tested viewport dimensions inaccurate.
 
+Automatic phone and foldable profiles move cutout clearance to both inline
+edges in landscape while retaining bottom-system-area clearance. An explicitly
+controlled or customized `environment.safeArea` remains consumer-owned.
+
 These values are useful for deterministic component states and layout
 occlusion testing. The package also hides scrollbar chrome in integrated touch
 profiles while leaving scrolling enabled; fine-pointer desktop profiles retain

@@ -307,7 +307,7 @@ nav {
   right: 0;
   bottom: 0;
   left: 0;
-  display: grid;
+  display: block;
   min-height: calc(4rem + var(--preview-safe-bottom));
   padding:
     0 var(--preview-safe-right) var(--preview-safe-bottom)
@@ -315,6 +315,11 @@ nav {
   background: rgb(255 255 255 / 96%);
   border-top: 1px solid #e1e5ee;
   backdrop-filter: blur(1rem);
+}
+
+.nav-actions {
+  display: grid;
+  min-height: 4rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -339,22 +344,31 @@ nav button[aria-current="page"] {
 
 @media (min-width: 700px) {
   .app-shell {
-    padding-bottom: var(--preview-safe-bottom);
+    padding-bottom: 0;
   }
 
   nav {
     position: static;
-    width: min(
-      calc(
-        100% - 2rem - var(--preview-safe-left) - var(--preview-safe-right)
-      ),
-      70rem
-    );
-    min-height: 3.5rem;
-    margin: 0 auto calc(2rem + var(--preview-safe-bottom));
+    width: auto;
+    min-height: 0;
+    margin:
+      0 calc(1rem + var(--preview-safe-right))
+      calc(2rem + var(--preview-safe-bottom))
+      calc(1rem + var(--preview-safe-left));
     padding: 0;
+    background: transparent;
+    border: 0;
+    backdrop-filter: none;
+  }
+
+  .nav-actions {
+    width: min(100%, 70rem);
+    min-height: 3.5rem;
+    margin: 0 auto;
+    background: rgb(255 255 255 / 96%);
     border: 1px solid #e1e5ee;
     border-radius: 1rem;
+    backdrop-filter: blur(1rem);
   }
 
   nav button {

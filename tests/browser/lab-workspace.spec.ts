@@ -113,6 +113,15 @@ test.describe("lab workspace layout and keyboard access", () => {
       'iframe[title="iPhone 17 Pro application preview"]',
     );
     await expect(iframe).toBeVisible();
+    expect(
+      await iframe.evaluate((element) => {
+        if (!(element instanceof HTMLIFrameElement)) return null;
+        return {
+          width: element.contentWindow?.innerWidth,
+          height: element.contentWindow?.innerHeight,
+        };
+      }),
+    ).toEqual({ width: 402, height: 874 });
 
     const clearance = await iframe.evaluate((element) => {
       if (!(element instanceof HTMLIFrameElement)) {
@@ -166,6 +175,85 @@ test.describe("lab workspace layout and keyboard access", () => {
     );
     expect(clearance.navigationBottom).toBeLessThanOrEqual(
       clearance.viewportHeight - clearance.bottomInset,
+    );
+
+    await page.getByRole("button", { name: "Rotate viewport" }).click();
+    await expect(
+      page.locator('[data-rdl-orientation="landscape"]'),
+    ).toBeVisible();
+    expect(
+      await iframe.evaluate((element) => {
+        if (!(element instanceof HTMLIFrameElement)) return null;
+        return {
+          width: element.contentWindow?.innerWidth,
+          height: element.contentWindow?.innerHeight,
+        };
+      }),
+    ).toEqual({ width: 874, height: 402 });
+    const landscapeClearance = await iframe.evaluate((element) => {
+      if (!(element instanceof HTMLIFrameElement)) {
+        throw new TypeError("Expected a preview iframe.");
+      }
+      const targetWindow = element.contentWindow;
+      const targetDocument = element.contentDocument;
+      const root = targetDocument?.documentElement;
+      const brand = targetDocument?.querySelector(".brand");
+      const headerAction = targetDocument?.querySelector("header button");
+      if (!targetWindow || !root || !brand || !headerAction) {
+        throw new Error("Expected the integrated demo header.");
+      }
+      const rootStyle = targetWindow.getComputedStyle(root);
+
+      return {
+        leftInset: Number.parseFloat(
+          rootStyle.getPropertyValue("--rdl-safe-area-inset-left"),
+        ),
+        rightInset: Number.parseFloat(
+          rootStyle.getPropertyValue("--rdl-safe-area-inset-right"),
+        ),
+        foregroundLeft: brand.getBoundingClientRect().left,
+        foregroundRight: headerAction.getBoundingClientRect().right,
+        viewportWidth: targetWindow.innerWidth,
+      };
+    });
+
+    expect(landscapeClearance.leftInset).toBeGreaterThan(0);
+    expect(landscapeClearance.rightInset).toBeGreaterThan(0);
+    expect(landscapeClearance.foregroundLeft).toBeGreaterThanOrEqual(
+      landscapeClearance.leftInset,
+    );
+    expect(landscapeClearance.foregroundRight).toBeLessThanOrEqual(
+      landscapeClearance.viewportWidth - landscapeClearance.rightInset,
+    );
+
+    await page.getByText("Environment scenarios").click();
+    await page.getByLabel("Safe area left").fill("300");
+    await page.getByLabel("Safe area right").fill("0");
+    const asymmetricClearance = await iframe.evaluate((element) => {
+      if (!(element instanceof HTMLIFrameElement)) {
+        throw new TypeError("Expected a preview iframe.");
+      }
+      const targetWindow = element.contentWindow;
+      const targetDocument = element.contentDocument;
+      const root = targetDocument?.documentElement;
+      const firstNavigationAction =
+        targetDocument?.querySelector("nav button");
+      if (!targetWindow || !root || !firstNavigationAction) {
+        throw new Error("Expected the integrated demo navigation.");
+      }
+      const rootStyle = targetWindow.getComputedStyle(root);
+
+      return {
+        leftInset: Number.parseFloat(
+          rootStyle.getPropertyValue("--rdl-safe-area-inset-left"),
+        ),
+        navigationLeft: firstNavigationAction.getBoundingClientRect().left,
+      };
+    });
+
+    expect(asymmetricClearance.leftInset).toBe(300);
+    expect(asymmetricClearance.navigationLeft).toBeGreaterThanOrEqual(
+      asymmetricClearance.leftInset,
     );
   });
 

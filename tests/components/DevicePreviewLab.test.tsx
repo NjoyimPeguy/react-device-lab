@@ -210,4 +210,61 @@ describe("DevicePreviewLab", () => {
     expect(screen.getByLabelText("Custom viewport width")).toHaveValue(500);
     expect(screen.getByLabelText("Custom viewport height")).toHaveValue(900);
   });
+
+  it("moves automatic phone safe-area clearance to both sides in landscape", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DevicePreviewLab
+        defaultDeviceId="iphone-17-pro"
+        defaultShowSafeArea
+        src="https://app.example.test/"
+      />,
+    );
+    const safeArea = container.querySelector("[data-rdl-safe-area]");
+    expect(safeArea).toBeInstanceOf(HTMLElement);
+    expect(safeArea).toHaveStyle({
+      "--rdl-safe-top": "59px",
+      "--rdl-safe-right": "0px",
+      "--rdl-safe-bottom": "34px",
+      "--rdl-safe-left": "0px",
+    });
+
+    await user.click(screen.getByRole("button", { name: "Rotate viewport" }));
+
+    await waitFor(() =>
+      expect(safeArea).toHaveStyle({
+        "--rdl-safe-top": "0px",
+        "--rdl-safe-right": "59px",
+        "--rdl-safe-bottom": "34px",
+        "--rdl-safe-left": "59px",
+      }),
+    );
+  });
+
+  it("preserves consumer-defined safe-area values when orientation changes", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DevicePreviewLab
+        defaultDeviceId="iphone-17-pro"
+        defaultEnvironment={{
+          safeArea: { top: 12, right: 3, bottom: 7, left: 5 },
+        }}
+        defaultShowSafeArea
+        src="https://app.example.test/"
+      />,
+    );
+    const safeArea = container.querySelector("[data-rdl-safe-area]");
+    expect(safeArea).toBeInstanceOf(HTMLElement);
+
+    await user.click(screen.getByRole("button", { name: "Rotate viewport" }));
+
+    await waitFor(() =>
+      expect(safeArea).toHaveStyle({
+        "--rdl-safe-top": "12px",
+        "--rdl-safe-right": "3px",
+        "--rdl-safe-bottom": "7px",
+        "--rdl-safe-left": "5px",
+      }),
+    );
+  });
 });
