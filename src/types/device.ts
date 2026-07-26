@@ -1,4 +1,4 @@
-export type DevicePlatform = "ios" | "android" | "desktop";
+export type DevicePlatform = "ios" | "android" | "desktop" | "web";
 
 export type DeviceCategory =
   | "phone"

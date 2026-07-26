@@ -13,7 +13,10 @@ export {
 } from "./bridge/protocol.js";
 export { DeviceFrame } from "./components/DeviceFrame.js";
 export { DevicePreview } from "./components/DevicePreview.js";
+export { DevicePreviewLab } from "./components/DevicePreviewLab.js";
+export { DeviceSelector } from "./components/DeviceSelector.js";
 export { IframePortal } from "./components/IframePortal.js";
+export { PreviewConfigurationPanel } from "./components/PreviewConfigurationPanel.js";
 export { VirtualKeyboard } from "./components/VirtualKeyboard.js";
 export { DEVICE_PRESETS } from "./catalog/devicePresets.js";
 export {
@@ -91,6 +94,15 @@ export type {
   DeviceFrameProps,
   SafeAreaInsets,
 } from "./types/frame.js";
+export type {
+  DevicePreviewLabProps,
+  DeviceSelectorProps,
+  PreviewConfigurationPanelProps,
+  PreviewDestination,
+  PreviewTheme,
+  PreviewViewportMode,
+  PreviewWorkspaceMode,
+} from "./types/lab.js";
 export type {
   ComputeFitScaleOptions,
   DevicePreviewProps,
