@@ -129,7 +129,7 @@ Portal component closures still run in the host JavaScript realm. Read
 - [Iframe security](docs/security.md) and [security policy](SECURITY.md)
 - [Device data and update policy](docs/device-data.md)
 - [Device skins and visual fidelity](docs/device-frames.md)
-- [Release process](docs/releasing.md)
+- [Release process](RELEASING.md)
 - [Contributing](CONTRIBUTING.md), [changelog](CHANGELOG.md), and
   [MIT license](LICENSE)
 
