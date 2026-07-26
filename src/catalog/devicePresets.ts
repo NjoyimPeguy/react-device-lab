@@ -1408,6 +1408,13 @@ const definitions: readonly PresetDefinition[] = [
   },
 ];
 
+/**
+ * Immutable built-in catalog of named phones, foldables, tablets, laptops,
+ * desktop displays, and ultrawide displays.
+ *
+ * Preset ids are stable API. Logical viewport data, physical resolution, and
+ * device pixel ratio remain independent metadata.
+ */
 export const DEVICE_PRESETS: readonly DevicePreset[] = deepFreeze(
   definitions.map(createPreset),
 );

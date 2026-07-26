@@ -11,13 +11,15 @@ The project follows Semantic Versioning:
 - minor: compatible features, new presets, and additive public API;
 - major: incompatible API, CSS contract, or behavioral changes.
 
-Before `1.0.0`, call out any intentional breaking change prominently. Never
-reuse a device preset ID for different hardware.
+Starting with `1.0.0`, incompatible public API or CSS contract changes require a
+new major version. Never reuse a device preset ID for different hardware.
 
 ## Maintainer checklist
 
 1. Update `CHANGELOG.md` and `package.json` to the intended version.
-2. Run `npm ci`, `npm run verify`, and the packed-consumer verification.
+2. Run `npm ci`, `npm run verify`, and the packed-consumer verification. The
+   verification suite builds the TypeDoc site and treats missing public API
+   documentation or broken links as errors.
 3. Inspect `npm pack --dry-run --json` and the generic screenshots.
 4. Confirm the public repository URL exactly matches `package.json`.
 5. Commit the release preparation through normal review.

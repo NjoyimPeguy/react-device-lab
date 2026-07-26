@@ -6,12 +6,7 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
-### Added
-
-- Initial public package implementation, documentation, generic demo, and
-  packed-consumer verification.
-
-## [0.1.0] - 2026-07-26
+## [1.0.0] - 2026-07-26
 
 ### Added
 
@@ -21,6 +16,10 @@ All notable changes are documented here. The format follows
   skins.
 - Responsive lab workspace, custom viewport controls, themes, safe-area and
   environment scenarios, accessible navigation, and visual regression suite.
+- TypeDoc reference site generated from validated TSDoc comments and the
+  existing public guides.
+- Generic demo, public documentation, agent harness, and packed-consumer
+  verification.
 
-[Unreleased]: https://github.com/NjoyimPeguy/react-device-lab/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/NjoyimPeguy/react-device-lab/releases/tag/v0.1.0
+[Unreleased]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/NjoyimPeguy/react-device-lab/releases/tag/v1.0.0

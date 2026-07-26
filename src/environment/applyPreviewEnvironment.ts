@@ -49,6 +49,18 @@ function setBooleanAttribute(
   root.setAttribute(name, value ? "true" : "false");
 }
 
+/**
+ * Applies a deterministic preview scenario to a same-origin document.
+ *
+ * The adapter sets data attributes and CSS custom properties, hides scrollbar
+ * chrome for coarse-pointer scenarios without disabling scrolling, and
+ * dispatches `react-device-lab:environment`. It does not override browser
+ * permission APIs or emulate native hardware.
+ *
+ * @param targetDocument - Same-origin document that owns the preview content.
+ * @param environment - Complete validated environment to apply.
+ * @returns A cleanup function that restores prior attributes and inline styles.
+ */
 export function applyPreviewEnvironment(
   targetDocument: Document,
   environment: PreviewEnvironment,

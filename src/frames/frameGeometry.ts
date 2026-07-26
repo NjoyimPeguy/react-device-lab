@@ -367,6 +367,15 @@ export function getDeviceFrameGeometry(
   };
 }
 
+/**
+ * Returns the rendered outer size of a device preview.
+ *
+ * @param device - Preset whose model-aware frame geometry is measured.
+ * @param orientation - Requested rotation; defaults to portrait.
+ * @param frameVisible - Whether bezel, controls, and extensions are included.
+ * @returns Outer width and height in CSS pixels. With a hidden frame, these
+ * equal the logical viewport dimensions.
+ */
 export function getDeviceFrameDimensions(
   device: DevicePreset,
   orientation: DeviceOrientation = "portrait",

@@ -5,6 +5,12 @@ import { groupDevicePresets } from "../catalog/group.js";
 import { searchDevicePresets } from "../catalog/search.js";
 import type { DeviceSelectorProps } from "../types/lab.js";
 
+/**
+ * Renders a searchable, grouped device catalog with native keyboard controls.
+ *
+ * @param props - Catalog, selected id, labels, and change callback.
+ * @returns Accessible search and grouped selection controls.
+ */
 export function DeviceSelector({
   devices = DEVICE_PRESETS,
   value,

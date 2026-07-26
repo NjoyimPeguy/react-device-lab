@@ -142,6 +142,26 @@ function findDevice(
   );
 }
 
+/**
+ * Renders the complete responsive device-preview workspace.
+ *
+ * At desktop widths the preview stage and fixed configuration panel share one
+ * row and scroll independently. Narrow hosts use a stacked layout. Stateful
+ * options support both controlled and uncontrolled React patterns.
+ *
+ * @param props - Mutually exclusive URL or React-portal lab props.
+ * @returns The themed lab header, route tools, preview stage, and configuration
+ * panel.
+ *
+ * @example
+ * ```tsx
+ * <DevicePreviewLab
+ *   defaultDeviceId="pixel-10"
+ *   defaultTheme="dark"
+ *   src="http://localhost:3000"
+ * />
+ * ```
+ */
 export function DevicePreviewLab(props: DevicePreviewLabProps) {
   const devices = props.devices ?? DEVICE_PRESETS;
   const initialDevice = findDevice(

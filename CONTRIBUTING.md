@@ -23,6 +23,7 @@ npm test
 npm run build
 npm run demo:build
 npm run docs:check
+npm run docs:build
 npm run test:browser
 npm run test:a11y
 npm run pack:check
@@ -34,6 +35,9 @@ git diff --check
 - Add a failing regression before behavioral implementation.
 - Keep imports SSR-safe and preserve exact iframe viewport dimensions.
 - Add public exports only through `src/index.ts`.
+- Add TSDoc for every public function, component, constant, type, interface,
+  and property. Include units, defaults, constraints, and error behavior when
+  they are not obvious from the type.
 - Keep React and React DOM as peers; justify any runtime dependency.
 - Use semantic HTML, visible focus, and browser-rendered accessibility tests.
 - Preserve unrelated work and keep generated dependency/build directories out
@@ -57,9 +61,11 @@ affected Chromium visual baselines after full-resolution inspection. See
 
 ## Documentation and commits
 
-Document public behavior and limitations with the change. Use focused commits
-with an imperative summary. By contributing, you agree that your contribution
-is licensed under the repository’s [MIT license](LICENSE).
+Document public behavior and limitations with the change. `npm run docs:build`
+must complete without undocumented-declaration or broken-link warnings; the
+generated `site/` directory stays uncommitted. Use focused commits with an
+imperative summary. By contributing, you agree that your contribution is
+licensed under the repository’s [MIT license](LICENSE).
 
 For security-sensitive findings, follow [SECURITY.md](SECURITY.md) instead of
 opening a public issue.

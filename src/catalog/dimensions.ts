@@ -16,6 +16,13 @@ function orient(
     : { width: longEdge, height: shortEdge };
 }
 
+/**
+ * Returns the exact logical iframe viewport for a device and orientation.
+ *
+ * @param device - Named device preset.
+ * @param orientation - Requested rotation; defaults to portrait.
+ * @returns Logical width and height in CSS pixels.
+ */
 export function getViewportDimensions(
   device: DevicePreset,
   orientation: DeviceOrientation = "portrait",
@@ -23,6 +30,13 @@ export function getViewportDimensions(
   return orient(device.logicalViewport, orientation);
 }
 
+/**
+ * Returns the manufacturer physical resolution in the requested orientation.
+ *
+ * @param device - Named device preset.
+ * @param orientation - Requested rotation; defaults to portrait.
+ * @returns Physical panel width and height in pixels, or `null` when unknown.
+ */
 export function getPhysicalResolution(
   device: DevicePreset,
   orientation: DeviceOrientation = "portrait",
@@ -32,6 +46,14 @@ export function getPhysicalResolution(
     : null;
 }
 
+/**
+ * Classifies an application viewport using Material-style responsive
+ * breakpoints.
+ *
+ * @param width - Logical viewport width in CSS pixels.
+ * @returns `compact` below 600 px, `medium` below 840 px, otherwise `expanded`.
+ * @throws `RangeError` when width is negative or not finite.
+ */
 export function getViewportWidthClass(width: number): ViewportWidthClass {
   if (!Number.isFinite(width) || width < 0) {
     throw new RangeError("Viewport width must be a non-negative finite number.");

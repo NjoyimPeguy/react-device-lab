@@ -5,6 +5,16 @@ import type {
 
 const RELATIVE_ROUTE_BASE = "https://react-device-lab.invalid/";
 
+/**
+ * Parses an absolute or relative route into immutable display state.
+ *
+ * @param href - Absolute URL or route relative to `base`.
+ * @param source - Mechanism that supplied the route.
+ * @param base - Optional absolute base URL for a relative route.
+ * @returns Normalized route state.
+ * @throws `TypeError` when the route is invalid or uses an unsupported
+ * protocol.
+ */
 export function createPreviewRouteState(
   href: string,
   source: PreviewRouteSource,
@@ -36,6 +46,12 @@ export function createPreviewRouteState(
   });
 }
 
+/**
+ * Formats route state for the lab toolbar.
+ *
+ * @param route - Normalized preview route state.
+ * @returns `pathname + search + hash`, or a portal-content label.
+ */
 export function formatPreviewRoute(route: PreviewRouteState): string {
   if (route.source === "portal") return "Portal content";
   return `${route.pathname}${route.search}${route.hash}` || "/";

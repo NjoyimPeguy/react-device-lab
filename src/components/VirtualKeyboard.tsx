@@ -6,6 +6,14 @@ const KEY_ROWS = [
   ["⇧", "Z", "X", "C", "V", "B", "N", "M", "⌫"],
 ] as const;
 
+/**
+ * Renders a decorative virtual-keyboard overlay for layout review.
+ *
+ * This component does not capture input or emulate a native keyboard.
+ *
+ * @param props - Keyboard visibility, height, and optional class.
+ * @returns The keyboard visualization, or `null` when hidden.
+ */
 export function VirtualKeyboard({
   state,
   className,

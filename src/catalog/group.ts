@@ -16,6 +16,13 @@ const GROUPS: readonly {
   { category: "ultrawide", label: "Ultrawide displays" },
 ];
 
+/**
+ * Groups presets into non-empty form-factor sections in catalog order.
+ *
+ * @param presets - Presets to group without mutation.
+ * @returns Phone, foldable, tablet, laptop, desktop, and ultrawide sections
+ * that contain at least one preset.
+ */
 export function groupDevicePresets(
   presets: readonly DevicePreset[],
 ): readonly DevicePresetGroup[] {

@@ -35,6 +35,20 @@ function normalizeAllowedOrigins(origins: readonly string[]): readonly string[] 
   );
 }
 
+/**
+ * Installs the optional exact-origin bridge inside an embedded application.
+ *
+ * The bridge reports initial readiness and later SPA routes, accepts
+ * configuration messages only from the allowed parent window and origins, and
+ * applies environment attributes to the target document.
+ *
+ * @param options - Exact-origin policy, callbacks, and optional test windows.
+ * @returns A cleanup function that removes listeners and restores environment
+ * changes. During SSR it is a no-op cleanup function.
+ * @throws `TypeError` in a browser (or when `targetWindow` is supplied) when
+ * the origin allowlist is empty, contains a wildcard, or contains a URL that
+ * is not an exact HTTP(S) origin.
+ */
 export function installPreviewBridge(
   options: InstallPreviewBridgeOptions,
 ): () => void {
@@ -101,6 +115,15 @@ export function installPreviewBridge(
   };
 }
 
+/**
+ * Immediately reports the current embedded route to one exact parent origin.
+ *
+ * @param targetOrigin - Exact HTTP or HTTPS parent origin.
+ * @param targetWindow - Embedded window; defaults to the current browser
+ * window.
+ * @throws `TypeError` when a target window is available and `targetOrigin` is
+ * not an exact origin, or the current location is not HTTP or HTTPS.
+ */
 export function notifyPreviewRoute(
   targetOrigin: string,
   targetWindow?: Window,

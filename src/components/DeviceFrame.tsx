@@ -14,6 +14,15 @@ function pixels(value: number): string {
   return `${value}px`;
 }
 
+/**
+ * Renders a model-aware, repository-authored skin around an exact viewport.
+ *
+ * The frame is decorative geometry, not manufacturer artwork. Hiding it removes
+ * all frame size while preserving the selected logical viewport.
+ *
+ * @param props - Device, orientation, content, and safe-area presentation.
+ * @returns The framed preview content region.
+ */
 export function DeviceFrame({
   device,
   children,

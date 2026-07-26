@@ -3,6 +3,10 @@
 The package exposes only the root module, the stylesheet, and package metadata.
 Do not import `dist/*` or repository source paths.
 
+This guide explains how the exports fit together. For declaration-level
+signatures, defaults, units, errors, and property semantics, build the searchable
+TypeDoc reference site with `npm run docs:build` and open `site/index.html`.
+
 ```ts
 import {
   DeviceFrame,

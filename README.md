@@ -119,6 +119,7 @@ Portal component closures still run in the host JavaScript realm. Read
 
 ## Documentation
 
+- [Documentation guide index](docs/index.md)
 - [Public API and custom devices](docs/api.md)
 - [Iframe modes, routes, and bridge](docs/iframe-and-bridge.md)
 - [Environment scenarios and native limitations](docs/environment-scenarios.md)
@@ -133,6 +134,19 @@ Portal component closures still run in the host JavaScript realm. Read
 - [Contributing](CONTRIBUTING.md), [changelog](CHANGELOG.md), and
   [MIT license](LICENSE)
 
+The repository also generates a searchable HTML reference site from the TSDoc
+comments on the public TypeScript API and includes every guide above in the same
+navigation:
+
+```bash
+npm run docs:build
+```
+
+Open `site/index.html` after the build. The generated `site/` directory is
+intentionally ignored; source comments and Markdown remain authoritative. For
+live local navigation and search, run `npm run docs:serve` and open
+`http://127.0.0.1:4176`.
+
 ## Acknowledgement
 
 [Flutter Device Preview](https://github.com/aloisdeniel/flutter_device_preview)
@@ -142,6 +156,7 @@ implementation: it does not copy that project’s code, data, or assets.
 
 ## Status
 
-The project is preparing its first public release. No package publication is
-performed by ordinary CI, and a maintainer must explicitly publish a matching
-GitHub Release before the trusted-publishing workflow can run.
+The project is preparing its first public `1.0.0` release. No package
+publication is performed by ordinary CI, and a maintainer must explicitly
+publish a matching GitHub Release before the trusted-publishing workflow can
+run.

@@ -47,6 +47,15 @@ function checked(event: React.ChangeEvent<HTMLInputElement>): boolean {
   return event.currentTarget.checked;
 }
 
+/**
+ * Renders controlled device, viewport, appearance, and environment controls.
+ *
+ * Use this component when composing a custom workspace. For a complete
+ * batteries-included workspace, use {@link DevicePreviewLab}.
+ *
+ * @param props - Current configuration values and change callbacks.
+ * @returns The configuration controls. The composing workspace owns scrolling.
+ */
 export function PreviewConfigurationPanel({
   devices,
   device,

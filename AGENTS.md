@@ -28,6 +28,7 @@ npm run lint
 npm run typecheck
 npm test
 npm run build
+npm run docs:build
 npm run test:browser
 npm run test:a11y
 npm run pack:check
@@ -57,6 +58,10 @@ branch complete. Browser tests require Playwright Chromium and WebKit.
   names. Axe checks are release gates.
 - Product-specific routes, names, tokens, messages, screenshots, fixtures,
   environment variables, and metadata do not belong in this repository.
+- Document every public export with TSDoc. Public interfaces and props must
+  explain behavior, units, defaults, and constraints that types alone do not
+  communicate. `npm run docs:build` treats missing documentation and broken
+  links as errors.
 - Keep `.augments/`, dependency directories, build output, browser reports, and
   package tarballs uncommitted.
 - Do not publish, push, tag, create releases, or open/merge pull requests without

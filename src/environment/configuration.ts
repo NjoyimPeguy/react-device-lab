@@ -35,6 +35,7 @@ function freezeEnvironment(environment: PreviewEnvironment): PreviewEnvironment 
   });
 }
 
+/** Immutable neutral baseline used when environment values are omitted. */
 export const DEFAULT_PREVIEW_ENVIRONMENT: PreviewEnvironment =
   freezeEnvironment({
     safeArea: SAFE_AREA_DEFAULT,
@@ -170,6 +171,14 @@ function isPreviewEnvironment(value: unknown): value is PreviewEnvironment {
   );
 }
 
+/**
+ * Merges and validates environment overrides against the neutral defaults.
+ *
+ * @param overrides - Partial environment scenario values.
+ * @returns A deeply frozen complete environment.
+ * @throws `TypeError` when a value is out of range or structurally
+ * invalid.
+ */
 export function createPreviewEnvironment(
   overrides: PreviewEnvironmentOverrides = {},
 ): PreviewEnvironment {
@@ -224,6 +233,16 @@ function isPreviewConfiguration(
   );
 }
 
+/**
+ * Validates an unknown object or JSON string as a version 1 configuration.
+ *
+ * The parser rejects unknown keys and invalid environment values so it can be
+ * used at storage and message boundaries.
+ *
+ * @param serialized - Unknown configuration value or JSON text.
+ * @returns A normalized immutable configuration.
+ * @throws `TypeError` when JSON parsing or validation fails.
+ */
 export function parsePreviewConfiguration(
   serialized: unknown,
 ): PreviewConfiguration {
@@ -246,6 +265,13 @@ export function parsePreviewConfiguration(
   });
 }
 
+/**
+ * Validates and serializes a version 1 preview configuration.
+ *
+ * @param configuration - Configuration to validate.
+ * @returns Compact JSON preserving the validated object's property order.
+ * @throws `TypeError` when the configuration is invalid.
+ */
 export function serializePreviewConfiguration(
   configuration: PreviewConfiguration,
 ): string {

@@ -31,6 +31,16 @@ function getPortalRoot(iframe: HTMLIFrameElement): HTMLElement | null {
   return root;
 }
 
+/**
+ * Mounts consumer React content into an isolated, viewport-accurate iframe.
+ *
+ * The iframe document receives its own media-query viewport and environment
+ * attributes. React component closures still execute in the host JavaScript
+ * realm.
+ *
+ * @param props - Portal content, iframe name, styles, and environment.
+ * @returns The iframe and, after its document loads, the React portal content.
+ */
 export function IframePortal({
   children,
   title,
