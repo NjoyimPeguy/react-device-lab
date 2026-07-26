@@ -138,35 +138,92 @@ const releaseWorkflow = await readFile(
   "utf8",
 );
 const parsedReleaseWorkflow = YAML.parse(releaseWorkflow);
+const releaseJobs = parsedReleaseWorkflow?.jobs ?? {};
+const verifyJob = parsedReleaseWorkflow?.jobs?.verify;
+const verifySteps = Array.isArray(verifyJob?.steps) ? verifyJob.steps : [];
 const publishJob = parsedReleaseWorkflow?.jobs?.publish;
 const publishSteps = Array.isArray(publishJob?.steps) ? publishJob.steps : [];
-const packStep = publishSteps.find((step) => step?.id === "pack");
+const publishSetupStep = publishSteps[0];
+const packStep = verifySteps.find((step) => step?.id === "pack");
+const packageUploadStep = verifySteps.find(
+  (step) => step?.name === "Upload the verified release artifact",
+);
+const packageDownloadStep = publishSteps.find(
+  (step) => step?.name === "Download the verified release artifact",
+);
 const publishStep = publishSteps.find(
   (step) => step?.name === "Publish the verified release artifact",
 );
-const bootstrapCredentialPattern =
-  /NODE_AUTH_TOKEN:\s*\$\{\{\s*secrets\.NPM_BOOTSTRAP_TOKEN\s*\}\}/gu;
-const bootstrapCredentialMatches =
-  releaseWorkflow.match(bootstrapCredentialPattern) ?? [];
-const releaseWorkflowWithoutBootstrapCredential = releaseWorkflow.replace(
-  bootstrapCredentialPattern,
+const expectedPackCommand = [
+  'tarball="$(npm pack --ignore-scripts --silent)"',
+  'test -f "$tarball"',
+  'test ! -e "release-package.tgz"',
+  'mv -- "$tarball" "release-package.tgz"',
+  'test -f "release-package.tgz"',
   "",
-);
+].join("\n");
+const expectedPublishCommand = [
+  'test -f "./package-artifact/release-package.tgz"',
+  'npm publish "./package-artifact/release-package.tgz" --ignore-scripts --access public',
+  "",
+].join("\n");
+const containsSecretReference = (value) => {
+  if (typeof value === "string") {
+    return /\$\{\{\s*secrets\s*(?:\.|\[)/u.test(value);
+  }
+  if (Array.isArray(value)) {
+    return value.some(containsSecretReference);
+  }
+  if (value && typeof value === "object") {
+    return Object.entries(value).some(
+      ([key, nestedValue]) =>
+        containsSecretReference(key) || containsSecretReference(nestedValue),
+    );
+  }
+  return false;
+};
 if (
   !parsedReleaseWorkflow?.on?.release?.types?.includes("published") ||
+  Object.keys(releaseJobs).sort().join(",") !== "publish,verify" ||
+  verifyJob?.if !== "github.repository == 'NjoyimPeguy/react-device-lab'" ||
+  verifyJob?.environment !== undefined ||
+  verifyJob?.permissions?.contents !== "read" ||
+  verifyJob?.permissions?.["id-token"] !== undefined ||
   publishJob?.if !== "github.repository == 'NjoyimPeguy/react-device-lab'" ||
+  publishJob?.needs !== "verify" ||
   publishJob?.environment !== "npm" ||
   publishJob?.permissions?.contents !== "read" ||
   publishJob?.permissions?.["id-token"] !== "write" ||
-  !packStep?.run?.includes("npm pack --ignore-scripts --silent") ||
-  publishStep?.run !==
-    'npm publish "./${{ steps.pack.outputs.tarball }}" --ignore-scripts --access public' ||
-  publishStep?.env?.NODE_AUTH_TOKEN !==
-    "${{ secrets.NPM_BOOTSTRAP_TOKEN }}" ||
-  bootstrapCredentialMatches.length !== 1 ||
-  /NODE_AUTH_TOKEN|NPM_TOKEN|NPM_BOOTSTRAP_TOKEN/u.test(
-    releaseWorkflowWithoutBootstrapCredential,
-  )
+  publishSteps.length !== 3 ||
+  publishSetupStep?.uses !== "actions/setup-node@v6" ||
+  publishSetupStep?.with?.["node-version"] !== "24.18.0" ||
+  publishSetupStep?.with?.["registry-url"] !==
+    "https://registry.npmjs.org" ||
+  publishSetupStep?.with?.["package-manager-cache"] !== false ||
+  packStep?.run !== expectedPackCommand ||
+  packageUploadStep?.uses !== "actions/upload-artifact@v4" ||
+  packageUploadStep?.with?.name !==
+    "release-package-${{ github.run_id }}-${{ github.run_attempt }}" ||
+  packageUploadStep?.with?.path !== "release-package.tgz" ||
+  packageUploadStep?.with?.["if-no-files-found"] !== "error" ||
+  packageDownloadStep?.uses !== "actions/download-artifact@v5" ||
+  packageDownloadStep?.with?.name !==
+    "release-package-${{ github.run_id }}-${{ github.run_attempt }}" ||
+  packageDownloadStep?.with?.path !== "package-artifact" ||
+  publishStep?.run !== expectedPublishCommand ||
+  publishStep?.env !== undefined ||
+  verifySteps.some(
+    (step) =>
+      typeof step?.run === "string" && /\bnpm (?:publish|stage publish)\b/u.test(step.run),
+  ) ||
+  publishSteps.some((step) => /^actions\/checkout@/u.test(step?.uses ?? "")) ||
+  publishSteps.some(
+    (step) =>
+      typeof step?.run === "string" &&
+      /\bnpm (?:ci|install|run|exec|rebuild)\b/u.test(step.run),
+  ) ||
+  /NODE_AUTH_TOKEN|NPM_TOKEN|NPM_BOOTSTRAP_TOKEN/u.test(releaseWorkflow) ||
+  containsSecretReference(parsedReleaseWorkflow)
 ) {
   throw new Error("Release workflow does not satisfy the trusted-publishing gate.");
 }
