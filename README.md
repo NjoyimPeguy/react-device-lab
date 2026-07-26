@@ -11,6 +11,10 @@ usage guide will be documented before the first release.
 This package previews web application behavior. It is not an iOS, Android, or
 hardware emulator, and it does not replace native-device testing.
 
+See [iframe modes, fidelity, and the optional bridge](docs/iframe-and-bridge.md)
+for the exact same-origin, cross-origin, portal, and environment-simulation
+boundaries.
+
 ## License
 
 MIT
