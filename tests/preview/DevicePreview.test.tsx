@@ -85,10 +85,14 @@ describe("DevicePreview", () => {
     const iframe = getPreviewIframe(
       "Galaxy S25 application preview",
     );
-    const srcSetter = vi.spyOn(iframe, "src", "set");
 
     await user.click(screen.getByRole("button", { name: "Reload preview" }));
-    expect(srcSetter).toHaveBeenCalledWith(
+    const reloadedIframe = getPreviewIframe(
+      "Galaxy S25 application preview",
+    );
+    expect(reloadedIframe).not.toBe(iframe);
+    expect(reloadedIframe).toHaveAttribute(
+      "src",
       "https://app.example.test/current?tab=one#item",
     );
 

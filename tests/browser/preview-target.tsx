@@ -10,6 +10,10 @@ import "./preview-target.css";
 const search = new URLSearchParams(window.location.search);
 const bridgeEnabled = search.get("bridge") === "true";
 const parentOrigin = search.get("parent");
+const loadGenerationKey = "react-device-lab-browser-target-generation";
+const loadGeneration =
+  Number(sessionStorage.getItem(loadGenerationKey) ?? "0") + 1;
+sessionStorage.setItem(loadGenerationKey, String(loadGeneration));
 
 if (bridgeEnabled && parentOrigin) {
   installPreviewBridge({ allowedParentOrigins: [parentOrigin] });
@@ -52,6 +56,7 @@ function TargetApplication() {
       <section>
         <p className="target-application__eyebrow">Current destination</p>
         <output aria-label="Target application route">{route}</output>
+        <output aria-label="Target load generation">{loadGeneration}</output>
         <button onClick={navigate} type="button">
           Open tasks
         </button>

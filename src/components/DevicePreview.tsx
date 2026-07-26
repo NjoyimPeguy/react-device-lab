@@ -160,6 +160,11 @@ export function DevicePreview(props: DevicePreviewProps) {
   const [route, setRoute] = useState(() => initialRoute(props));
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
   const [portalKey, setPortalKey] = useState(0);
+  const [sourceReload, setSourceReload] = useState<{
+    readonly generation: number;
+    readonly href: string;
+    readonly sourceUrl: string;
+  } | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const loadedSourceFrame = useRef<HTMLIFrameElement | null>(null);
   const inspectionSuspended = useRef(false);
@@ -427,6 +432,12 @@ export function DevicePreview(props: DevicePreviewProps) {
   }, [configuration, iframe, isSource, postConfiguration]);
 
   const displayedRoute = isSource ? route : PORTAL_ROUTE;
+  const activeSourceReload =
+    isSource && sourceReload?.sourceUrl === sourceUrl
+      ? sourceReload
+      : null;
+  const renderedSourceUrl =
+    activeSourceReload?.href ?? sourceUrl;
   const routeIsSynchronized =
     !isSource || displayedRoute.source !== "initial";
   const routeLabel = isSource
@@ -440,14 +451,12 @@ export function DevicePreview(props: DevicePreviewProps) {
   }, [displayedRoute, onRouteChange]);
 
   const reload = () => {
-    if (isSource) {
-      const currentIframe = iframeRef.current;
-      if (currentIframe) {
-        expectedNavigationOrigin.current = getOrigin(displayedRoute.href);
-        inspectionSuspended.current =
-          expectedNavigationOrigin.current !== window.location.origin;
-        currentIframe.src = displayedRoute.href;
-      }
+    if (isSource && sourceUrl !== undefined) {
+      setSourceReload((current) => ({
+        generation: (current?.generation ?? 0) + 1,
+        href: displayedRoute.href,
+        sourceUrl,
+      }));
       return;
     }
     setPortalKey((key) => key + 1);
@@ -533,11 +542,11 @@ export function DevicePreview(props: DevicePreviewProps) {
                   onLoad={(event) =>
                     synchronizeSourceFrame(event.currentTarget)
                   }
-                  key={sourceUrl}
+                  key={`${sourceUrl}:${activeSourceReload?.generation ?? 0}`}
                   ref={captureIframe}
                   referrerPolicy={props.referrerPolicy}
                   sandbox={props.sandbox}
-                  src={props.src}
+                  src={renderedSourceUrl}
                   title={title}
                 />
               ) : (

@@ -16,10 +16,15 @@ test.describe("preview engine", () => {
       page.getByRole("status", { name: "Current embedded route" }),
     ).toHaveText(route);
 
+    const generation = Number(
+      await target
+        .getByRole("status", { name: "Target load generation" })
+        .textContent(),
+    );
     await page.getByRole("button", { name: "Reload preview" }).click();
     await expect(
-      target.getByRole("heading", { name: "Responsive task board" }),
-    ).toBeVisible();
+      target.getByRole("status", { name: "Target load generation" }),
+    ).toHaveText(String(generation + 1));
     await expect(
       page.getByRole("status", { name: "Current embedded route" }),
     ).toHaveText(route);
