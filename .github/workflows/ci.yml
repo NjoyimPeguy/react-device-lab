@@ -12,6 +12,9 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.0-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -20,8 +23,16 @@ jobs:
           cache: npm
       - run: npm install --global npm@11.16.0
       - run: npm ci
-      - run: npx playwright install --with-deps chromium webkit
       - run: npm run verify
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
 
   react-peer-range:
     runs-on: ubuntu-latest

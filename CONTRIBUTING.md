@@ -56,8 +56,10 @@ catalog invariants.
 Do not contribute manufacturer artwork, traced vectors, marketing images,
 restricted design resources, or third-party screenshots. Build geometry with
 repository-authored React and CSS. Add feature assertions and update only the
-affected Chromium visual baselines after full-resolution inspection. See
-[device-frames.md](docs/device-frames.md).
+affected Chromium visual baselines after full-resolution inspection. Generate
+release baselines with the exact Playwright container pinned in
+`.github/workflows/ci.yml`; host-generated images are useful for local review
+but are not release baselines. See [device-frames.md](docs/device-frames.md).
 
 ## Documentation and commits
 

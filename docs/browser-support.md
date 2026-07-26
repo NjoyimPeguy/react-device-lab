@@ -18,10 +18,12 @@ Older embedded webviews may require application-level transpilation or CSS
 fallbacks. Cross-origin restrictions are browser security behavior, not a
 compatibility bug.
 
-Frame screenshots are generated in Linux Chromium for deterministic review.
-Small antialiasing and font differences are expected across operating systems;
-logical viewport dimensions and DOM geometry are asserted independently from
-pixel comparisons.
+Release screenshot baselines are generated and compared in the exact, pinned
+Playwright Noble container declared by the CI and release workflows. This keeps
+the browser build, fonts, and rasterization environment aligned. Host-generated
+screenshots remain useful for local review, but small antialiasing and font
+differences are expected across operating systems. Logical viewport dimensions
+and DOM geometry are asserted independently from pixel comparisons.
 
 Open-in-new-tab behavior can be blocked by browser popup policy if it is not
 triggered by a user action. The built-in button performs the call directly from

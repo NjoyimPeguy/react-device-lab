@@ -90,7 +90,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
     "@eslint/js": "10.0.1",
-    "@playwright/test": "1.62.0",
+    "@playwright/test": "1.61.0",
     "@testing-library/jest-dom": "7.0.0",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
@@ -103,6 +103,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.7.0",
     "jsdom": "29.1.1",
+    "playwright-core": "1.61.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "smol-toml": "1.7.1",
