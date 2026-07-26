@@ -73,6 +73,44 @@ describe("DevicePreview", () => {
     ).toHaveAttribute("data-rdl-device-id", "pixel-10");
   });
 
+  it("resolves a default device id from the built-in catalog", () => {
+    render(
+      <DevicePreview
+        defaultDeviceId="pixel-10"
+        src="https://app.example.test/"
+      />,
+    );
+
+    expect(
+      screen
+        .getByTitle("Pixel 10 application preview")
+        .closest("[data-rdl-device-frame]"),
+    ).toHaveAttribute("data-rdl-device-id", "pixel-10");
+  });
+
+  it("posts the clamped explicit zoom used by the preview", () => {
+    render(
+      <DevicePreview
+        device={findPreset("Pixel 10")}
+        src={window.location.href}
+        zoom={9}
+      />,
+    );
+    const iframe = getPreviewIframe("Pixel 10 application preview");
+    const postMessage = vi.spyOn(iframe.contentWindow!, "postMessage");
+
+    expect(() => fireEvent.load(iframe)).not.toThrow();
+
+    const configuration = postMessage.mock.calls
+      .map(([message]) => parsePreviewBridgeMessage(message))
+      .find((message) => message?.type === "configuration");
+    expect(configuration?.type).toBe("configuration");
+    if (configuration?.type !== "configuration") {
+      throw new TypeError("Expected a configuration bridge message.");
+    }
+    expect(configuration.payload.configuration.zoom).toBe(2);
+  });
+
   it("keeps reload and new-tab actions on the current route", async () => {
     const user = userEvent.setup();
     const open = vi.spyOn(window, "open").mockReturnValue(null);

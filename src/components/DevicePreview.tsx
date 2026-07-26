@@ -40,13 +40,14 @@ const PORTAL_ROUTE = createPreviewRouteState("about:srcdoc", "portal");
 
 function resolveDevice(props: DevicePreviewProps): DevicePreset {
   if (props.device) return props.device;
+  const devices = props.devices ?? DEVICE_PRESETS;
   if (props.defaultDeviceId) {
-    const selected = props.devices?.find(
+    const selected = devices.find(
       (device) => device.id === props.defaultDeviceId,
     );
     if (selected) return selected;
   }
-  return props.devices?.[0] ?? DEFAULT_DEVICE;
+  return devices[0] ?? DEFAULT_DEVICE;
 }
 
 function getOrigin(href: string): string | null {
@@ -115,6 +116,28 @@ function initialRoute(props: DevicePreviewProps): PreviewRouteState {
     : createPreviewRouteState("about:srcdoc", "portal");
 }
 
+/**
+ * Renders one application inside an exact named-device or portal iframe
+ * viewport.
+ *
+ * Zoom transforms only the outer presentation. The iframe's logical width,
+ * height, media queries, and `window.innerWidth` remain authoritative.
+ * Explicit numeric zoom is clamped before both presentation and bridge
+ * configuration are applied.
+ * Same-origin routes are observed directly; cross-origin routes require the
+ * optional exact-origin bridge.
+ *
+ * @param props - Mutually exclusive URL or React-portal preview props.
+ * @returns A framed and visually scaled application viewport.
+ *
+ * @example
+ * ```tsx
+ * <DevicePreview
+ *   defaultDeviceId="iphone-17-pro"
+ *   src="http://localhost:3000"
+ * />
+ * ```
+ */
 export function DevicePreview(props: DevicePreviewProps) {
   const device = resolveDevice(props);
   const orientation = props.orientation ?? "portrait";
@@ -180,11 +203,11 @@ export function DevicePreview(props: DevicePreviewProps) {
       version: 1,
       deviceId: device.id,
       orientation,
-      zoom,
+      zoom: zoom === "fit" ? zoom : scale,
       frameVisible,
       environment,
     }),
-    [device.id, environment, frameVisible, orientation, zoom],
+    [device.id, environment, frameVisible, orientation, scale, zoom],
   );
 
   const updateRoute = useCallback((nextRoute: PreviewRouteState) => {
