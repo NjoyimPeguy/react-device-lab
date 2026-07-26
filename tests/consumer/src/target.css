@@ -1,0 +1,90 @@
+:root {
+  color: #172033;
+  background: #f4f7fb;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 140vh;
+  margin: 0;
+}
+
+main {
+  display: grid;
+  min-height: 100vh;
+  align-content: start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #315ee7;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+output {
+  overflow-wrap: anywhere;
+  color: #526079;
+}
+
+button {
+  width: fit-content;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  color: white;
+  background: #315ee7;
+  font: inherit;
+  font-weight: 700;
+}
+
+section {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 1rem;
+  background: white;
+}
+
+section strong {
+  font-size: 1.25rem;
+}
+
+@media (min-width: 600px) {
+  main {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.65fr);
+    padding: 2rem;
+  }
+
+  main > :not(section) {
+    grid-column: 1;
+  }
+
+  section {
+    grid-column: 2;
+    grid-row: 1 / span 5;
+  }
+}
+
+@media (min-width: 840px) {
+  main {
+    grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.6fr);
+    gap: 1.5rem 3rem;
+    padding: 3rem;
+  }
+}

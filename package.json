@@ -71,11 +71,12 @@
     "demo:serve": "npm run build && vite --config demo/vite.config.ts --host 127.0.0.1 --port 4175 --strictPort",
     "docs:check": "node scripts/docs-check.mjs",
     "screenshots:check": "playwright test --project=chromium --grep @screenshots",
+    "test:packed-consumer": "node scripts/pack-consumer-test.mjs",
     "release:check": "node scripts/check-release-version.mjs",
     "agent:check": "node scripts/validate-agent-harness.mjs",
     "neutrality:check": "node scripts/neutrality-check.mjs",
     "pack:check": "npm pack --dry-run --ignore-scripts --json --cache .cache/npm | node scripts/pack-check.mjs",
-    "verify": "npm run neutrality:check && npm run agent:check && npm run lint && npm run typecheck && npm test && npm run build && npm run demo:build && npm run docs:check && npm run test:browser && npm run test:a11y && npm run pack:check",
+    "verify": "npm run neutrality:check && npm run agent:check && npm run lint && npm run typecheck && npm test && npm run build && npm run demo:build && npm run docs:check && npm run test:browser && npm run test:a11y && npm run pack:check && npm run test:packed-consumer",
     "prepack": "npm run build",
     "prepublishOnly": "npm run verify"
   },
