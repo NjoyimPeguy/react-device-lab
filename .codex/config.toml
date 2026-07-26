@@ -1,0 +1,6 @@
+[agents]
+max_concurrent_threads_per_session = 3
+
+[agents.package_reviewer]
+description = "Read-only package, security, accessibility, and public-boundary reviewer."
+config_file = "agents/package-reviewer.toml"

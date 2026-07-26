@@ -1,0 +1,26 @@
+node_modules/
+dist/
+demo-dist/
+site/
+coverage/
+playwright-report/
+test-results/
+.cache/
+.artifacts/
+.vite/
+*.tgz
+
+# Local planning and review state
+.augments/
+
+# Personal harness state
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/agent-memory/
+.claude/agent-memory-local/
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.swp

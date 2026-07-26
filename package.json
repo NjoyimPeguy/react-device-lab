@@ -1,0 +1,117 @@
+{
+  "name": "react-device-lab",
+  "version": "1.0.0",
+  "description": "Accessible React components for previewing web applications across named device viewports.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Njoyim Peguy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NjoyimPeguy/react-device-lab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NjoyimPeguy/react-device-lab/issues"
+  },
+  "homepage": "https://github.com/NjoyimPeguy/react-device-lab#readme",
+  "keywords": [
+    "react",
+    "responsive",
+    "device-preview",
+    "viewport",
+    "iframe",
+    "accessibility",
+    "development-tools"
+  ],
+  "engines": {
+    "node": ">=22.14.0",
+    "npm": ">=11.5.1"
+  },
+  "packageManager": "npm@11.16.0",
+  "files": [
+    "dist",
+    "docs",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "README.md",
+    "RELEASING.md",
+    "SECURITY.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles/index.css",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "npm run clean && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:browser": "playwright test",
+    "test:browser:serve": "vite --host 127.0.0.1 --port 4173 --strictPort",
+    "test:browser:serve:cross": "vite --host 127.0.0.1 --port 4174 --strictPort",
+    "test:a11y": "playwright test --project=chromium --grep @a11y",
+    "demo:build": "npm run build && vite build --config demo/vite.config.ts",
+    "demo:serve": "npm run build && vite --config demo/vite.config.ts --host 127.0.0.1 --port 4175 --strictPort",
+    "docs:build": "typedoc",
+    "docs:check": "node scripts/docs-check.mjs",
+    "docs:serve": "npm run docs:build && vite site --host 127.0.0.1 --port 4176 --strictPort",
+    "screenshots:check": "playwright test --project=chromium --grep @screenshots",
+    "test:packed-consumer": "node scripts/pack-consumer-test.mjs",
+    "release:check": "node scripts/check-release-version.mjs",
+    "agent:check": "node scripts/validate-agent-harness.mjs",
+    "neutrality:check": "node scripts/neutrality-check.mjs",
+    "pack:check": "npm pack --dry-run --ignore-scripts --json --cache .cache/npm | node scripts/pack-check.mjs",
+    "verify": "npm run neutrality:check && npm run agent:check && npm run lint && npm run typecheck && npm test && npm run build && npm run demo:build && npm run docs:check && npm run docs:build && npm run test:browser && npm run test:a11y && npm run pack:check && npm run test:packed-consumer",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run verify"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.61.0",
+    "@testing-library/jest-dom": "7.0.0",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@types/node": "26.1.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.4",
+    "@vitest/coverage-v8": "4.1.10",
+    "eslint": "10.8.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.7.0",
+    "jsdom": "29.1.1",
+    "playwright-core": "1.61.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "smol-toml": "1.7.1",
+    "typedoc": "0.28.20",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.65.0",
+    "vite": "8.1.5",
+    "vitest": "4.1.10",
+    "yaml": "2.9.0"
+  }
+}

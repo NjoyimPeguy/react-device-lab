@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.agents/hooks/check-public-neutrality.mjs\"",
+            "timeout": 30,
+            "statusMessage": "Checking public repository neutrality"
+          }
+        ]
+      }
+    ]
+  }
+}

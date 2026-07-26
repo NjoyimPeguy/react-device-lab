@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Device Catalog"
+  short_description: "Review and update device preset data"
+  default_prompt: "Use $maintain-device-catalog to add or verify device presets with authoritative sources."
