@@ -1,35 +1,41 @@
 :root {
   color-scheme: light dark;
-  --rdl-accent: #315efb;
+  --rdl-accent: #3d5afe;
   --rdl-accent-contrast: #ffffff;
-  --rdl-canvas: #f4f6fb;
+  --rdl-canvas: oklch(0.992 0.002 255);
+  --rdl-stage: oklch(0.946 0.004 260);
   --rdl-surface: #ffffff;
-  --rdl-surface-raised: #f8f9fc;
-  --rdl-border: #d8dce6;
-  --rdl-text: #171923;
-  --rdl-text-muted: #687086;
-  --rdl-focus: #315efb;
-  --rdl-danger: #c5353f;
-  --rdl-radius-sm: 0.5rem;
+  --rdl-surface-raised: oklch(0.955 0.005 260);
+  --rdl-border: rgb(0 0 0 / 10%);
+  --rdl-text: #0b1524;
+  --rdl-text-muted: #6b7280;
+  --rdl-focus: #0b1524;
+  --rdl-danger: #b4524b;
+  --rdl-frame-outline: rgb(11 21 36 / 20%);
+  --rdl-frame-shadow-color: rgb(16 24 40 / 34%);
+  --rdl-radius-sm: 0.625rem;
   --rdl-radius-md: 0.75rem;
   --rdl-radius-lg: 1rem;
   --rdl-font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, ui-sans-serif,
+    system-ui, sans-serif;
 }
 
 [data-rdl-theme="dark"] {
   color-scheme: dark;
-  --rdl-accent: #6d8cff;
-  --rdl-accent-contrast: #07102f;
-  --rdl-canvas: #15161b;
-  --rdl-surface: #1b1d23;
-  --rdl-surface-raised: #22252d;
-  --rdl-border: #363a45;
+  --rdl-accent: #3d5afe;
+  --rdl-accent-contrast: #ffffff;
+  --rdl-canvas: oklch(0.146 0.007 280);
+  --rdl-stage: oklch(0.233 0.01 280);
+  --rdl-surface: oklch(0.175 0.008 280);
+  --rdl-surface-raised: oklch(0.204 0.009 280);
+  --rdl-border: rgb(255 255 255 / 11%);
   --rdl-text: #f4f6fb;
-  --rdl-text-muted: #a1a8ba;
-  --rdl-focus: #8ba3ff;
-  --rdl-danger: #ff7d86;
+  --rdl-text-muted: #7a8598;
+  --rdl-focus: #f4f6fb;
+  --rdl-danger: #de8b85;
+  --rdl-frame-outline: rgb(255 255 255 / 34%);
+  --rdl-frame-shadow-color: rgb(0 0 0 / 72%);
 }
 
 .rdl-preview {
@@ -121,6 +127,7 @@
   justify-content: center;
   padding: 1.5rem;
   overflow: auto;
+  background: var(--rdl-stage);
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
 }
@@ -736,7 +743,7 @@
   --rdl-frame-metal: #30333a;
   --rdl-frame-metal-edge: #111217;
   --rdl-frame-highlight: rgb(255 255 255 / 22%);
-  --rdl-frame-shadow: rgb(4 6 12 / 34%);
+  --rdl-frame-shadow: var(--rdl-frame-shadow-color);
   --rdl-frame-glass: #050609;
   --rdl-frame-lens: #101b2b;
   --rdl-safe-area-color: rgb(49 94 251 / 88%);
@@ -777,8 +784,8 @@
   border-radius: var(--rdl-frame-radius);
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 12%) inset,
-    0 0 0 2px rgb(0 0 0 / 18%),
-    0 12px 32px var(--rdl-frame-shadow);
+    0 0 0 2px var(--rdl-frame-outline),
+    0 14px 36px var(--rdl-frame-shadow);
 }
 
 .rdl-frame[data-rdl-frame-visible="false"] .rdl-frame__shell {
@@ -1044,7 +1051,9 @@
     var(--rdl-frame-metal);
   border: 1px solid var(--rdl-frame-metal-edge);
   border-radius: 3px;
-  box-shadow: 0 1px 1px rgb(0 0 0 / 45%);
+  box-shadow:
+    0 0 0 1px var(--rdl-frame-outline),
+    0 1px 1px rgb(0 0 0 / 45%);
 }
 
 .rdl-frame__control--mute,

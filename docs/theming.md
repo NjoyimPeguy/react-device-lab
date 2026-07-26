@@ -12,6 +12,7 @@ affected:
   --rdl-accent: #6d4aff;
   --rdl-accent-contrast: #ffffff;
   --rdl-canvas: #f7f5fb;
+  --rdl-stage: #f1eef8;
   --rdl-surface: #ffffff;
   --rdl-surface-raised: #faf9fd;
   --rdl-border: #ddd8e8;
@@ -19,6 +20,8 @@ affected:
   --rdl-text-muted: #6f687d;
   --rdl-focus: #5635e7;
   --rdl-danger: #bd3348;
+  --rdl-frame-outline: rgb(33 29 43 / 20%);
+  --rdl-frame-shadow-color: rgb(33 29 43 / 32%);
   --rdl-radius-sm: 0.5rem;
   --rdl-radius-md: 0.75rem;
   --rdl-radius-lg: 1rem;
@@ -36,6 +39,12 @@ Keep focus contrast and target sizes intact when customizing. Package variables
 style the workspace and authored shell; they do not inject a product theme into
 a cross-origin target. Use the environment color-scheme scenario or the target’s
 own theme API for application content.
+
+`--rdl-stage`, `--rdl-frame-outline`, and `--rdl-frame-shadow-color` work
+together to preserve the device silhouette. Keep the stage visibly separate
+from both the frame edge and configuration surface in each theme. A dark theme
+normally needs a lighter stage and outline than its surrounding canvas; this is
+the luminance counterpart of a dark frame on the light default stage.
 
 `fullscreen` uses `100dvh` and suppresses document-level workspace overflow.
 `bounded` fills its containing block and requires the parent to provide a useful
