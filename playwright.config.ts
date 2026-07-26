@@ -20,6 +20,11 @@ export default defineConfig({
       url: "http://127.0.0.1:4174/tests/browser/preview-target.html",
       reuseExistingServer: !process.env["CI"],
     },
+    {
+      command: "npm run demo:serve",
+      url: "http://127.0.0.1:4175/",
+      reuseExistingServer: !process.env["CI"],
+    },
   ],
   projects: [
     {

@@ -15,6 +15,7 @@ const ignoredDirectories = new Set([
   ".cache",
   ".git",
   "coverage",
+  "demo-dist",
   "dist",
   "node_modules",
   "playwright-report",

@@ -8,6 +8,7 @@ export default tseslint.config(
     ignores: [
       ".augments/**",
       "coverage/**",
+      "demo-dist/**",
       "dist/**",
       "node_modules/**",
       "playwright-report/**",

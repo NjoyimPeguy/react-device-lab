@@ -13,6 +13,19 @@ and CSS custom properties, and hide scrollbar chrome for touch profiles without
 disabling scrolling. The displayed route is marked as synchronized after the
 first successful inspection.
 
+```tsx
+import { DevicePreviewLab } from "react-device-lab";
+
+export function LocalReview() {
+  return (
+    <DevicePreviewLab
+      defaultDeviceId="pixel-10"
+      src="/application/"
+    />
+  );
+}
+```
+
 Link and form navigations to another same-origin document remain inspectable.
 An unannounced programmatic document navigation can make the frame opaque. The
 host then stops inspection rather than attempting access that the browser may
@@ -33,16 +46,42 @@ checks the sending window, message schema, protocol version, event origin, and
 reported URL origin before accepting a route. A target must apply an appropriate
 `frame-ancestors` policy and should accept only parents it actually trusts.
 
+```tsx
+<DevicePreviewLab
+  bridgeOrigins={["https://target.example.test"]}
+  sandbox="allow-scripts allow-same-origin"
+  src="https://target.example.test/example"
+/>
+```
+
+`bridgeOrigins` permits messages only; it does not make the iframe same-origin
+or grant DOM access. Review whether the target truly needs each sandbox token.
+
 ```ts
 import { installPreviewBridge } from "react-device-lab";
 
 const uninstall = installPreviewBridge({
   allowedParentOrigins: ["https://preview.example.test"],
 });
+
+// Later, during application teardown:
+uninstall();
 ```
 
 The bridge carries preview configuration and route state. It does not grant DOM
 access, bypass iframe sandboxing, or weaken the browser same-origin policy.
+
+The bridge listens for `popstate`, `hashchange`, and the exported
+`PREVIEW_ROUTE_EVENT`. For routers that do not dispatch one of those events
+after navigation, call `notifyPreviewRoute` with the exact parent origin:
+
+```ts
+import { notifyPreviewRoute } from "react-device-lab";
+
+router.subscribe(() => {
+  notifyPreviewRoute("https://preview.example.test");
+});
+```
 
 ## Consumer-rendered portal mode
 
@@ -68,3 +107,20 @@ event. The package does not replace `navigator.permissions`, synthesize native
 keyboards, alter hardware sensors, reproduce system bars, or make CSS `env()`
 values behave like a physical operating system. Validate native behavior with
 real devices and the relevant platform tools.
+
+Use `showSafeArea` to draw the selected insets without changing the logical
+viewport:
+
+```tsx
+<DevicePreviewLab
+  defaultEnvironment={{
+    safeArea: { top: 59, right: 0, bottom: 34, left: 0 },
+  }}
+  defaultShowSafeArea
+  src="/application/"
+/>
+```
+
+Orientation swaps logical width and height while retaining the selected device.
+`zoom="fit"` or numeric values such as `0.5`, `0.75`, and `1` affect only outer
+presentation; iframe CSS dimensions remain exact.

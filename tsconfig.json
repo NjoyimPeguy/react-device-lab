@@ -15,11 +15,16 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "paths": {
+      "react-device-lab": ["./src/index.ts"],
+      "react-device-lab/styles.css": ["./src/types/styles.d.ts"]
+    },
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
   "include": [
     "src",
+    "demo",
     "tests",
     "eslint.config.js",
     "playwright.config.ts",
