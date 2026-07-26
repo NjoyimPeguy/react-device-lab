@@ -1,6 +1,7 @@
 import { access, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import YAML from "yaml";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
@@ -136,11 +137,36 @@ const releaseWorkflow = await readFile(
   resolve(root, ".github/workflows/release.yml"),
   "utf8",
 );
+const parsedReleaseWorkflow = YAML.parse(releaseWorkflow);
+const publishJob = parsedReleaseWorkflow?.jobs?.publish;
+const publishSteps = Array.isArray(publishJob?.steps) ? publishJob.steps : [];
+const packStep = publishSteps.find((step) => step?.id === "pack");
+const publishStep = publishSteps.find(
+  (step) => step?.name === "Publish the verified release artifact",
+);
+const bootstrapCredentialPattern =
+  /NODE_AUTH_TOKEN:\s*\$\{\{\s*secrets\.NPM_BOOTSTRAP_TOKEN\s*\}\}/gu;
+const bootstrapCredentialMatches =
+  releaseWorkflow.match(bootstrapCredentialPattern) ?? [];
+const releaseWorkflowWithoutBootstrapCredential = releaseWorkflow.replace(
+  bootstrapCredentialPattern,
+  "",
+);
 if (
-  !/release:\s*\n\s+types:\s*\[published\]/u.test(releaseWorkflow) ||
-  !/id-token:\s*write/u.test(releaseWorkflow) ||
-  !/npm publish --access public/u.test(releaseWorkflow) ||
-  /NODE_AUTH_TOKEN|NPM_TOKEN/u.test(releaseWorkflow)
+  !parsedReleaseWorkflow?.on?.release?.types?.includes("published") ||
+  publishJob?.if !== "github.repository == 'NjoyimPeguy/react-device-lab'" ||
+  publishJob?.environment !== "npm" ||
+  publishJob?.permissions?.contents !== "read" ||
+  publishJob?.permissions?.["id-token"] !== "write" ||
+  !packStep?.run?.includes("npm pack --ignore-scripts --silent") ||
+  publishStep?.run !==
+    'npm publish "./${{ steps.pack.outputs.tarball }}" --ignore-scripts --access public' ||
+  publishStep?.env?.NODE_AUTH_TOKEN !==
+    "${{ secrets.NPM_BOOTSTRAP_TOKEN }}" ||
+  bootstrapCredentialMatches.length !== 1 ||
+  /NODE_AUTH_TOKEN|NPM_TOKEN|NPM_BOOTSTRAP_TOKEN/u.test(
+    releaseWorkflowWithoutBootstrapCredential,
+  )
 ) {
   throw new Error("Release workflow does not satisfy the trusted-publishing gate.");
 }

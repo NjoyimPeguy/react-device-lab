@@ -43,18 +43,35 @@ Configure npm’s trusted publisher for:
 - allowed action: `npm publish`
 
 The npm environment should require maintainer approval. The workflow grants
-`contents: read` and job-scoped `id-token: write`; it has no npm token. npm
-trusted publishing requires npm 11.5.1+ and Node 22.14.0+, exchanges GitHub’s
-short-lived OIDC token, and automatically adds provenance for a public package
-from a public repository.
+`contents: read` and job-scoped `id-token: write`. npm trusted publishing
+requires npm 11.5.1+ and Node 22.14.0+, exchanges GitHub’s short-lived OIDC
+token, and automatically adds provenance for a public package from a public
+repository.
 
 The package name is currently unregistered. npm’s trusted-publisher controls are
 documented under an existing package’s settings. Before the first publication,
-confirm npm’s current new-package bootstrap flow. If the settings are not
-available until ownership exists, perform any required one-time bootstrap only
-as an explicitly authorized maintainer action, then configure trusted publishing
-before enabling later automated releases. Do not add a long-lived publish token
-to `release.yml`.
+use this one-time bootstrap:
+
+1. Create a short-expiry granular npm access token with read/write package
+   permission and bypass 2FA enabled. Because the package does not exist yet,
+   npm may require the token to cover all packages temporarily.
+2. Store it only as the `NPM_BOOTSTRAP_TOKEN` secret in the protected GitHub
+   `npm` environment. Never store it in the repository or a repository-wide
+   secret.
+3. Publish the `v1.0.0` GitHub Release. The release workflow runs in GitHub
+   Actions, packs the already-verified artifact without lifecycle scripts, and
+   publishes that exact tarball without lifecycle scripts. The write token is
+   therefore available only to the registry call, and the first package
+   publication includes npm provenance.
+4. Configure the package’s trusted publisher with the values above.
+5. Delete the `NPM_BOOTSTRAP_TOKEN` environment secret and revoke the npm token
+   immediately.
+6. Remove the temporary `NODE_AUTH_TOKEN` fallback from `release.yml` in a
+   reviewed cleanup commit. Later releases authenticate only through OIDC.
+
+The npm CLI checks the GitHub OIDC identity before falling back to the temporary
+bootstrap token. A token-free workflow is the required steady state after
+`v1.0.0`; do not add a long-lived publish token.
 
 Current authoritative references:
 
