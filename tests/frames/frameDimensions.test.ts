@@ -18,8 +18,8 @@ describe("frame dimensions", () => {
     const monitor = findPreset("Full HD desktop");
 
     expect(getDeviceFrameDimensions(phone, "portrait", true)).toEqual({
-      width: 399,
-      height: 815,
+      width: 423,
+      height: 859,
     });
     expect(getDeviceFrameDimensions(monitor, "landscape", true)).toEqual({
       width: 1944,
@@ -50,15 +50,15 @@ describe("frame dimensions", () => {
     });
     expect(getDeviceFrameDimensions(s9Plus, "portrait", true)).toEqual({
       width: 427,
-      height: 892,
+      height: 898,
     });
     expect(getDeviceFrameDimensions(a55, "portrait", false)).toEqual({
       width: 360,
       height: 780,
     });
     expect(getDeviceFrameDimensions(a55, "portrait", true)).toEqual({
-      width: 374,
-      height: 794,
+      width: 384,
+      height: 813,
     });
   });
 
@@ -74,8 +74,8 @@ describe("frame dimensions", () => {
       height: 1088,
     });
     expect(getDeviceFrameDimensions(foldable, "landscape", true)).toEqual({
-      width: 1106,
-      height: 839,
+      width: 1136,
+      height: 869,
     });
   });
 });

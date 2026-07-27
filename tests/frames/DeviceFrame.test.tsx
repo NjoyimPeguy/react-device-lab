@@ -218,7 +218,7 @@ describe("DeviceFrame", () => {
       "data-rdl-corner-profile",
       edge.device.frame.cornerProfile,
     );
-    expect(edge.frame).toHaveStyle({ "--rdl-frame-radius": "48px" });
+    expect(edge.frame).toHaveStyle({ "--rdl-frame-radius": "44px" });
     edge.unmount();
 
     const ultra = renderFrame("Galaxy S25 Ultra");
@@ -229,15 +229,211 @@ describe("DeviceFrame", () => {
     expect(ultra.frame).toHaveStyle({ "--rdl-frame-radius": "25px" });
   });
 
-  it("emits the authored default tone for each frame style", () => {
+  it.each([
+    ["iPhone SE (3rd generation)", 50, 3],
+    ["iPhone 13 mini", 49, 41],
+    ["iPhone 16e", 54, 46],
+    ["iPhone 17e", 54, 46],
+    ["iPhone 17 Pro Max", 56, 48],
+  ])(
+    "pins the recalibrated %s silhouette radii",
+    (name, outerRadius, screenRadius) => {
+      const { frame, unmount } = renderFrame(name);
+      expect(frame).toHaveStyle({
+        "--rdl-frame-radius": `${outerRadius}px`,
+        "--rdl-screen-radius": `${screenRadius}px`,
+      });
+      unmount();
+    },
+  );
+
+  it("restores home-button body proportions on iPhone SE (3rd generation)", () => {
+    const { frame, unmount } = renderFrame("iPhone SE (3rd generation)");
+    expect(frame).toHaveStyle({
+      "--rdl-bezel-top": "96px",
+      "--rdl-bezel-right": "24px",
+      "--rdl-bezel-bottom": "96px",
+      "--rdl-bezel-left": "24px",
+    });
+    unmount();
+  });
+
+  it.each([
+    ["iPhone 13 mini", 150],
+    ["iPhone 16e", 146],
+    ["iPhone 17e", 146],
+    ["iPhone 17 Pro Max", 92],
+  ])("pins the recalibrated %s cutout width", (name, cutoutWidth) => {
+    const { frame, unmount } = renderFrame(name);
+    expect(frame).toHaveStyle({ "--rdl-cutout-width": `${cutoutWidth}px` });
+    unmount();
+  });
+
+  it.each([
+    ["iPad (10th generation)", 75, 18],
+    ["iPad (A16)", 75, 18],
+    ["iPad mini (A17 Pro)", 80, 18],
+    ["iPad Air 11-inch", 73, 18],
+    ["iPad Air 13-inch", 66, 18],
+    ["iPad Pro 11-inch", 63, 18],
+    ["iPad Pro 13-inch", 63, 18],
+    ["Galaxy S21", 34, 26],
+    ["Galaxy S25 Edge", 44, 36],
+    ["Galaxy S26 Ultra", 40, 30],
+    ["Galaxy A57", 34, 26],
+    ["Galaxy Z Flip 7 — unfolded", 38, 32],
+    ["Galaxy Z Flip 8 — unfolded", 38, 32],
+    ["Galaxy Z Fold 6 — cover", 26, 20],
+    ["Galaxy Z Fold 7 — cover", 22, 16],
+    ["Galaxy Z Fold 8 — cover", 22, 16],
+    ["Galaxy Z Fold 8 Ultra — cover", 22, 16],
+    ["Galaxy Tab S9", 15, 10],
+    ["Galaxy Tab S10+", 17, 11],
+    ["Galaxy Tab S10 Ultra", 18, 11],
+    ["Galaxy Tab S11 Ultra", 18, 11],
+    ["Pixel 8 Pro", 52, 44],
+    ["Pixel 9 Pro", 57, 49],
+    ["Pixel 9 Pro XL", 56, 48],
+    ["Pixel 10 Pro", 58, 50],
+    ["Pixel 10 Pro XL", 57, 49],
+    ["Pixel 10 Pro Fold — unfolded", 34, 27],
+  ])(
+    "pins the recalibrated %s silhouette radii",
+    (name, outerRadius, screenRadius) => {
+      const { frame, unmount } = renderFrame(name);
+      expect(frame).toHaveStyle({
+        "--rdl-frame-radius": `${outerRadius}px`,
+        "--rdl-screen-radius": `${screenRadius}px`,
+      });
+      unmount();
+    },
+  );
+
+  it.each([
+    ["iPad (10th generation)", 57, 57, 57, 57],
+    ["iPad mini (A17 Pro)", 62, 62, 62, 62],
+    ["iPad Air 13-inch", 48, 48, 48, 48],
+    ["iPad Pro 11-inch", 45, 45, 45, 45],
+    ["Galaxy S9+", 26, 8, 26, 8],
+    ["Galaxy S21", 12, 10, 12, 10],
+    ["Galaxy A55", 14, 12, 19, 12],
+    ["Galaxy A56", 9, 8, 9, 8],
+    ["Galaxy Z Flip 6 — cover", 16, 26, 26, 26],
+    ["Galaxy Z Flip 7 — cover", 20, 16, 20, 16],
+    ["Galaxy Z Flip 8 — cover", 20, 16, 20, 16],
+    ["Galaxy Z Flip 8 — unfolded", 16, 16, 16, 16],
+    ["Galaxy Z Fold 6 — cover", 22, 28, 22, 28],
+    ["Galaxy Z Fold 8 — unfolded", 24, 24, 24, 24],
+    ["Galaxy Z Fold 8 Ultra — unfolded", 26, 26, 26, 26],
+    ["Galaxy Tab S9", 22, 22, 22, 22],
+    ["Galaxy Tab S10 Ultra", 23, 23, 23, 23],
+    ["Pixel 8a", 8, 8, 8, 8],
+    ["Pixel 9a", 8, 8, 8, 8],
+  ])(
+    "pins the recalibrated %s bezel insets",
+    (name, top, right, bottom, left) => {
+      const { frame, unmount } = renderFrame(name);
+      expect(frame).toHaveStyle({
+        "--rdl-bezel-top": `${top}px`,
+        "--rdl-bezel-right": `${right}px`,
+        "--rdl-bezel-bottom": `${bottom}px`,
+        "--rdl-bezel-left": `${left}px`,
+      });
+      unmount();
+    },
+  );
+
+  it.each([
+    ["Galaxy Z Flip 6 — cover", 144, 60],
+    ["Galaxy Z Flip 8 — cover", 82, 36],
+    ["Galaxy Z Fold 7 — cover", 16, 16],
+    ["Galaxy Z Fold 8 — unfolded", 18, 18],
+    ["Galaxy Tab S9", 12, 12],
+    ["Galaxy Tab S10 Ultra", 105, 13],
+    ["Galaxy Tab S11 Ultra", 52, 17],
+    ["iPad (10th generation)", 14, 14],
+    ["iPad mini (A17 Pro)", 16, 16],
+  ])(
+    "pins the recalibrated %s cutout size",
+    (name, cutoutWidth, cutoutHeight) => {
+      const { frame, unmount } = renderFrame(name);
+      expect(frame).toHaveStyle({
+        "--rdl-cutout-width": `${cutoutWidth}px`,
+        "--rdl-cutout-height": `${cutoutHeight}px`,
+      });
+      unmount();
+    },
+  );
+
+  it("rounds the Galaxy S25 Ultra rail like the real hardware", () => {
+    const s25Ultra = renderFrame("Galaxy S25 Ultra");
+    expect(s25Ultra.frame).toHaveAttribute(
+      "data-rdl-corner-profile",
+      "rounded",
+    );
+    s25Ultra.unmount();
+
+    const s24Ultra = renderFrame("Galaxy S24 Ultra");
+    expect(s24Ultra.frame).toHaveAttribute(
+      "data-rdl-corner-profile",
+      "rounded-compact",
+    );
+    s24Ultra.unmount();
+
+    const s26Ultra = renderFrame("Galaxy S26 Ultra");
+    expect(s26Ultra.frame).toHaveAttribute(
+      "data-rdl-corner-profile",
+      "rounded",
+    );
+    s26Ultra.unmount();
+  });
+
+  it("hides the under-display camera on Galaxy Z Fold 6 — unfolded", () => {
+    const { frame, device, unmount } = renderFrame(
+      "Galaxy Z Fold 6 — unfolded",
+    );
+    expect(device.frame.cutout).toBe("none");
+    expect(
+      frame.querySelector('[data-rdl-feature="punch-hole"]'),
+    ).not.toBeInTheDocument();
+    expect(
+      frame.querySelector('[data-rdl-feature="fold-crease"]'),
+    ).toBeInTheDocument();
+    unmount();
+  });
+
+  it("emits the calibrated tone for representative devices", () => {
     const expectations: Array<[string, string]> = [
       ["iPhone SE (3rd generation)", "silver"],
       ["iPhone 13 mini", "graphite"],
-      ["iPhone 17 Pro", "graphite"],
-      ["Galaxy S25 Ultra", "graphite"],
+      ["iPhone 15 Pro", "titanium-light"],
+      ["iPhone 15 Pro Max", "titanium-light"],
+      ["iPhone 16 Pro", "titanium-light"],
+      ["iPhone 16 Pro Max", "titanium-light"],
+      ["iPhone Air", "titanium-light"],
+      ["iPhone 17 Pro", "silver"],
+      ["iPhone 17 Pro Max", "silver"],
+      ["iPad mini (A17 Pro)", "graphite"],
+      ["iPad Air 11-inch", "graphite"],
+      ["iPad Pro 13-inch", "graphite"],
+      ["Galaxy S24 Ultra", "titanium-dark"],
+      ["Galaxy S25", "silver"],
+      ["Galaxy S25 Edge", "titanium-light"],
+      ["Galaxy S25 Ultra", "titanium-dark"],
+      ["Galaxy A56", "silver"],
+      ["Galaxy Z Flip 6 — unfolded", "silver"],
+      ["Galaxy Z Fold 6 — unfolded", "silver"],
       ["Galaxy Z Fold 7 — unfolded", "graphite"],
-      ["iPad Pro 13-inch", "silver"],
+      ["Galaxy Tab S9", "graphite"],
+      ["Galaxy Tab S10+", "graphite"],
+      ["Pixel 8 Pro", "porcelain"],
+      ["Pixel 9a", "porcelain"],
+      ["Pixel 10 Pro", "porcelain"],
+      ["Pixel 10a", "silver"],
+      ["Pixel 10 Pro Fold — unfolded", "porcelain"],
+      ["Pixel Tablet", "porcelain"],
       ["MacBook Air 13-inch", "silver"],
+      ["Windows laptop", "graphite"],
       ["Full HD desktop", "graphite"],
     ];
 

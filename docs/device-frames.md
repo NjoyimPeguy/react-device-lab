@@ -35,6 +35,15 @@ mobile and tablet bezel geometry while retaining the selected preset.
 Fit mode. Hiding the frame returns the unchanged logical viewport dimensions.
 The frame never changes the target application's media-query width or height.
 
+In July 2026 every preset's geometry was recalibrated against manufacturer
+body dimensions and published panel diagonals: corner radii track each model's
+real corner class (squared, slightly rounded, or fully rounded), bezels track
+panel-ppi-derived borders, cutouts track measured notch, island, punch-hole,
+and camera-pair sizes, and shell tones track published rail materials
+(titanium, aluminum, steel). Calibration motivations per family are kept with
+the change that introduced them; the before/after browser screenshots live
+next to those notes as review evidence.
+
 ## Shell tone palette
 
 The shell's metal finish is selected by `data-rdl-shell-tone`. Each tone

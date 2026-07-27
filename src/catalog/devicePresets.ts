@@ -418,6 +418,14 @@ const FOLDABLE_UNFOLDED_FRAME: DeviceFrameMetadata = {
   controls: ["volume", "power"],
 };
 
+// The Fold 6 inner camera sits under the display panel, so no cutout is drawn.
+const FOLDABLE_UNFOLDED_UDC_FRAME: DeviceFrameMetadata = {
+  style: "foldable-unfolded",
+  cutout: "none",
+  cornerProfile: "rounded-compact",
+  controls: ["volume", "power"],
+};
+
 const TABLET_FRAME: DeviceFrameMetadata = {
   style: "tablet",
   cutout: "tablet-camera",
@@ -1019,7 +1027,7 @@ const definitions: readonly PresetDefinition[] = [
     physical: [1440, 3120],
     physicalSource: SAMSUNG_S25,
     ratio: 3.75,
-    frame: ANDROID_PHONE_SQUARE_FRAME,
+    frame: ANDROID_PHONE_FRAME,
   },
   {
     id: "galaxy-s26",
@@ -1361,7 +1369,7 @@ const definitions: readonly PresetDefinition[] = [
     physical: [1856, 2160],
     physicalSource: SAMSUNG_FOLD_6,
     ratio: 2,
-    frame: FOLDABLE_UNFOLDED_FRAME,
+    frame: FOLDABLE_UNFOLDED_UDC_FRAME,
     fold: {
       state: "unfolded",
       axis: "vertical",
