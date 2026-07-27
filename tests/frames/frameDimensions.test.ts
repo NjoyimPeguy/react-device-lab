@@ -39,4 +39,43 @@ describe("frame dimensions", () => {
       height: 884,
     });
   });
+
+  it("reflects the corrected Android density profiles in outer frame size", () => {
+    const s9Plus = findPreset("Galaxy S9+");
+    const a55 = findPreset("Galaxy A55");
+
+    expect(getDeviceFrameDimensions(s9Plus, "portrait", false)).toEqual({
+      width: 411,
+      height: 846,
+    });
+    expect(getDeviceFrameDimensions(s9Plus, "portrait", true)).toEqual({
+      width: 427,
+      height: 892,
+    });
+    expect(getDeviceFrameDimensions(a55, "portrait", false)).toEqual({
+      width: 360,
+      height: 780,
+    });
+    expect(getDeviceFrameDimensions(a55, "portrait", true)).toEqual({
+      width: 374,
+      height: 794,
+    });
+  });
+
+  it("frames the landscape-native unfolded panel around its base orientation", () => {
+    const foldable = findPreset("Galaxy Z Fold 8 — unfolded");
+
+    expect(getDeviceFrameDimensions(foldable, "landscape", false)).toEqual({
+      width: 1088,
+      height: 821,
+    });
+    expect(getDeviceFrameDimensions(foldable, "portrait", false)).toEqual({
+      width: 821,
+      height: 1088,
+    });
+    expect(getDeviceFrameDimensions(foldable, "landscape", true)).toEqual({
+      width: 1106,
+      height: 839,
+    });
+  });
 });

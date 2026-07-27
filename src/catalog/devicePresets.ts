@@ -29,6 +29,18 @@ const APPLE_IPHONE_17: DeviceDataSource = {
   note: "Manufacturer panel resolution for iPhone 17.",
 };
 
+const APPLE_IPHONE_17E: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.apple.com/iphone-17e/specs/",
+  note: "Manufacturer panel resolution for iPhone 17e.",
+};
+
+const APPLE_IPHONE_17E_LOGICAL: DeviceDataSource = {
+  kind: "platform",
+  url: "https://developer.apple.com/design/human-interface-guidelines/layout",
+  note: "iPhone 17e shares the 1170 × 2532 panel and traditional notch with iPhone 14 and iPhone 16e; the Apple HIG layout table has no iPhone 17e row yet, so the 390 × 844 CSS point profile is inferred from that identical panel and the documented iPhone 16e HIG row.",
+};
+
 const APPLE_IPHONE_AIR: DeviceDataSource = {
   kind: "manufacturer",
   url: "https://www.apple.com/iphone-air/specs/",
@@ -84,37 +96,37 @@ function appleSupportSource(
 
 const SAMSUNG_S9: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-s9/specs/",
+  url: "https://www.samsung.com/sg/support/mobile-devices/what-is-the-difference-between-samsung-galaxy-s9-and-s9-plus-and-s8-and-s8-plus/",
   note: "Manufacturer main-display resolution for Galaxy S9+.",
 };
 
 const SAMSUNG_S21: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-s21-5g/specs/",
-  note: "Manufacturer main-display resolution for Galaxy S21.",
+  url: "https://www.samsung.com/ae/news/local/samsung-launches-all-new-galaxy-s21-series-5g/",
+  note: "Manufacturer main-display resolution for Galaxy S21, from Samsung's official launch announcement.",
 };
 
 const SAMSUNG_S22: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-s22/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-s22?tab=specs",
   note: "Manufacturer main-display resolution for the Galaxy S22 family.",
 };
 
 const SAMSUNG_S23: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-s23/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-s23?tab=specs",
   note: "Manufacturer main-display resolution for the Galaxy S23 family.",
 };
 
 const SAMSUNG_S24: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-s24/specs/",
+  url: "https://www.samsung.com/ae/support/mobile-devices/what-are-the-sizes-and-the-resolution-of-the-new-s24-series/",
   note: "Manufacturer main-display resolution for the Galaxy S24 family.",
 };
 
 const SAMSUNG_S25: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-s25/specs/",
+  url: "https://www.samsung.com/ph/smartphones/galaxy-s25/specs/",
   note: "Manufacturer main-display resolution for the Galaxy S25 family.",
 };
 
@@ -126,31 +138,61 @@ const SAMSUNG_S25_EDGE: DeviceDataSource = {
 
 const SAMSUNG_S26: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2026_1Q_Interim_Report.pdf",
-  note: "Manufacturer-reported main-display resolution for the Galaxy S26 family.",
+  url: "https://www.samsung.com/ca/business/smartphones/galaxy-s/galaxy-s26-sm-s942wzdexac/",
+  note: "Manufacturer main-display resolution for Galaxy S26.",
+};
+
+const SAMSUNG_S26_PLUS: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsung.com/ca/business/smartphones/galaxy-s/galaxy-s26-plus-sm-s947wzdexac/",
+  note: "Manufacturer main-display resolution for Galaxy S26+.",
+};
+
+const SAMSUNG_S26_ULTRA: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsung.com/levant/business/smartphones/galaxy-s/galaxy-s26-ultra-sm-s948bzdimea/",
+  note: "Manufacturer main-display resolution for Galaxy S26 Ultra.",
 };
 
 const SAMSUNG_A55: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-a55-5g/specs/",
+  url: "https://www.samsung.com/ae/smartphones/galaxy-a/galaxy-a55-5g-awesome-iceblue-128gb-sm-a556elbvmea/",
   note: "Manufacturer main-display resolution for Galaxy A55.",
+};
+
+const SAMSUNG_A56: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsung.com/uk/smartphones/galaxy-a/galaxy-a56-5g-awesome-lightgrey-256gb-sm-a566bzaceub/",
+  note: "Manufacturer main-display resolution for Galaxy A56.",
+};
+
+const SAMSUNG_A57: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsung.com/uk/smartphones/galaxy-a/galaxy-a57-5g-awesome-navy-256gb-sm-a576bdbdeub/",
+  note: "Manufacturer main-display resolution for Galaxy A57.",
 };
 
 const SAMSUNG_FLIP_6: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-z-flip6/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-z-flip6?tab=specs",
   note: "Manufacturer main-display resolution for Galaxy Z Flip 6.",
 };
 
 const SAMSUNG_FLIP_7: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-z-flip7/specs/",
+  url: "https://www.samsung.com/sa_en/support/mobile-devices/what-is-the-display-size-resolution-of-galaxy-flip-7-galaxy-fold-7/",
   note: "Manufacturer main-display resolution for Galaxy Z Flip 7.",
+};
+
+const SAMSUNG_FLIP_8: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsung.com/us/smartphones/galaxy-z-flip8/",
+  note: "Manufacturer main- and cover-display resolutions for Galaxy Z Flip 8.",
 };
 
 const SAMSUNG_FOLD_6: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-z-fold6/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-z-fold6?tab=specs",
   note: "Manufacturer main- and cover-display resolutions for Galaxy Z Fold 6.",
 };
 
@@ -160,39 +202,51 @@ const SAMSUNG_FOLD_7: DeviceDataSource = {
   note: "Manufacturer main- and cover-display resolutions for Galaxy Z Fold 7.",
 };
 
+const SAMSUNG_FOLD_8: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsungmobilepress.com/articles/galaxy-z-fold8-ultra-fold8-flip8-perfected-every-way-living",
+  note: "Manufacturer main- and cover-display resolutions for the Galaxy Z Fold 8 family.",
+};
+
+const SAMSUNG_FOLD_8_UNFOLDED: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://www.samsungmobilepress.com/articles/galaxy-z-fold8-ultra-fold8-flip8-perfected-every-way-living",
+  note: "Manufacturer unfolded-panel resolution for Galaxy Z Fold 8; Samsung lists the panel landscape-first (1,848 × 2,448), so this preset stores the natural unfolded landscape orientation as its base orientation.",
+};
+
 const SAMSUNG_TAB_S9: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-tab-s9/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-tab-s9?tab=specs",
   note: "Manufacturer panel resolution for Galaxy Tab S9.",
 };
 
 const SAMSUNG_TAB_S10: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-tab-s10-ultra/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-tab-s10-ultra?tab=specs",
   note: "Manufacturer panel resolutions for Galaxy Tab S10+ and S10 Ultra.",
 };
 
 const SAMSUNG_TAB_S11: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://www.samsung.com/global/galaxy/galaxy-tab-s11-ultra/specs/",
+  url: "https://www.samsungmobilepress.com/media-assets/galaxy-tab-s11-ultra?tab=specs",
   note: "Manufacturer panel resolution for Galaxy Tab S11 Ultra.",
 };
 
 const GOOGLE_PIXEL_8: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://store.google.com/product/pixel_8_specs",
+  url: "https://support.google.com/pixelphone/answer/7158570",
   note: "Manufacturer panel resolution for Pixel 8.",
 };
 
 const GOOGLE_PIXEL_8_PRO: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://store.google.com/product/pixel_8_pro_specs",
+  url: "https://support.google.com/pixelphone/answer/7158570",
   note: "Manufacturer panel resolution for Pixel 8 Pro.",
 };
 
 const GOOGLE_PIXEL_8A: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://store.google.com/product/pixel_8a_specs",
+  url: "https://support.google.com/pixelphone/answer/7158570",
   note: "Manufacturer panel resolution for Pixel 8a.",
 };
 
@@ -226,16 +280,28 @@ const GOOGLE_PIXEL_10_PRO: DeviceDataSource = {
   note: "Manufacturer panel resolution for Pixel 10 Pro and Pro XL.",
 };
 
+const GOOGLE_PIXEL_10A: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://store.google.com/product/pixel_10a_specs",
+  note: "Manufacturer panel resolution for Pixel 10a.",
+};
+
 const GOOGLE_PIXEL_FOLD: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://store.google.com/product/pixel_9_pro_fold_specs",
+  url: "https://support.google.com/pixelphone/answer/7158570",
   note: "Manufacturer inner- and outer-display resolutions for Pixel 9 Pro Fold.",
+};
+
+const GOOGLE_PIXEL_10_PRO_FOLD: DeviceDataSource = {
+  kind: "manufacturer",
+  url: "https://store.google.com/product/pixel_10_pro_fold_specs",
+  note: "Manufacturer inner- and outer-display resolutions for Pixel 10 Pro Fold.",
 };
 
 const GOOGLE_TABLET: DeviceDataSource = {
   kind: "manufacturer",
-  url: "https://store.google.com/product/pixel_tablet_specs",
-  note: "Manufacturer panel resolution for Pixel Tablet.",
+  url: "https://web.archive.org/web/2024/https://store.google.com/product/pixel_tablet_specs",
+  note: "Manufacturer panel resolution for Pixel Tablet; archived copy of Google's delisted official specification page.",
 };
 
 const APPLE_MACBOOK: DeviceDataSource = {
@@ -404,6 +470,7 @@ interface PresetDefinition
     | "fold"
   > {
   readonly logical: readonly [width: number, height: number];
+  readonly logicalSource?: DeviceDataSource;
   readonly physical: readonly [width: number, height: number] | null;
   readonly physicalSource?: DeviceDataSource;
   readonly ratio: number;
@@ -433,12 +500,13 @@ function createPreset(definition: PresetDefinition): DevicePreset {
         }
       : null;
   const logicalSource =
-    definition.platform === "android"
+    definition.logicalSource ??
+    (definition.platform === "android"
       ? {
           ...baseLogicalSource,
           note: `${definition.name} uses the package-selected ${definition.logical[0]} × ${definition.logical[1]} CSS-pixel profile at ${androidProfile?.densityDpi} density DPI with the default display-size setting and browser chrome excluded.`,
         }
-      : baseLogicalSource;
+      : baseLogicalSource);
   const physicalResolution = definition.physical
     ? {
         width: definition.physical[0],
@@ -677,6 +745,19 @@ const definitions: readonly PresetDefinition[] = [
     frame: IPHONE_ISLAND_CAMERA_FRAME,
   },
   {
+    id: "iphone-17e",
+    name: "iPhone 17e",
+    platform: "ios",
+    category: "phone",
+    family: "iPhone 17",
+    logical: [390, 844],
+    logicalSource: APPLE_IPHONE_17E_LOGICAL,
+    physical: [1170, 2532],
+    physicalSource: APPLE_IPHONE_17E,
+    ratio: 3,
+    frame: IPHONE_NOTCH_ACTION_FRAME,
+  },
+  {
     id: "iphone-17",
     name: "iPhone 17",
     platform: "ios",
@@ -814,10 +895,10 @@ const definitions: readonly PresetDefinition[] = [
     platform: "android",
     category: "phone",
     family: "Galaxy S",
-    logical: [320, 658],
+    logical: [411, 846],
     physical: [1440, 2960],
     physicalSource: SAMSUNG_S9,
-    ratio: 4.5,
+    ratio: 3.5,
     frame: ANDROID_EARPIECE_FRAME,
   },
   {
@@ -960,7 +1041,7 @@ const definitions: readonly PresetDefinition[] = [
     family: "Galaxy S26",
     logical: [384, 832],
     physical: [1440, 3120],
-    physicalSource: SAMSUNG_S26,
+    physicalSource: SAMSUNG_S26_PLUS,
     ratio: 3.75,
     frame: ANDROID_PHONE_FRAME,
   },
@@ -972,7 +1053,7 @@ const definitions: readonly PresetDefinition[] = [
     family: "Galaxy S26",
     logical: [384, 832],
     physical: [1440, 3120],
-    physicalSource: SAMSUNG_S26,
+    physicalSource: SAMSUNG_S26_ULTRA,
     ratio: 3.75,
     frame: ANDROID_PHONE_FRAME,
   },
@@ -982,10 +1063,34 @@ const definitions: readonly PresetDefinition[] = [
     platform: "android",
     category: "phone",
     family: "Galaxy A",
-    logical: [480, 1040],
+    logical: [360, 780],
     physical: [1080, 2340],
     physicalSource: SAMSUNG_A55,
-    ratio: 2.25,
+    ratio: 3,
+    frame: ANDROID_PHONE_FRAME,
+  },
+  {
+    id: "galaxy-a56",
+    name: "Galaxy A56",
+    platform: "android",
+    category: "phone",
+    family: "Galaxy A56",
+    logical: [360, 780],
+    physical: [1080, 2340],
+    physicalSource: SAMSUNG_A56,
+    ratio: 3,
+    frame: ANDROID_PHONE_FRAME,
+  },
+  {
+    id: "galaxy-a57",
+    name: "Galaxy A57",
+    platform: "android",
+    category: "phone",
+    family: "Galaxy A57",
+    logical: [360, 780],
+    physical: [1080, 2340],
+    physicalSource: SAMSUNG_A57,
+    ratio: 3,
     frame: ANDROID_PHONE_FRAME,
   },
   {
@@ -1109,6 +1214,18 @@ const definitions: readonly PresetDefinition[] = [
     frame: ANDROID_PHONE_FRAME,
   },
   {
+    id: "pixel-10a",
+    name: "Pixel 10a",
+    platform: "android",
+    category: "phone",
+    family: "Pixel 10",
+    logical: [360, 808],
+    physical: [1080, 2424],
+    physicalSource: GOOGLE_PIXEL_10A,
+    ratio: 3,
+    frame: ANDROID_PHONE_FRAME,
+  },
+  {
     id: "galaxy-z-flip-6-cover",
     name: "Galaxy Z Flip 6 — cover",
     platform: "android",
@@ -1178,6 +1295,42 @@ const definitions: readonly PresetDefinition[] = [
       axis: "horizontal",
       crease: true,
       pairedDeviceId: "galaxy-z-flip-7-cover",
+    },
+  },
+  {
+    id: "galaxy-z-flip-8-cover",
+    name: "Galaxy Z Flip 8 — cover",
+    platform: "android",
+    category: "foldable",
+    family: "Galaxy Z Flip",
+    logical: [474, 524],
+    physical: [948, 1048],
+    physicalSource: SAMSUNG_FLIP_8,
+    ratio: 2,
+    frame: FOLDABLE_FLIP_COVER_FRAME,
+    fold: {
+      state: "cover",
+      axis: "horizontal",
+      crease: false,
+      pairedDeviceId: "galaxy-z-flip-8",
+    },
+  },
+  {
+    id: "galaxy-z-flip-8",
+    name: "Galaxy Z Flip 8 — unfolded",
+    platform: "android",
+    category: "foldable",
+    family: "Galaxy Z Flip",
+    logical: [360, 840],
+    physical: [1080, 2520],
+    physicalSource: SAMSUNG_FLIP_8,
+    ratio: 3,
+    frame: FOLDABLE_UNFOLDED_FRAME,
+    fold: {
+      state: "unfolded",
+      axis: "horizontal",
+      crease: true,
+      pairedDeviceId: "galaxy-z-flip-8-cover",
     },
   },
   {
@@ -1253,6 +1406,78 @@ const definitions: readonly PresetDefinition[] = [
     },
   },
   {
+    id: "galaxy-z-fold-8-cover",
+    name: "Galaxy Z Fold 8 — cover",
+    platform: "android",
+    category: "foldable",
+    family: "Galaxy Z Fold",
+    logical: [416, 657],
+    physical: [1248, 1972],
+    physicalSource: SAMSUNG_FOLD_8,
+    ratio: 3,
+    frame: FOLDABLE_COVER_FRAME,
+    fold: {
+      state: "cover",
+      axis: "vertical",
+      crease: false,
+      pairedDeviceId: "galaxy-z-fold-8-unfolded",
+    },
+  },
+  {
+    id: "galaxy-z-fold-8-unfolded",
+    name: "Galaxy Z Fold 8 — unfolded",
+    platform: "android",
+    category: "foldable",
+    family: "Galaxy Z Fold",
+    logical: [1088, 821],
+    physical: [2448, 1848],
+    physicalSource: SAMSUNG_FOLD_8_UNFOLDED,
+    ratio: 2.25,
+    frame: FOLDABLE_UNFOLDED_FRAME,
+    fold: {
+      state: "unfolded",
+      axis: "vertical",
+      crease: true,
+      pairedDeviceId: "galaxy-z-fold-8-cover",
+    },
+  },
+  {
+    id: "galaxy-z-fold-8-ultra-cover",
+    name: "Galaxy Z Fold 8 Ultra — cover",
+    platform: "android",
+    category: "foldable",
+    family: "Galaxy Z Fold",
+    logical: [360, 840],
+    physical: [1080, 2520],
+    physicalSource: SAMSUNG_FOLD_8,
+    ratio: 3,
+    frame: FOLDABLE_COVER_FRAME,
+    fold: {
+      state: "cover",
+      axis: "vertical",
+      crease: false,
+      pairedDeviceId: "galaxy-z-fold-8-ultra-unfolded",
+    },
+  },
+  {
+    id: "galaxy-z-fold-8-ultra-unfolded",
+    name: "Galaxy Z Fold 8 Ultra — unfolded",
+    platform: "android",
+    category: "foldable",
+    family: "Galaxy Z Fold",
+    logical: [1003, 1113],
+    physical: [2256, 2504],
+    physicalSource: SAMSUNG_FOLD_8,
+    ratio: 2.25,
+    frame: FOLDABLE_UNFOLDED_FRAME,
+    fold: {
+      state: "unfolded",
+      axis: "vertical",
+      crease: true,
+      pairedDeviceId: "galaxy-z-fold-8-ultra-cover",
+    },
+  },
+  {
     id: "pixel-9-pro-fold-cover",
     name: "Pixel 9 Pro Fold — cover",
     platform: "android",
@@ -1286,6 +1511,42 @@ const definitions: readonly PresetDefinition[] = [
       axis: "vertical",
       crease: true,
       pairedDeviceId: "pixel-9-pro-fold-cover",
+    },
+  },
+  {
+    id: "pixel-10-pro-fold-cover",
+    name: "Pixel 10 Pro Fold — cover",
+    platform: "android",
+    category: "foldable",
+    family: "Pixel Fold",
+    logical: [360, 788],
+    physical: [1080, 2364],
+    physicalSource: GOOGLE_PIXEL_10_PRO_FOLD,
+    ratio: 3,
+    frame: FOLDABLE_COVER_FRAME,
+    fold: {
+      state: "cover",
+      axis: "vertical",
+      crease: false,
+      pairedDeviceId: "pixel-10-pro-fold-unfolded",
+    },
+  },
+  {
+    id: "pixel-10-pro-fold-unfolded",
+    name: "Pixel 10 Pro Fold — unfolded",
+    platform: "android",
+    category: "foldable",
+    family: "Pixel Fold",
+    logical: [864, 896],
+    physical: [2076, 2152],
+    physicalSource: GOOGLE_PIXEL_10_PRO_FOLD,
+    ratio: 2.5,
+    frame: FOLDABLE_UNFOLDED_FRAME,
+    fold: {
+      state: "unfolded",
+      axis: "vertical",
+      crease: true,
+      pairedDeviceId: "pixel-10-pro-fold-cover",
     },
   },
   {
