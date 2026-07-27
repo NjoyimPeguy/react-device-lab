@@ -23,6 +23,13 @@ function pixels(value: number): string {
  *
  * @param props - Device, orientation, content, and safe-area presentation.
  * @returns The framed preview content region.
+ *
+ * @example
+ * ```tsx
+ * <DeviceFrame device={DEVICE_PRESETS[0]} showSafeArea>
+ *   <CheckoutPage />
+ * </DeviceFrame>
+ * ```
  */
 export function DeviceFrame({
   device,

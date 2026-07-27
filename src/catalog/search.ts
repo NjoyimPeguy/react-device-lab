@@ -17,6 +17,12 @@ function normalize(value: string): string {
  * @param query - User-entered search text.
  * @param presets - Catalog to search; defaults to {@link DEVICE_PRESETS}.
  * @returns A new array in source-catalog order.
+ *
+ * @example
+ * ```ts
+ * const matches = searchDevicePresets("iphone pro");
+ * // Every iPhone Pro preset, in catalog order.
+ * ```
  */
 export function searchDevicePresets(
   query: string,

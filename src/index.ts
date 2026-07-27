@@ -113,7 +113,10 @@ export type {
   SafeAreaInsets,
 } from "./types/frame.js";
 export type {
+  DevicePreviewLabBaseProps,
+  DevicePreviewLabPortalProps,
   DevicePreviewLabProps,
+  DevicePreviewLabSourceProps,
   DeviceSelectorProps,
   PreviewConfigurationPanelProps,
   PreviewDestination,

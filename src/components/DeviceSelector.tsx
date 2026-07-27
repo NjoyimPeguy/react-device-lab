@@ -10,6 +10,13 @@ import type { DeviceSelectorProps } from "../types/lab.js";
  *
  * @param props - Catalog, selected id, labels, and change callback.
  * @returns Accessible search and grouped selection controls.
+ *
+ * @example
+ * ```tsx
+ * const [device, setDevice] = useState(DEVICE_PRESETS[0]);
+ *
+ * <DeviceSelector onChange={setDevice} value={device.id} />
+ * ```
  */
 export function DeviceSelector({
   devices = DEVICE_PRESETS,

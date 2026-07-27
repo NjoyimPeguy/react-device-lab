@@ -142,111 +142,276 @@ export interface PreviewConfigurationPanelProps {
  * Every stateful option supports controlled and uncontrolled use. Supplying
  * both forms uses the controlled value and retains the default only for initial
  * uncontrolled state.
- *
- * @inline
  */
-interface DevicePreviewLabBaseProps {
+export interface DevicePreviewLabBaseProps {
   /**
    * Device catalog; defaults to {@link DEVICE_PRESETS} and must contain at
    * least one preset.
+   *
+   * @category Selection
    */
   readonly devices?: readonly DevicePreset[];
-  /** Header title; defaults to `"Device Preview Lab"`. */
+  /**
+   * Header title; defaults to `"Device Preview Lab"`.
+   *
+   * @category Content
+   */
   readonly title?: ReactNode;
   /**
    * Header description; defaults to
    * `"Exact responsive viewports for web application review"`.
+   *
+   * @category Content
    */
   readonly description?: ReactNode;
-  /** Optional status badge rendered in the header. */
+  /**
+   * Optional status badge rendered in the header.
+   *
+   * @category Content
+   */
   readonly badge?: ReactNode;
-  /** Optional notice rendered below the header and above the workspace. */
+  /**
+   * Optional notice rendered below the header and above the workspace.
+   *
+   * @category Content
+   */
   readonly notice?: ReactNode;
-  /** Optional class added to the lab root. */
+  /**
+   * Optional class added to the lab root.
+   *
+   * @category Appearance
+   */
   readonly className?: string;
-  /** Full-host or bounded presentation; defaults to `"fullscreen"`. */
+  /**
+   * Full-host or bounded presentation; defaults to `"fullscreen"`.
+   *
+   * @category Appearance
+   */
   readonly workspaceMode?: PreviewWorkspaceMode;
   /**
    * Controlled selected device id. Unknown ids fall back to the first catalog
    * preset.
+   *
+   * @category Selection
    */
   readonly deviceId?: string;
-  /** Initial selected id; defaults to the first catalog preset. */
+  /**
+   * Initial selected id; defaults to the first catalog preset.
+   *
+   * @category Selection
+   */
   readonly defaultDeviceId?: string;
-  /** Called when the selected device changes. */
+  /**
+   * Called when the selected device changes.
+   *
+   * @category Selection
+   */
   readonly onDeviceChange?: (device: DevicePreset) => void;
-  /** Controlled viewport rotation. */
+  /**
+   * Controlled viewport rotation.
+   *
+   * @category Viewport
+   */
   readonly orientation?: DeviceOrientation;
-  /** Initial viewport rotation; defaults to `"portrait"`. */
+  /**
+   * Initial viewport rotation; defaults to `"portrait"`.
+   *
+   * @category Viewport
+   */
   readonly defaultOrientation?: DeviceOrientation;
-  /** Called when the requested rotation changes. */
+  /**
+   * Called when the requested rotation changes.
+   *
+   * @category Viewport
+   */
   readonly onOrientationChange?: (orientation: DeviceOrientation) => void;
-  /** Controlled visual scale. */
+  /**
+   * Controlled visual scale.
+   *
+   * @category Viewport
+   */
   readonly zoom?: PreviewZoom;
-  /** Initial visual scale; defaults to `"fit"`. */
+  /**
+   * Initial visual scale; defaults to `"fit"`.
+   *
+   * @category Viewport
+   */
   readonly defaultZoom?: PreviewZoom;
-  /** Called when the visual scale changes. */
+  /**
+   * Called when the visual scale changes.
+   *
+   * @category Viewport
+   */
   readonly onZoomChange?: (zoom: PreviewZoom) => void;
-  /** Controlled device-frame visibility. */
+  /**
+   * Controlled device-frame visibility. Canonical form of the deprecated
+   * {@link DevicePreviewLabBaseProps.frameVisible | frameVisible} alias; when
+   * both are supplied, `showFrame` wins.
+   *
+   * @category Appearance
+   */
+  readonly showFrame?: boolean;
+  /**
+   * Initial device-frame visibility; defaults to `true`. Canonical form of
+   * the deprecated
+   * {@link DevicePreviewLabBaseProps.defaultFrameVisible | defaultFrameVisible}
+   * alias; when both are supplied, `defaultShowFrame` wins.
+   *
+   * @category Appearance
+   */
+  readonly defaultShowFrame?: boolean;
+  /**
+   * Controlled device-frame visibility.
+   *
+   * @deprecated Use {@link DevicePreviewLabBaseProps.showFrame | showFrame}
+   * instead. Both names remain fully supported; the canonical name wins when
+   * both are supplied.
+   *
+   * @category Appearance
+   */
   readonly frameVisible?: boolean;
-  /** Initial device-frame visibility; defaults to `true`. */
+  /**
+   * Initial device-frame visibility; defaults to `true`.
+   *
+   * @deprecated Use
+   * {@link DevicePreviewLabBaseProps.defaultShowFrame | defaultShowFrame}
+   * instead. Both names remain fully supported; the canonical name wins when
+   * both are supplied.
+   *
+   * @category Appearance
+   */
   readonly defaultFrameVisible?: boolean;
-  /** Called when device-frame visibility changes. */
+  /**
+   * Called when device-frame visibility changes, whichever prop name controls
+   * it.
+   *
+   * @category Appearance
+   */
   readonly onFrameVisibleChange?: (visible: boolean) => void;
-  /** Controlled package theme. */
+  /**
+   * Controlled package theme.
+   *
+   * @category Appearance
+   */
   readonly theme?: PreviewTheme;
-  /** Initial package theme; defaults to `"light"`. */
+  /**
+   * Initial package theme; defaults to `"light"`.
+   *
+   * @category Appearance
+   */
   readonly defaultTheme?: PreviewTheme;
-  /** Called when the package theme changes. */
+  /**
+   * Called when the package theme changes.
+   *
+   * @category Appearance
+   */
   readonly onThemeChange?: (theme: PreviewTheme) => void;
-  /** Controlled safe-area overlay visibility. */
+  /**
+   * Controlled safe-area overlay visibility.
+   *
+   * @category Overlays
+   */
   readonly showSafeArea?: boolean;
-  /** Initial safe-area overlay visibility; defaults to `false`. */
+  /**
+   * Initial safe-area overlay visibility; defaults to `false`.
+   *
+   * @category Overlays
+   */
   readonly defaultShowSafeArea?: boolean;
-  /** Called when safe-area overlay visibility changes. */
+  /**
+   * Called when safe-area overlay visibility changes.
+   *
+   * @category Overlays
+   */
   readonly onShowSafeAreaChange?: (visible: boolean) => void;
   /**
    * Controlled ruler and measurement-overlay visibility. While rulers are
    * visible, the measurement surface captures pointer input over the
    * viewport.
+   *
+   * @category Overlays
    */
   readonly showRulers?: boolean;
   /**
    * Initial ruler and measurement-overlay visibility; defaults to `false`.
+   *
+   * @category Overlays
    */
   readonly defaultShowRulers?: boolean;
-  /** Called when ruler and measurement-overlay visibility changes. */
+  /**
+   * Called when ruler and measurement-overlay visibility changes.
+   *
+   * @category Overlays
+   */
   readonly onShowRulersChange?: (visible: boolean) => void;
   /**
    * Controlled complete preview environment. When omitted, the lab uses the
    * selected model's suggested environment.
+   *
+   * @category Environment
    */
   readonly environment?: PreviewEnvironment;
   /**
    * Initial overrides merged with the selected model's pointer, hover,
    * safe-area, virtual-keyboard, and permission suggestions.
+   *
+   * @category Environment
    */
   readonly defaultEnvironment?: PreviewEnvironmentOverrides;
-  /** Called with the complete environment after a scenario change. */
+  /**
+   * Called with the complete environment after a scenario change.
+   *
+   * @category Environment
+   */
   readonly onEnvironmentChange?: (environment: PreviewEnvironment) => void;
-  /** Controlled named-device or custom-size mode. */
+  /**
+   * Controlled named-device or custom-size mode.
+   *
+   * @category Viewport
+   */
   readonly viewportMode?: PreviewViewportMode;
-  /** Initial viewport mode; defaults to `"device"`. */
+  /**
+   * Initial viewport mode; defaults to `"device"`.
+   *
+   * @category Viewport
+   */
   readonly defaultViewportMode?: PreviewViewportMode;
-  /** Called when the viewport mode changes. */
+  /**
+   * Called when the viewport mode changes.
+   *
+   * @category Viewport
+   */
   readonly onViewportModeChange?: (mode: PreviewViewportMode) => void;
-  /** Controlled custom logical dimensions in CSS pixels. */
+  /**
+   * Controlled custom logical dimensions in CSS pixels.
+   *
+   * @category Viewport
+   */
   readonly customViewport?: ViewportDimensions;
-  /** Initial custom logical dimensions; defaults to 412 × 915 CSS pixels. */
+  /**
+   * Initial custom logical dimensions; defaults to 412 × 915 CSS pixels.
+   *
+   * @category Viewport
+   */
   readonly defaultCustomViewport?: ViewportDimensions;
-  /** Called when custom logical dimensions change. */
+  /**
+   * Called when custom logical dimensions change.
+   *
+   * @category Viewport
+   */
   readonly onCustomViewportChange?: (viewport: ViewportDimensions) => void;
   /**
    * Non-negative finite stage-edge clearance used by Fit scaling; defaults to
    * 24 CSS pixels.
+   *
+   * @category Advanced
    */
   readonly fitPadding?: number;
-  /** Called whenever the package can determine a new embedded route. */
+  /**
+   * Called whenever the package can determine a new embedded route.
+   *
+   * @category Integration
+   */
   readonly onRouteChange?: (route: PreviewRouteState) => void;
   /**
    * Opt-in persistence of the preview configuration in the page URL. `true`
@@ -256,6 +421,8 @@ interface DevicePreviewLabBaseProps {
    * `history.replaceState`, so lab changes never add history entries. A valid
    * payload present on load wins over defaults but yields to explicitly
    * controlled props. Defaults to `false`.
+   *
+   * @category Integration
    */
   readonly syncConfigurationToUrl?: boolean | string;
   /**
@@ -267,76 +434,166 @@ interface DevicePreviewLabBaseProps {
    * already prevented. Device cycling follows flattened catalog-group order
    * and wraps; zoom steps clamp to 10%–200% and start from 100% when the
    * current scale is Fit.
+   *
+   * @category Behavior
    */
   readonly keyboardShortcuts?: boolean | PreviewShortcuts;
 }
 
 /**
- * URL-mode lab props.
- *
- * @inline
+ * URL-mode lab props. Combines {@link DevicePreviewLabBaseProps} with the
+ * application `src`, optional destinations, and iframe integration options.
  */
-interface DevicePreviewLabSourceProps extends DevicePreviewLabBaseProps {
+export interface DevicePreviewLabSourceProps
+  extends DevicePreviewLabBaseProps {
   /**
    * Fallback or only application URL. A valid selected destination takes
    * precedence when `destinations` are supplied.
+   *
+   * @category Content
    */
   readonly src: string;
-  /** React children are unavailable in URL mode. */
+  /**
+   * React children are unavailable in URL mode.
+   *
+   * @category Content
+   */
   readonly children?: never;
-  /** Portal CSS is unavailable in URL mode. */
+  /**
+   * Portal CSS is unavailable in URL mode.
+   *
+   * @category Content
+   */
   readonly portalStyles?: never;
-  /** Optional consumer-defined application destinations. */
+  /**
+   * Optional consumer-defined application destinations.
+   *
+   * @category Selection
+   */
   readonly destinations?: readonly PreviewDestination[];
-  /** Controlled selected destination id. */
+  /**
+   * Controlled selected destination id.
+   *
+   * @category Selection
+   */
   readonly destinationId?: string;
-  /** Initial selected destination id; defaults to the first destination. */
+  /**
+   * Initial selected destination id; defaults to the first destination.
+   *
+   * @category Selection
+   */
   readonly defaultDestinationId?: string;
-  /** Called when the selected destination changes. */
+  /**
+   * Called when the selected destination changes.
+   *
+   * @category Selection
+   */
   readonly onDestinationChange?: (destination: PreviewDestination) => void;
-  /** Exact origins accepted by the optional cross-origin bridge. */
+  /**
+   * Exact origins accepted by the optional cross-origin bridge.
+   *
+   * @category Integration
+   */
   readonly bridgeOrigins?: readonly string[];
-  /** iframe sandbox token list supplied by the consumer. */
+  /**
+   * iframe sandbox token list supplied by the consumer.
+   *
+   * @category Integration
+   */
   readonly sandbox?: string;
-  /** iframe Permissions Policy allowlist supplied by the consumer. */
+  /**
+   * iframe Permissions Policy allowlist supplied by the consumer.
+   *
+   * @category Integration
+   */
   readonly allow?: string;
-  /** Referrer policy applied to the application iframe. */
+  /**
+   * Referrer policy applied to the application iframe.
+   *
+   * @category Integration
+   */
   readonly referrerPolicy?: HTMLIFrameElement["referrerPolicy"];
 }
 
 /**
- * React portal-mode lab props.
- *
- * @inline
+ * React portal-mode lab props. Combines {@link DevicePreviewLabBaseProps}
+ * with React `children` mounted inside an isolated iframe document.
  */
-interface DevicePreviewLabPortalProps extends DevicePreviewLabBaseProps {
-  /** URL loading is unavailable in portal mode. */
+export interface DevicePreviewLabPortalProps
+  extends DevicePreviewLabBaseProps {
+  /**
+   * URL loading is unavailable in portal mode.
+   *
+   * @category Content
+   */
   readonly src?: never;
-  /** React content mounted inside an isolated iframe document. */
+  /**
+   * React content mounted inside an isolated iframe document.
+   *
+   * @category Content
+   */
   readonly children: ReactNode;
-  /** CSS text injected into the portal iframe document. */
+  /**
+   * CSS text injected into the portal iframe document.
+   *
+   * @category Content
+   */
   readonly portalStyles?: string;
-  /** URL destinations are unavailable in portal mode. */
+  /**
+   * URL destinations are unavailable in portal mode.
+   *
+   * @category Selection
+   */
   readonly destinations?: never;
-  /** Destination selection is unavailable in portal mode. */
+  /**
+   * Destination selection is unavailable in portal mode.
+   *
+   * @category Selection
+   */
   readonly destinationId?: never;
-  /** Uncontrolled destination selection is unavailable in portal mode. */
+  /**
+   * Uncontrolled destination selection is unavailable in portal mode.
+   *
+   * @category Selection
+   */
   readonly defaultDestinationId?: never;
-  /** Destination callbacks are unavailable in portal mode. */
+  /**
+   * Destination callbacks are unavailable in portal mode.
+   *
+   * @category Selection
+   */
   readonly onDestinationChange?: never;
-  /** Cross-origin bridge origins are unavailable in portal mode. */
+  /**
+   * Cross-origin bridge origins are unavailable in portal mode.
+   *
+   * @category Integration
+   */
   readonly bridgeOrigins?: never;
-  /** URL iframe sandbox options are unavailable in portal mode. */
+  /**
+   * URL iframe sandbox options are unavailable in portal mode.
+   *
+   * @category Integration
+   */
   readonly sandbox?: never;
-  /** URL iframe Permissions Policy options are unavailable in portal mode. */
+  /**
+   * URL iframe Permissions Policy options are unavailable in portal mode.
+   *
+   * @category Integration
+   */
   readonly allow?: never;
-  /** URL iframe referrer policy is unavailable in portal mode. */
+  /**
+   * URL iframe referrer policy is unavailable in portal mode.
+   *
+   * @category Integration
+   */
   readonly referrerPolicy?: never;
 }
 
 /**
- * Mutually exclusive props for the complete URL-mode or React-portal preview
- * workspace.
+ * Mutually exclusive props for the complete URL-mode
+ * ({@link DevicePreviewLabSourceProps}) or React-portal
+ * ({@link DevicePreviewLabPortalProps}) preview workspace. Shared options
+ * live in {@link DevicePreviewLabBaseProps}.
  */
 export type DevicePreviewLabProps =
   | DevicePreviewLabSourceProps

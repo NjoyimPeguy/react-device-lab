@@ -35,6 +35,14 @@ const PLATFORM_LABELS: Readonly<Record<DevicePlatform, string>> = {
  * @param presets - Presets to group without mutation.
  * @returns Phone, foldable, tablet, laptop, desktop, and ultrawide sections
  * that contain at least one preset.
+ *
+ * @example
+ * ```ts
+ * const sections = groupDevicePresets(DEVICE_PRESETS);
+ * for (const section of sections) {
+ *   console.log(section.label, section.devices.length);
+ * }
+ * ```
  */
 export function groupDevicePresets(
   presets: readonly DevicePreset[],

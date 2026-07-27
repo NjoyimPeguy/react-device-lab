@@ -133,6 +133,63 @@ describe("DevicePreviewLab URL synchronization", () => {
     );
   });
 
+  it("keeps the canonical controlled frame visibility ahead of the URL payload", () => {
+    window.history.replaceState(
+      null,
+      "",
+      `/${writePreviewConfigurationToSearch("", restoredConfiguration)}`,
+    );
+    render(
+      <DevicePreviewLab
+        showFrame
+        src="https://app.example.test/"
+        syncConfigurationToUrl
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+  });
+
+  it("keeps the deprecated controlled frame visibility ahead of the URL payload", () => {
+    window.history.replaceState(
+      null,
+      "",
+      `/${writePreviewConfigurationToSearch("", restoredConfiguration)}`,
+    );
+    render(
+      <DevicePreviewLab
+        frameVisible
+        src="https://app.example.test/"
+        syncConfigurationToUrl
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+  });
+
+  it("restores the shared frame visibility over the canonical default", () => {
+    window.history.replaceState(
+      null,
+      "",
+      `/${writePreviewConfigurationToSearch("", restoredConfiguration)}`,
+    );
+    render(
+      <DevicePreviewLab
+        defaultShowFrame
+        src="https://app.example.test/"
+        syncConfigurationToUrl
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).not.toBeChecked();
+  });
+
   it("uses a custom parameter name when synchronization is a string", () => {
     render(
       <DevicePreviewLab

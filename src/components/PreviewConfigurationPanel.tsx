@@ -59,6 +59,55 @@ function checked(event: React.ChangeEvent<HTMLInputElement>): boolean {
  *
  * @param props - Current configuration values and change callbacks.
  * @returns The configuration controls. The composing workspace owns scrolling.
+ *
+ * @example
+ * ```tsx
+ * function StandalonePanel() {
+ *   const [device, setDevice] = useState(DEVICE_PRESETS[0]);
+ *   const [orientation, setOrientation] =
+ *     useState<DeviceOrientation>("portrait");
+ *   const [zoom, setZoom] = useState<PreviewZoom>("fit");
+ *   const [frameVisible, setFrameVisible] = useState(true);
+ *   const [theme, setTheme] = useState<PreviewTheme>("light");
+ *   const [showSafeArea, setShowSafeArea] = useState(false);
+ *   const [showRulers, setShowRulers] = useState(false);
+ *   const [environment, setEnvironment] = useState(() =>
+ *     createPreviewEnvironment(),
+ *   );
+ *   const [viewportMode, setViewportMode] =
+ *     useState<PreviewViewportMode>("device");
+ *   const [customViewport, setCustomViewport] = useState({
+ *     width: 412,
+ *     height: 915,
+ *   });
+ *
+ *   return (
+ *     <PreviewConfigurationPanel
+ *       customViewport={customViewport}
+ *       device={device}
+ *       devices={DEVICE_PRESETS}
+ *       environment={environment}
+ *       frameVisible={frameVisible}
+ *       onCustomViewportChange={setCustomViewport}
+ *       onDeviceChange={setDevice}
+ *       onEnvironmentChange={setEnvironment}
+ *       onFrameVisibleChange={setFrameVisible}
+ *       onOrientationChange={setOrientation}
+ *       onShowRulersChange={setShowRulers}
+ *       onShowSafeAreaChange={setShowSafeArea}
+ *       onThemeChange={setTheme}
+ *       onViewportModeChange={setViewportMode}
+ *       onZoomChange={setZoom}
+ *       orientation={orientation}
+ *       showRulers={showRulers}
+ *       showSafeArea={showSafeArea}
+ *       theme={theme}
+ *       viewportMode={viewportMode}
+ *       zoom={zoom}
+ *     />
+ *   );
+ * }
+ * ```
  */
 export function PreviewConfigurationPanel({
   devices,

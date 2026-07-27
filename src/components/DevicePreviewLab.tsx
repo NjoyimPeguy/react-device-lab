@@ -190,9 +190,9 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     defaultValue: props.defaultZoom ?? "fit",
     onChange: props.onZoomChange,
   });
-  const [frameVisible, setFrameVisible] = useControllableState({
-    value: props.frameVisible,
-    defaultValue: props.defaultFrameVisible ?? true,
+  const [showFrame, setShowFrame] = useControllableState({
+    value: props.showFrame ?? props.frameVisible,
+    defaultValue: props.defaultShowFrame ?? props.defaultFrameVisible ?? true,
     onChange: props.onFrameVisibleChange,
   });
   const [theme, setTheme] = useControllableState<PreviewTheme>({
@@ -305,10 +305,10 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       deviceId: selectedDevice.id,
       orientation,
       zoom,
-      frameVisible,
+      frameVisible: showFrame,
       environment,
     }),
-    [selectedDevice.id, orientation, zoom, frameVisible, environment],
+    [selectedDevice.id, orientation, zoom, showFrame, environment],
   );
   useUrlConfiguration(
     props.syncConfigurationToUrl,
@@ -326,8 +326,8 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
         setOrientation(restored.orientation);
       }
       if (props.zoom === undefined) setZoom(restored.zoom);
-      if (props.frameVisible === undefined) {
-        setFrameVisible(restored.frameVisible);
+      if (props.showFrame === undefined && props.frameVisible === undefined) {
+        setShowFrame(restored.frameVisible);
       }
       if (props.environment === undefined) {
         setEnvironment(restored.environment);
@@ -415,7 +415,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       onZoomIn: () => stepZoom(1),
       onZoomOut: () => stepZoom(-1),
       onZoomReset: () => setZoom("fit"),
-      onToggleFrame: () => setFrameVisible(!frameVisible),
+      onToggleFrame: () => setShowFrame(!showFrame),
     },
     enabled: props.keyboardShortcuts !== false,
   });
@@ -437,11 +437,11 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       device={selectedDevice}
       devices={devices}
       environment={environment}
-      frameVisible={frameVisible}
+      frameVisible={showFrame}
       onCustomViewportChange={setCustomViewport}
       onDeviceChange={handleDeviceChange}
       onEnvironmentChange={setEnvironment}
-      onFrameVisibleChange={setFrameVisible}
+      onFrameVisibleChange={setShowFrame}
       onOrientationChange={setOrientation}
       onShowSafeAreaChange={setShowSafeArea}
       onShowRulersChange={setShowRulers}
@@ -507,7 +507,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
               device={activeDevice}
               environment={environment}
               fitPadding={props.fitPadding ?? 24}
-              frameVisible={frameVisible}
+              frameVisible={showFrame}
               {...(props.onRouteChange !== undefined
                 ? { onRouteChange: props.onRouteChange }
                 : {})}
@@ -523,7 +523,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
               device={activeDevice}
               environment={environment}
               fitPadding={props.fitPadding ?? 24}
-              frameVisible={frameVisible}
+              frameVisible={showFrame}
               {...(props.onRouteChange !== undefined
                 ? { onRouteChange: props.onRouteChange }
                 : {})}

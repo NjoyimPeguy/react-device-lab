@@ -18,6 +18,38 @@ import {
 } from "react-device-lab";
 ```
 
+## Quick start
+
+URL mode previews a running application inside an exact named-device viewport:
+
+```tsx
+import { DevicePreviewLab } from "react-device-lab";
+import "react-device-lab/styles.css";
+
+export function App() {
+  return <DevicePreviewLab src="http://localhost:3000" />;
+}
+```
+
+Portal mode renders your own React tree inside the isolated preview document
+instead of loading a URL:
+
+```tsx
+import { DevicePreviewLab } from "react-device-lab";
+import "react-device-lab/styles.css";
+
+export function App() {
+  return (
+    <DevicePreviewLab portalStyles="body { font-family: system-ui; }">
+      <CheckoutPage />
+    </DevicePreviewLab>
+  );
+}
+```
+
+Every stateful option supports controlled and uncontrolled use; uncontrolled
+defaults carry the `default*` prefix, so the snippets above need nothing else.
+
 ## Components
 
 - `DevicePreviewLab` composes the complete responsive workspace. It accepts
@@ -127,6 +159,11 @@ prop types. `DevicePreviewLab` supports controlled and uncontrolled device,
 orientation, zoom, frame, theme, safe-area visibility, ruler visibility,
 viewport mode, custom dimensions, environment, and destination state. The
 embedded application owns its live route; observe it with `onRouteChange`.
+
+Frame visibility uses the canonical `showFrame` / `defaultShowFrame` props.
+The original `frameVisible` / `defaultFrameVisible` names keep working as
+deprecated aliases, and the canonical name wins when both forms are supplied.
+`onFrameVisibleChange` remains the single change callback for both names.
 
 ## Rulers and measurement
 
@@ -242,7 +279,116 @@ Standalone panels receive the same action through the `previewRoot` prop.
 import { capturePreviewPng } from "react-device-lab";
 
 const root = document.querySelector("[data-rdl-export-root]");
-const blob = await capturePreviewPng(root, { fileName: "checkout-preview" });
+if (root instanceof HTMLElement) {
+  const blob = await capturePreviewPng(root, { fileName: "checkout-preview" });
+}
+```
+
+## Recipes
+
+Complete patterns built from the exports above.
+
+### Controlled state
+
+Pair each value prop with its `on*Change` callback. The lab never mutates
+controlled values, so a rejected change simply does not render.
+
+```tsx
+function ControlledPreview() {
+  const [deviceId, setDeviceId] = useState("iphone-17-pro");
+  const [showFrame, setShowFrame] = useState(true);
+
+  return (
+    <DevicePreviewLab
+      deviceId={deviceId}
+      onDeviceChange={(device) => setDeviceId(device.id)}
+      onFrameVisibleChange={setShowFrame}
+      showFrame={showFrame}
+      src="http://localhost:3000"
+    />
+  );
+}
+```
+
+### Custom device list
+
+Append project-defined presets — such as the `kioskProfile` from
+[Custom device](#custom-device) — without losing the built-in catalog.
+
+```tsx
+<DevicePreviewLab
+  defaultDeviceId="example-kiosk"
+  devices={[...DEVICE_PRESETS, kioskProfile]}
+  src="http://localhost:3000"
+/>
+```
+
+### Shareable configuration URL
+
+Persist device, orientation, zoom, frame visibility, and environment in the
+query string so a link restores the exact preview.
+
+```tsx
+<DevicePreviewLab src="http://localhost:3000" syncConfigurationToUrl />
+```
+
+See [Shareable configuration URLs](#shareable-configuration-urls) for custom
+parameter names and the standalone reader and writer helpers.
+
+### Environment scenario
+
+Start from a scenario — dark color scheme with the virtual keyboard open —
+while the device keeps suggesting everything else.
+
+```tsx
+<DevicePreviewLab
+  defaultEnvironment={{
+    colorScheme: "dark",
+    virtualKeyboard: { visible: true, height: 300 },
+  }}
+  src="http://localhost:3000"
+/>
+```
+
+### Keyboard shortcuts and rulers
+
+Keep the default plain-key keymap, remap device cycling, and open with the
+measurement rulers visible.
+
+```tsx
+<DevicePreviewLab
+  defaultShowRulers
+  keyboardShortcuts={{ nextDevice: "n", previousDevice: "p" }}
+  src="http://localhost:3000"
+/>
+```
+
+### Custom viewport
+
+Preview exact consumer dimensions instead of a named device.
+
+```tsx
+<DevicePreviewLab
+  defaultCustomViewport={{ width: 500, height: 900 }}
+  defaultViewportMode="custom"
+  src="http://localhost:3000"
+/>
+```
+
+### PNG export callback
+
+The configuration panel's built-in "Export PNG" action covers the common
+case. Call `capturePreviewPng` directly when the host application owns the
+export UI.
+
+```tsx
+async function handleExportClick() {
+  const root = document.querySelector<HTMLElement>("[data-rdl-export-root]");
+  if (!root) return;
+  const blob = await capturePreviewPng(root, { fileName: "device-preview" });
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 ```
 
 ## Bridge and environment utilities

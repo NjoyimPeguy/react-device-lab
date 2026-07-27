@@ -23,6 +23,14 @@ export const PREVIEW_CONFIGURATION_URL_PARAM = "rdl";
  * @param param - Parameter carrying the payload; defaults to
  * {@link PREVIEW_CONFIGURATION_URL_PARAM}.
  * @returns The normalized immutable configuration, or `null`.
+ *
+ * @example
+ * ```ts
+ * const restored = readPreviewConfigurationFromSearch(
+ *   window.location.search,
+ * );
+ * if (restored) console.log(restored.deviceId, restored.zoom);
+ * ```
  */
 export function readPreviewConfigurationFromSearch(
   search: string,
@@ -50,6 +58,19 @@ export function readPreviewConfigurationFromSearch(
  * {@link PREVIEW_CONFIGURATION_URL_PARAM}.
  * @returns A query string preserving unrelated parameters.
  * @throws `TypeError` when the configuration is invalid.
+ *
+ * @example
+ * ```ts
+ * const search = writePreviewConfigurationToSearch(window.location.search, {
+ *   version: 1,
+ *   deviceId: "iphone-17-pro",
+ *   orientation: "landscape",
+ *   zoom: 0.75,
+ *   frameVisible: true,
+ *   environment: createPreviewEnvironment(),
+ * });
+ * window.history.replaceState(null, "", search);
+ * ```
  */
 export function writePreviewConfigurationToSearch(
   search: string,

@@ -394,6 +394,108 @@ describe("DevicePreviewLab", () => {
     ).toBeChecked();
   });
 
+  it("treats showFrame as the canonical controlled frame visibility", async () => {
+    const user = userEvent.setup();
+    const onFrameVisibleChange = vi.fn();
+    render(
+      <DevicePreviewLab
+        onFrameVisibleChange={onFrameVisibleChange}
+        showFrame={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(onFrameVisibleChange).toHaveBeenCalledWith(true);
+    expect(toggle).not.toBeChecked();
+  });
+
+  it("lets the canonical showFrame win over the deprecated alias", () => {
+    render(
+      <DevicePreviewLab
+        frameVisible
+        showFrame={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).not.toBeChecked();
+  });
+
+  it("keeps the deprecated controlled frameVisible alias working alone", async () => {
+    const user = userEvent.setup();
+    const onFrameVisibleChange = vi.fn();
+    render(
+      <DevicePreviewLab
+        frameVisible={false}
+        onFrameVisibleChange={onFrameVisibleChange}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(onFrameVisibleChange).toHaveBeenCalledWith(true);
+    expect(toggle).not.toBeChecked();
+  });
+
+  it("treats defaultShowFrame as the canonical initial visibility", async () => {
+    const user = userEvent.setup();
+    render(
+      <DevicePreviewLab
+        defaultShowFrame={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(toggle).toBeChecked();
+  });
+
+  it("lets the canonical defaultShowFrame win over the deprecated default", () => {
+    render(
+      <DevicePreviewLab
+        defaultFrameVisible={false}
+        defaultShowFrame
+        src="https://app.example.test/"
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+  });
+
+  it("keeps the deprecated defaultFrameVisible alias working alone", async () => {
+    const user = userEvent.setup();
+    render(
+      <DevicePreviewLab
+        defaultFrameVisible={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(toggle).toBeChecked();
+  });
+
   it("ignores shortcuts typed into the device search field", async () => {
     const user = userEvent.setup();
     const first = DEVICE_PRESETS[0];
