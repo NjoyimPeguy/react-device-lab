@@ -26,7 +26,9 @@ default was already prevented. Bindings ignore Control, Meta, and Alt so they
 never shadow browser or operating-system combos; Shift stays allowed so
 shifted symbols such as `+` keep working. `DevicePreviewLab` disables the
 keymap with `keyboardShortcuts={false}`, overrides individual keys with a
-partial object, and removes a binding with `null`.
+partial object, and removes a binding with `null`. When an override takes a
+key a default binding still holds, the override wins the key and the default
+action is left unbound.
 
 The package does not trap focus. An embedded iframe is its own focus context, so
 keyboard testing must include entering and leaving the target document.

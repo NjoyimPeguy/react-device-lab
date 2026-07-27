@@ -29,7 +29,9 @@ export interface UsePreviewShortcutsOptions {
   readonly enabled?: boolean;
   /**
    * Per-action key overrides. An omitted action keeps its default key and a
-   * `null` value removes that binding.
+   * `null` value removes that binding. An override that collides with a key
+   * a default binding still holds wins the key, leaving the default action
+   * unbound.
    */
   readonly bindings?: PreviewShortcuts;
   /** Actions invoked for each bound key. */
@@ -70,13 +72,21 @@ function resolveKeymap(
   bindings: PreviewShortcuts | undefined,
 ): ReadonlyMap<string, keyof UsePreviewShortcutsCallbacks> {
   const keymap = new Map<string, keyof UsePreviewShortcutsCallbacks>();
-  for (const action of Object.keys(
-    DEFAULT_BINDINGS,
-  ) as PreviewShortcutAction[]) {
+  const actions = Object.keys(DEFAULT_BINDINGS) as PreviewShortcutAction[];
+  // Defaults land first so an explicit override wins a key collision; the
+  // displaced default action keeps no key.
+  for (const action of actions) {
+    if (bindings?.[action] === undefined) {
+      keymap.set(
+        normalizeKey(DEFAULT_BINDINGS[action]),
+        CALLBACK_NAMES[action],
+      );
+    }
+  }
+  for (const action of actions) {
     const override = bindings?.[action];
-    const key = override === undefined ? DEFAULT_BINDINGS[action] : override;
-    if (key !== null && key !== "") {
-      keymap.set(normalizeKey(key), CALLBACK_NAMES[action]);
+    if (override !== undefined && override !== null && override !== "") {
+      keymap.set(normalizeKey(override), CALLBACK_NAMES[action]);
     }
   }
   return keymap;

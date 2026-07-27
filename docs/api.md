@@ -265,6 +265,10 @@ Same-origin iframe documents, including portal-mode content, are serialized
 recursively. Cross-origin iframe pixels are unreachable by design: the export
 renders a neutral placeholder block in that region and emits a single console
 warning per capture. The function never attempts to read a cross-origin frame.
+The same self-containment rule limits same-origin content: browsers fetch no
+external subresources for an SVG loaded as an image, so `<img>` sources, CSS
+`background-image` URLs, and webfonts export as blank regions or fallback
+fonts.
 Failures reject with a typed `PreviewPngExportError` whose `code`
 distinguishes an empty root, an unavailable canvas, an undecodable serialized
 image, and a refused draw or encode.

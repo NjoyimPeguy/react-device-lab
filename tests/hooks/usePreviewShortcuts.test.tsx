@@ -165,6 +165,18 @@ describe("usePreviewShortcuts", () => {
     expect(callbacks.onNextDevice).toHaveBeenCalledTimes(1);
   });
 
+  it("lets a consumer override win a key held by a default binding", () => {
+    const callbacks = createCallbacks();
+    render(<Harness bindings={{ rotate: "f" }} callbacks={callbacks} />);
+
+    press("f");
+    expect(callbacks.onRotate).toHaveBeenCalledTimes(1);
+    expect(callbacks.onToggleFrame).not.toHaveBeenCalled();
+
+    press("r");
+    expect(callbacks.onRotate).toHaveBeenCalledTimes(1);
+  });
+
   it("attaches no listener while disabled and attaches once enabled", () => {
     const callbacks = createCallbacks();
     const { rerender } = render(

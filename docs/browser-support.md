@@ -24,9 +24,12 @@ compatibility bug.
 
 PNG export follows the same rule. Same-origin iframe documents are serialized
 recursively into the snapshot, while cross-origin iframe regions render as a
-neutral placeholder block with a single console warning per capture. Hosts
-that refuse the draw or the encode surface a typed `PreviewPngExportError`
-instead of a silent failure.
+neutral placeholder block with a single console warning per capture. The same
+self-containment rule limits same-origin content: browsers fetch no external
+subresources for an SVG loaded as an image, so `<img>` sources, CSS
+`background-image` URLs, and webfonts export as blank regions or fallback
+fonts. Hosts that refuse the draw or the encode surface a typed
+`PreviewPngExportError` instead of a silent failure.
 
 Release screenshot baselines are generated and compared in the exact, pinned
 Playwright Noble container declared by the CI and release workflows. This keeps

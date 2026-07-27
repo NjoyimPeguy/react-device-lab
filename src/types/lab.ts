@@ -429,7 +429,9 @@ export interface DevicePreviewLabBaseProps {
    * Keyboard control of the preview; defaults to enabled with the default
    * {@link PreviewShortcuts} keymap. `false` removes every binding; a partial
    * object overrides individual keys and a `null` value removes one binding.
-   * Shortcuts use plain keys, never fire while focus is in an input, select,
+   * An override that collides with a key a default binding still holds wins
+   * the key, leaving the default action unbound. Shortcuts use plain keys,
+   * never fire while focus is in an input, select,
    * textarea, or contenteditable element, and ignore events whose default was
    * already prevented. Device cycling follows flattened catalog-group order
    * and wraps; zoom steps clamp to 10%–200% and start from 100% when the

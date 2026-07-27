@@ -260,4 +260,44 @@ describe("capturePreviewPng", () => {
     expect(failure).toBeInstanceOf(PreviewPngExportError);
     expect((failure as PreviewPngExportError).code).toBe("blob-unavailable");
   });
+
+  it("rejects with a typed error when the host refuses the draw", async () => {
+    const root = buildRoot();
+    stubRect(root, 300, 200);
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockImplementation(
+      (function (this: HTMLCanvasElement, contextId: string) {
+        if (contextId !== "2d") return null;
+        return {
+          drawImage: () => {
+            throw new DOMException(
+              "The canvas has been tainted by cross-origin data.",
+              "SecurityError",
+            );
+          },
+        };
+      }) as typeof HTMLCanvasElement.prototype.getContext,
+    );
+    mockCanvasToBlob(new Blob([PNG_BYTES], { type: "image/png" }));
+
+    const failure = await capturePreviewPng(root).catch(
+      (error: unknown) => error,
+    );
+    expect(failure).toBeInstanceOf(PreviewPngExportError);
+    expect((failure as PreviewPngExportError).code).toBe(
+      "rasterization-failed",
+    );
+  });
+
+  it("rejects with a typed error outside a browser document", async () => {
+    const root = buildRoot();
+    vi.stubGlobal("window", undefined);
+
+    const failure = await capturePreviewPng(root).catch(
+      (error: unknown) => error,
+    );
+    expect(failure).toBeInstanceOf(PreviewPngExportError);
+    expect((failure as PreviewPngExportError).code).toBe(
+      "unsupported-environment",
+    );
+  });
 });

@@ -295,6 +295,11 @@ function normalizeFileName(fileName: string | undefined): string | null {
  * block in that region and emits a single console warning per capture. The
  * function never attempts to read a cross-origin frame.
  *
+ * The same self-containment rule limits same-origin content. Browsers fetch
+ * no external subresources for an SVG loaded as an image, so `<img>` sources,
+ * CSS `background-image` URLs, and webfonts referenced by the serialized
+ * subtree export as blank regions or fallback fonts.
+ *
  * The promise resolves with the PNG `Blob` only — no download is triggered.
  * Pass `options.fileName` to receive a named `File` instead.
  *
