@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
@@ -7,6 +10,19 @@ import {
   getDeviceFrameDimensions,
   type DevicePreset,
 } from "../../src/index.js";
+
+/**
+ * Shell tones authored in `src/styles/index.css`. The graphite default lives
+ * on the base `.rdl-frame` variables, so it needs no attribute selector.
+ */
+const AUTHORED_SHELL_TONES: readonly string[] = [
+  "graphite",
+  "silver",
+  "titanium-dark",
+  "titanium-light",
+  "porcelain",
+];
+const DEFAULT_SHELL_TONE = "graphite";
 
 function findPreset(name: string): DevicePreset {
   const preset = DEVICE_PRESETS.find((candidate) => candidate.name === name);
@@ -211,6 +227,63 @@ describe("DeviceFrame", () => {
       ultra.device.frame.cornerProfile,
     );
     expect(ultra.frame).toHaveStyle({ "--rdl-frame-radius": "25px" });
+  });
+
+  it("emits the authored default tone for each frame style", () => {
+    const expectations: Array<[string, string]> = [
+      ["iPhone SE (3rd generation)", "silver"],
+      ["iPhone 13 mini", "graphite"],
+      ["iPhone 17 Pro", "graphite"],
+      ["Galaxy S25 Ultra", "graphite"],
+      ["Galaxy Z Fold 7 — unfolded", "graphite"],
+      ["iPad Pro 13-inch", "silver"],
+      ["MacBook Air 13-inch", "silver"],
+      ["Full HD desktop", "graphite"],
+    ];
+
+    for (const [name, tone] of expectations) {
+      const rendered = renderFrame(name);
+      expect(rendered.frame, name).toHaveAttribute(
+        "data-rdl-shell-tone",
+        tone,
+      );
+      rendered.unmount();
+    }
+  });
+
+  it("emits only authored palette tones across the whole catalog", () => {
+    for (const device of DEVICE_PRESETS) {
+      const { unmount } = render(
+        <DeviceFrame device={device} contentLabel={device.name}>
+          Content
+        </DeviceFrame>,
+      );
+      const frame = screen
+        .getByRole("region", { name: device.name })
+        .closest("[data-rdl-device-frame]");
+      const tone = (frame as HTMLElement).dataset["rdlShellTone"];
+      expect(AUTHORED_SHELL_TONES.includes(tone ?? ""), device.id).toBe(true);
+      unmount();
+    }
+  });
+
+  it("backs every authored shell tone with a full set of CSS variables", () => {
+    const stylesheet = readFileSync(
+      resolve("src/styles/index.css"),
+      "utf8",
+    );
+
+    for (const tone of AUTHORED_SHELL_TONES) {
+      if (tone === DEFAULT_SHELL_TONE) continue;
+      const rule = new RegExp(
+        `\\.rdl-frame\\[data-rdl-shell-tone="${tone}"\\]\\s*\\{[^}]*\\}`,
+        "u",
+      );
+      const block = rule.exec(stylesheet)?.[0] ?? "";
+      expect(block, tone).toContain("--rdl-frame-metal:");
+      expect(block, tone).toContain("--rdl-frame-metal-edge:");
+      expect(block, tone).toContain("--rdl-frame-highlight:");
+    }
   });
 
   it("draws a non-interactive safe-area overlay with explicit insets", () => {

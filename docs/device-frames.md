@@ -35,6 +35,37 @@ mobile and tablet bezel geometry while retaining the selected preset.
 Fit mode. Hiding the frame returns the unchanged logical viewport dimensions.
 The frame never changes the target application's media-query width or height.
 
+## Shell tone palette
+
+The shell's metal finish is selected by `data-rdl-shell-tone`. Each tone
+redefines the same three custom properties — `--rdl-frame-metal`,
+`--rdl-frame-metal-edge`, and `--rdl-frame-highlight` — so the shared shell
+gradients, controls, and shadows keep working unchanged. Metal values are
+theme-independent; the outline and drop shadow adapt to `data-rdl-theme`
+through `--rdl-frame-outline` and `--rdl-frame-shadow-color`, keeping every
+tone legible in both light and dark modes.
+
+| Tone | Intended devices |
+| --- | --- |
+| `graphite` | Default dark finish for most phones, foldables, and monitors; defined by the base `.rdl-frame` variables, no selector. |
+| `silver` | Default light finish for home-button phones, tablets, and laptops. |
+| `titanium-dark` | Dark titanium rails: iPhone Pro "Black Titanium", Galaxy S Ultra "Titanium Black/Gray". |
+| `titanium-light` | Light titanium rails: iPhone Pro "Natural/White Titanium", Galaxy S Ultra "Titanium Whitesilver". |
+| `porcelain` | Warm ceramic off-white in the spirit of the Pixel "Porcelain" colorway. |
+
+Calibration policy:
+
+- Tones are named after the published colorway family they approximate, but
+  the values are authored in this repository. They are not sampled from
+  manufacturer artwork, photography, or design resources.
+- The palette stays deliberately small. A new tone is added only when a
+  catalog device's signature finish cannot be read as one of the existing
+  tones; near-miss colorways map to the closest existing tone.
+- Frame-style defaults are stable. A non-default tone reaches a device only
+  through an explicit per-model `shellTone` override in `MODEL_OVERRIDES`
+  (`src/frames/frameGeometry.ts`), so extending the palette never shifts the
+  rendering of uncalibrated presets.
+
 ## Visual regression policy
 
 The browser suite stores generic Chromium baselines for representative

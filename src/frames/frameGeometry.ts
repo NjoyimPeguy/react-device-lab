@@ -23,7 +23,12 @@ interface GeometryValues {
   readonly cutoutWidth: number;
   readonly cutoutHeight: number;
   readonly cutoutOffset: number;
-  readonly shellTone: "graphite" | "silver";
+  readonly shellTone:
+    | "graphite"
+    | "silver"
+    | "titanium-dark"
+    | "titanium-light"
+    | "porcelain";
 }
 
 export interface DeviceFrameGeometry extends GeometryValues {

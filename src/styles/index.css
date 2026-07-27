@@ -766,6 +766,24 @@
   --rdl-frame-highlight: rgb(255 255 255 / 52%);
 }
 
+.rdl-frame[data-rdl-shell-tone="titanium-dark"] {
+  --rdl-frame-metal: #3b3835;
+  --rdl-frame-metal-edge: #1a1815;
+  --rdl-frame-highlight: rgb(255 255 255 / 24%);
+}
+
+.rdl-frame[data-rdl-shell-tone="titanium-light"] {
+  --rdl-frame-metal: #a9a49b;
+  --rdl-frame-metal-edge: #5d5952;
+  --rdl-frame-highlight: rgb(255 255 255 / 45%);
+}
+
+.rdl-frame[data-rdl-shell-tone="porcelain"] {
+  --rdl-frame-metal: #d8d2c4;
+  --rdl-frame-metal-edge: #8a8477;
+  --rdl-frame-highlight: rgb(255 255 255 / 60%);
+}
+
 .rdl-frame__shell {
   position: relative;
   z-index: 0;
