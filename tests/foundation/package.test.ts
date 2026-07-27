@@ -21,7 +21,7 @@ describe("package foundation", () => {
     const packageJson = await readJson("package.json");
 
     expect(packageJson["name"]).toBe("react-device-lab");
-    expect(packageJson["version"]).toBe("1.0.0");
+    expect(packageJson["version"]).toBe("1.1.0");
     expect(packageJson["type"]).toBe("module");
     expect(packageJson["files"]).toEqual(
       expect.arrayContaining(["dist", "LICENSE", "README.md"]),
