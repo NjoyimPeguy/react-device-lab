@@ -60,7 +60,14 @@ export function DeviceSelector({
           <option value="">No matching devices</option>
         ) : null}
         {groups.map((group) => (
-          <optgroup key={group.category} label={group.label}>
+          <optgroup
+            key={
+              group.platform
+                ? `${group.category}-${group.platform}`
+                : group.category
+            }
+            label={group.label}
+          >
             {group.devices.map((device) => (
               <option key={device.id} value={device.id}>
                 {device.name}
