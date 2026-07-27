@@ -1,10 +1,11 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import {
   DEVICE_PRESETS,
   DevicePreviewLab,
+  groupDevicePresets,
 } from "../../src/index.js";
 
 describe("DevicePreviewLab", () => {
@@ -265,6 +266,262 @@ describe("DevicePreviewLab", () => {
         "--rdl-safe-bottom": "7px",
         "--rdl-safe-left": "5px",
       }),
+    );
+  });
+
+  it("cycles devices in flattened catalog order and rotates from the keyboard", () => {
+    const ordered = groupDevicePresets(DEVICE_PRESETS).flatMap(
+      (group) => group.devices,
+    );
+    const first = DEVICE_PRESETS[0];
+    const startIndex = ordered.findIndex((device) => device.id === first?.id);
+    const next = ordered[(startIndex + 1) % ordered.length];
+    render(<DevicePreviewLab src="https://app.example.test/" />);
+
+    fireEvent.keyDown(window, { key: "]" });
+    expect(screen.getByLabelText("Device")).toHaveValue(next?.id ?? "");
+
+    fireEvent.keyDown(window, { key: "[" });
+    expect(screen.getByLabelText("Device")).toHaveValue(first?.id ?? "");
+
+    const iframe = screen.getByTitle(
+      `${first?.name ?? "Device"} application preview`,
+    );
+    expect(iframe.closest("[data-rdl-viewport-width]")).toHaveAttribute(
+      "data-rdl-viewport-width",
+      String(first?.logicalViewport.width),
+    );
+
+    fireEvent.keyDown(window, { key: "r" });
+
+    expect(iframe.closest("[data-rdl-viewport-width]")).toHaveAttribute(
+      "data-rdl-viewport-width",
+      String(first?.logicalViewport.height),
+    );
+  });
+
+  it("steps zoom within 10%–200%, resets to Fit, and toggles the frame", () => {
+    render(<DevicePreviewLab src="https://app.example.test/" />);
+    const iframe = screen.getByTitle(
+      `${DEVICE_PRESETS[0]?.name ?? "Device"} application preview`,
+    );
+    const scale = () =>
+      iframe.closest("[data-rdl-preview-scale]")?.getAttribute(
+        "data-rdl-preview-scale",
+      );
+    const frameToggle = screen.getByRole("checkbox", {
+      name: "Show device frame",
+    });
+
+    fireEvent.keyDown(window, { key: "+" });
+    expect(scale()).toBe("1.1");
+
+    fireEvent.keyDown(window, { key: "-" });
+    fireEvent.keyDown(window, { key: "-" });
+    expect(scale()).toBe("0.9");
+
+    for (let index = 0; index < 12; index += 1) {
+      fireEvent.keyDown(window, { key: "-" });
+    }
+    expect(scale()).toBe("0.1");
+
+    for (let index = 0; index < 30; index += 1) {
+      fireEvent.keyDown(window, { key: "+" });
+    }
+    expect(scale()).toBe("2");
+
+    fireEvent.keyDown(window, { key: "0" });
+    expect(screen.getByRole("button", { name: "Fit" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
+    expect(frameToggle).toBeChecked();
+    fireEvent.keyDown(window, { key: "f" });
+    expect(frameToggle).not.toBeChecked();
+  });
+
+  it("disables every binding with keyboardShortcuts={false}", () => {
+    const first = DEVICE_PRESETS[0];
+    render(
+      <DevicePreviewLab
+        keyboardShortcuts={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    fireEvent.keyDown(window, { key: "]" });
+    fireEvent.keyDown(window, { key: "r" });
+    fireEvent.keyDown(window, { key: "f" });
+
+    expect(screen.getByLabelText("Device")).toHaveValue(first?.id ?? "");
+    expect(
+      screen
+        .getByTitle(`${first?.name ?? "Device"} application preview`)
+        .closest("[data-rdl-viewport-width]"),
+    ).toHaveAttribute(
+      "data-rdl-viewport-width",
+      String(first?.logicalViewport.width),
+    );
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+  });
+
+  it("overrides and removes individual bindings", () => {
+    const ordered = groupDevicePresets(DEVICE_PRESETS).flatMap(
+      (group) => group.devices,
+    );
+    const first = DEVICE_PRESETS[0];
+    const startIndex = ordered.findIndex((device) => device.id === first?.id);
+    const next = ordered[(startIndex + 1) % ordered.length];
+    render(
+      <DevicePreviewLab
+        keyboardShortcuts={{ nextDevice: "n", toggleFrame: null }}
+        src="https://app.example.test/"
+      />,
+    );
+
+    fireEvent.keyDown(window, { key: "n" });
+    expect(screen.getByLabelText("Device")).toHaveValue(next?.id ?? "");
+
+    fireEvent.keyDown(window, { key: "]" });
+    expect(screen.getByLabelText("Device")).toHaveValue(next?.id ?? "");
+
+    fireEvent.keyDown(window, { key: "f" });
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+  });
+
+  it("treats showFrame as the canonical controlled frame visibility", async () => {
+    const user = userEvent.setup();
+    const onFrameVisibleChange = vi.fn();
+    render(
+      <DevicePreviewLab
+        onFrameVisibleChange={onFrameVisibleChange}
+        showFrame={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(onFrameVisibleChange).toHaveBeenCalledWith(true);
+    expect(toggle).not.toBeChecked();
+  });
+
+  it("lets the canonical showFrame win over the deprecated alias", () => {
+    render(
+      <DevicePreviewLab
+        frameVisible
+        showFrame={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).not.toBeChecked();
+  });
+
+  it("keeps the deprecated controlled frameVisible alias working alone", async () => {
+    const user = userEvent.setup();
+    const onFrameVisibleChange = vi.fn();
+    render(
+      <DevicePreviewLab
+        frameVisible={false}
+        onFrameVisibleChange={onFrameVisibleChange}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(onFrameVisibleChange).toHaveBeenCalledWith(true);
+    expect(toggle).not.toBeChecked();
+  });
+
+  it("treats defaultShowFrame as the canonical initial visibility", async () => {
+    const user = userEvent.setup();
+    render(
+      <DevicePreviewLab
+        defaultShowFrame={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(toggle).toBeChecked();
+  });
+
+  it("lets the canonical defaultShowFrame win over the deprecated default", () => {
+    render(
+      <DevicePreviewLab
+        defaultFrameVisible={false}
+        defaultShowFrame
+        src="https://app.example.test/"
+      />,
+    );
+
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+  });
+
+  it("keeps the deprecated defaultFrameVisible alias working alone", async () => {
+    const user = userEvent.setup();
+    render(
+      <DevicePreviewLab
+        defaultFrameVisible={false}
+        src="https://app.example.test/"
+      />,
+    );
+
+    const toggle = screen.getByRole("checkbox", { name: "Show device frame" });
+    expect(toggle).not.toBeChecked();
+
+    await user.click(toggle);
+
+    expect(toggle).toBeChecked();
+  });
+
+  it("ignores shortcuts typed into the device search field", async () => {
+    const user = userEvent.setup();
+    const first = DEVICE_PRESETS[0];
+    render(<DevicePreviewLab src="https://app.example.test/" />);
+
+    await user.type(screen.getByLabelText("Search devices"), "r]f+0");
+
+    expect(
+      screen
+        .getByTitle(`${first?.name ?? "Device"} application preview`)
+        .closest("[data-rdl-device-id]"),
+    ).toHaveAttribute("data-rdl-device-id", first?.id ?? "");
+    expect(
+      screen
+        .getByTitle(`${first?.name ?? "Device"} application preview`)
+        .closest("[data-rdl-viewport-width]"),
+    ).toHaveAttribute(
+      "data-rdl-viewport-width",
+      String(first?.logicalViewport.width),
+    );
+    expect(
+      screen.getByRole("checkbox", { name: "Show device frame" }),
+    ).toBeChecked();
+    expect(screen.getByRole("button", { name: "Fit" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
     );
   });
 });

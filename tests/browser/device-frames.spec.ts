@@ -51,9 +51,8 @@ test.describe("device frames", () => {
         '[data-rdl-cutout-mount="top"] .rdl-frame__cutout:not(.rdl-frame__cutout--camera-pair)',
       );
       if (await topMountedCutout.count()) {
-        const frameBox = await page
-          .locator("[data-rdl-device-frame]")
-          .boundingBox();
+        const frameElement = page.locator("[data-rdl-device-frame]");
+        const frameBox = await frameElement.boundingBox();
         const cutoutBox = await topMountedCutout.boundingBox();
         expect(frameBox).not.toBeNull();
         expect(cutoutBox).not.toBeNull();
@@ -64,8 +63,22 @@ test.describe("device frames", () => {
               ((frameBox?.x ?? 0) + (frameBox?.width ?? 0) / 2),
           ),
         ).toBeLessThan(2);
+        // The cutout hugs the top at bezel-top + cutout-offset, in the
+        // harness-scaled coordinate space. Calibrated bezels differ per
+        // model, so read the authored offsets instead of a fixed margin.
+        const geometry = await frameElement.evaluate((element) => ({
+          bezelTop: parseFloat(
+            element.style.getPropertyValue("--rdl-bezel-top"),
+          ),
+          cutoutOffset: parseFloat(
+            element.style.getPropertyValue("--rdl-cutout-offset"),
+          ),
+          width: parseFloat(element.style.width),
+        }));
+        const scale = (frameBox?.width ?? 0) / geometry.width;
         expect(cutoutBox?.y ?? Infinity).toBeLessThan(
-          (frameBox?.y ?? 0) + 24,
+          (frameBox?.y ?? 0) +
+            (geometry.bezelTop + geometry.cutoutOffset + 2) * scale,
         );
       }
 

@@ -19,7 +19,21 @@ describe("DeviceSelector", () => {
     );
 
     expect(screen.getByLabelText("Search devices")).toBeVisible();
-    expect(screen.getByRole("group", { name: "Phones" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "Phones — Android" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "Phones — iOS" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "Tablets — Android" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "Tablets — iOS" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "Foldables" }),
+    ).toBeInTheDocument();
     await user.type(screen.getByLabelText("Search devices"), "S25 Edge");
 
     const selector = screen.getByLabelText("Device");

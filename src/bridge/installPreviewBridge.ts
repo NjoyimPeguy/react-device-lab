@@ -48,6 +48,16 @@ function normalizeAllowedOrigins(origins: readonly string[]): readonly string[] 
  * @throws `TypeError` in a browser (or when `targetWindow` is supplied) when
  * the origin allowlist is empty, contains a wildcard, or contains a URL that
  * is not an exact HTTP(S) origin.
+ *
+ * @example
+ * ```ts
+ * const removeBridge = installPreviewBridge({
+ *   allowedParentOrigins: ["https://preview.example.test"],
+ *   onConfiguration: (configuration) => {
+ *     console.log("Applied preview for", configuration.deviceId);
+ *   },
+ * });
+ * ```
  */
 export function installPreviewBridge(
   options: InstallPreviewBridgeOptions,

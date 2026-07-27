@@ -34,6 +34,7 @@ createRoot(document.querySelector("#root")!).render(
         },
       ]}
       src="/preview/"
+      syncConfigurationToUrl
     />
   </StrictMode>,
 );

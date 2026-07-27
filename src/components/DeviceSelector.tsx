@@ -10,6 +10,13 @@ import type { DeviceSelectorProps } from "../types/lab.js";
  *
  * @param props - Catalog, selected id, labels, and change callback.
  * @returns Accessible search and grouped selection controls.
+ *
+ * @example
+ * ```tsx
+ * const [device, setDevice] = useState(DEVICE_PRESETS[0]);
+ *
+ * <DeviceSelector onChange={setDevice} value={device.id} />
+ * ```
  */
 export function DeviceSelector({
   devices = DEVICE_PRESETS,
@@ -60,7 +67,14 @@ export function DeviceSelector({
           <option value="">No matching devices</option>
         ) : null}
         {groups.map((group) => (
-          <optgroup key={group.category} label={group.label}>
+          <optgroup
+            key={
+              group.platform
+                ? `${group.category}-${group.platform}`
+                : group.category
+            }
+            label={group.label}
+          >
             {group.devices.map((device) => (
               <option key={device.id} value={device.id}>
                 {device.name}

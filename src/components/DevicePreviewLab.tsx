@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { DEVICE_PRESETS } from "../catalog/devicePresets.js";
 import { getViewportWidthClass } from "../catalog/dimensions.js";
+import { groupDevicePresets } from "../catalog/group.js";
 import { createPreviewEnvironment } from "../environment/configuration.js";
 import { useControllableState } from "../hooks/useControllableState.js";
+import { usePreviewShortcuts } from "../hooks/usePreviewShortcuts.js";
+import { useUrlConfiguration } from "../hooks/useUrlConfiguration.js";
+import { resolvePreviewScale } from "../preview/scaling.js";
 import type {
   DeviceCategory,
   DeviceOrientation,
@@ -16,7 +20,7 @@ import type {
   PreviewTheme,
   PreviewViewportMode,
 } from "../types/lab.js";
-import type { PreviewZoom } from "../types/preview.js";
+import type { PreviewConfiguration, PreviewZoom } from "../types/preview.js";
 import { DevicePreview } from "./DevicePreview.js";
 import { PreviewConfigurationPanel } from "./PreviewConfigurationPanel.js";
 
@@ -25,6 +29,8 @@ const CUSTOM_SOURCE = Object.freeze({
   url: "https://github.com/NjoyimPeguy/react-device-lab#custom-viewports",
   note: "Consumer-defined CSS viewport profile.",
 });
+
+const ZOOM_KEYBOARD_STEP = 0.1;
 
 function customCategory(width: number): DeviceCategory {
   const widthClass = getViewportWidthClass(width);
@@ -184,9 +190,9 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     defaultValue: props.defaultZoom ?? "fit",
     onChange: props.onZoomChange,
   });
-  const [frameVisible, setFrameVisible] = useControllableState({
-    value: props.frameVisible,
-    defaultValue: props.defaultFrameVisible ?? true,
+  const [showFrame, setShowFrame] = useControllableState({
+    value: props.showFrame ?? props.frameVisible,
+    defaultValue: props.defaultShowFrame ?? props.defaultFrameVisible ?? true,
     onChange: props.onFrameVisibleChange,
   });
   const [theme, setTheme] = useControllableState<PreviewTheme>({
@@ -198,6 +204,11 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     value: props.showSafeArea,
     defaultValue: props.defaultShowSafeArea ?? false,
     onChange: props.onShowSafeAreaChange,
+  });
+  const [showRulers, setShowRulers] = useControllableState({
+    value: props.showRulers,
+    defaultValue: props.defaultShowRulers ?? false,
+    onChange: props.onShowRulersChange,
   });
   const [viewportMode, setViewportMode] =
     useControllableState<PreviewViewportMode>({
@@ -288,6 +299,48 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     selectedDevice,
     setEnvironment,
   ]);
+  const urlConfiguration = useMemo<PreviewConfiguration>(
+    () => ({
+      version: 1,
+      deviceId: selectedDevice.id,
+      orientation,
+      zoom,
+      frameVisible: showFrame,
+      environment,
+    }),
+    [selectedDevice.id, orientation, zoom, showFrame, environment],
+  );
+  useUrlConfiguration(
+    props.syncConfigurationToUrl,
+    urlConfiguration,
+    (restored) => {
+      const restoredDevice =
+        props.deviceId === undefined
+          ? devices.find((device) => device.id === restored.deviceId)
+          : undefined;
+      if (restoredDevice !== undefined) {
+        setDeviceId(restoredDevice.id);
+        props.onDeviceChange?.(restoredDevice);
+      }
+      if (props.orientation === undefined) {
+        setOrientation(restored.orientation);
+      }
+      if (props.zoom === undefined) setZoom(restored.zoom);
+      if (props.showFrame === undefined && props.frameVisible === undefined) {
+        setShowFrame(restored.frameVisible);
+      }
+      if (props.environment === undefined) {
+        setEnvironment(restored.environment);
+      }
+      // Keep the automatic environment profile aligned with the restored
+      // device and orientation so the restored environment is not replaced.
+      const nextDevice = restoredDevice ?? selectedDevice;
+      automaticEnvironmentProfile.current = `${nextDevice.id}:${
+        props.orientation ?? restored.orientation
+      }`;
+      automaticSafeArea.current = null;
+    },
+  );
   const destinations =
     "src" in props ? (props.destinations ?? []) : [];
   const initialDestinationId =
@@ -309,6 +362,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     () => createCustomPreset(customViewport),
     [customViewport],
   );
+  const [previewStage, setPreviewStage] = useState<HTMLElement | null>(null);
   const activeDevice =
     viewportMode === "custom" ? customDevice : selectedDevice;
   const classes = ["rdl-lab", props.className].filter(Boolean).join(" ");
@@ -317,6 +371,54 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     setDeviceId(device.id);
     props.onDeviceChange?.(device);
   };
+
+  const shortcutDevices = useMemo(
+    () => groupDevicePresets(devices).flatMap((group) => group.devices),
+    [devices],
+  );
+
+  const cycleShortcutDevice = (direction: 1 | -1) => {
+    if (shortcutDevices.length < 2) return;
+    const currentIndex = shortcutDevices.findIndex(
+      (device) => device.id === deviceId,
+    );
+    const nextIndex =
+      currentIndex < 0
+        ? 0
+        : (currentIndex + direction + shortcutDevices.length) %
+          shortcutDevices.length;
+    const next = shortcutDevices[nextIndex];
+    if (next !== undefined && next.id !== deviceId) {
+      handleDeviceChange(next);
+    }
+  };
+
+  const stepZoom = (direction: 1 | -1) => {
+    const current = zoom === "fit" ? 1 : zoom;
+    setZoom(
+      resolvePreviewScale(
+        Math.round((current + direction * ZOOM_KEYBOARD_STEP) * 100) / 100,
+        1,
+      ),
+    );
+  };
+
+  usePreviewShortcuts({
+    ...(typeof props.keyboardShortcuts === "object"
+      ? { bindings: props.keyboardShortcuts }
+      : {}),
+    callbacks: {
+      onRotate: () =>
+        setOrientation(orientation === "portrait" ? "landscape" : "portrait"),
+      onPreviousDevice: () => cycleShortcutDevice(-1),
+      onNextDevice: () => cycleShortcutDevice(1),
+      onZoomIn: () => stepZoom(1),
+      onZoomOut: () => stepZoom(-1),
+      onZoomReset: () => setZoom("fit"),
+      onToggleFrame: () => setShowFrame(!showFrame),
+    },
+    enabled: props.keyboardShortcuts !== false,
+  });
 
   const panel = (
     <PreviewConfigurationPanel
@@ -335,17 +437,20 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       device={selectedDevice}
       devices={devices}
       environment={environment}
-      frameVisible={frameVisible}
+      frameVisible={showFrame}
       onCustomViewportChange={setCustomViewport}
       onDeviceChange={handleDeviceChange}
       onEnvironmentChange={setEnvironment}
-      onFrameVisibleChange={setFrameVisible}
+      onFrameVisibleChange={setShowFrame}
       onOrientationChange={setOrientation}
       onShowSafeAreaChange={setShowSafeArea}
+      onShowRulersChange={setShowRulers}
       onThemeChange={setTheme}
       onViewportModeChange={setViewportMode}
       onZoomChange={setZoom}
       orientation={orientation}
+      previewRoot={previewStage}
+      showRulers={showRulers}
       showSafeArea={showSafeArea}
       theme={theme}
       viewportMode={viewportMode}
@@ -381,7 +486,11 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
         <div className="rdl-lab__notice">{props.notice}</div>
       ) : null}
       <div className="rdl-lab__workspace">
-        <section aria-label="Preview stage" className="rdl-lab__stage">
+        <section
+          aria-label="Preview stage"
+          className="rdl-lab__stage"
+          ref={setPreviewStage}
+        >
           {"src" in props && props.src !== undefined ? (
             <DevicePreview
               {...(props.allow !== undefined ? { allow: props.allow } : {})}
@@ -398,11 +507,12 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
               device={activeDevice}
               environment={environment}
               fitPadding={props.fitPadding ?? 24}
-              frameVisible={frameVisible}
+              frameVisible={showFrame}
               {...(props.onRouteChange !== undefined
                 ? { onRouteChange: props.onRouteChange }
                 : {})}
               orientation={orientation}
+              showRulers={showRulers}
               showSafeArea={showSafeArea}
               src={effectiveDestination?.src ?? props.src}
               zoom={zoom}
@@ -413,12 +523,13 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
               device={activeDevice}
               environment={environment}
               fitPadding={props.fitPadding ?? 24}
-              frameVisible={frameVisible}
+              frameVisible={showFrame}
               {...(props.onRouteChange !== undefined
                 ? { onRouteChange: props.onRouteChange }
                 : {})}
               orientation={orientation}
               portalStyles={props.portalStyles ?? ""}
+              showRulers={showRulers}
               showSafeArea={showSafeArea}
               zoom={zoom}
             >

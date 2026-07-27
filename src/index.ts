@@ -38,14 +38,32 @@ export {
   usePreviewEnvironment,
 } from "./environment/PreviewEnvironmentContext.js";
 export { getDeviceFrameDimensions } from "./frames/frameGeometry.js";
+export { usePreviewShortcuts } from "./hooks/usePreviewShortcuts.js";
+export type {
+  UsePreviewShortcutsCallbacks,
+  UsePreviewShortcutsOptions,
+} from "./hooks/usePreviewShortcuts.js";
 export {
   computeFitScale,
   resolvePreviewScale,
 } from "./preview/scaling.js";
 export {
+  capturePreviewPng,
+  PreviewPngExportError,
+} from "./preview/exportImage.js";
+export type {
+  PreviewPngExportErrorCode,
+  PreviewPngExportOptions,
+} from "./preview/exportImage.js";
+export {
   createPreviewRouteState,
   formatPreviewRoute,
 } from "./preview/routes.js";
+export {
+  PREVIEW_CONFIGURATION_URL_PARAM,
+  readPreviewConfigurationFromSearch,
+  writePreviewConfigurationToSearch,
+} from "./preview/urlConfiguration.js";
 
 export type {
   AndroidViewportProfile,
@@ -95,10 +113,14 @@ export type {
   SafeAreaInsets,
 } from "./types/frame.js";
 export type {
+  DevicePreviewLabBaseProps,
+  DevicePreviewLabPortalProps,
   DevicePreviewLabProps,
+  DevicePreviewLabSourceProps,
   DeviceSelectorProps,
   PreviewConfigurationPanelProps,
   PreviewDestination,
+  PreviewShortcuts,
   PreviewTheme,
   PreviewViewportMode,
   PreviewWorkspaceMode,

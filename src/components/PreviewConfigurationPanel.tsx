@@ -1,10 +1,14 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import {
   getPhysicalResolution,
   getViewportDimensions,
   getViewportWidthClass,
 } from "../catalog/dimensions.js";
 import { createPreviewEnvironment } from "../environment/configuration.js";
+import {
+  capturePreviewPng,
+  PreviewPngExportError,
+} from "../preview/exportImage.js";
 import { resolvePreviewScale } from "../preview/scaling.js";
 import type { ViewportDimensions } from "../types/device.js";
 import type {
@@ -55,6 +59,55 @@ function checked(event: React.ChangeEvent<HTMLInputElement>): boolean {
  *
  * @param props - Current configuration values and change callbacks.
  * @returns The configuration controls. The composing workspace owns scrolling.
+ *
+ * @example
+ * ```tsx
+ * function StandalonePanel() {
+ *   const [device, setDevice] = useState(DEVICE_PRESETS[0]);
+ *   const [orientation, setOrientation] =
+ *     useState<DeviceOrientation>("portrait");
+ *   const [zoom, setZoom] = useState<PreviewZoom>("fit");
+ *   const [frameVisible, setFrameVisible] = useState(true);
+ *   const [theme, setTheme] = useState<PreviewTheme>("light");
+ *   const [showSafeArea, setShowSafeArea] = useState(false);
+ *   const [showRulers, setShowRulers] = useState(false);
+ *   const [environment, setEnvironment] = useState(() =>
+ *     createPreviewEnvironment(),
+ *   );
+ *   const [viewportMode, setViewportMode] =
+ *     useState<PreviewViewportMode>("device");
+ *   const [customViewport, setCustomViewport] = useState({
+ *     width: 412,
+ *     height: 915,
+ *   });
+ *
+ *   return (
+ *     <PreviewConfigurationPanel
+ *       customViewport={customViewport}
+ *       device={device}
+ *       devices={DEVICE_PRESETS}
+ *       environment={environment}
+ *       frameVisible={frameVisible}
+ *       onCustomViewportChange={setCustomViewport}
+ *       onDeviceChange={setDevice}
+ *       onEnvironmentChange={setEnvironment}
+ *       onFrameVisibleChange={setFrameVisible}
+ *       onOrientationChange={setOrientation}
+ *       onShowRulersChange={setShowRulers}
+ *       onShowSafeAreaChange={setShowSafeArea}
+ *       onThemeChange={setTheme}
+ *       onViewportModeChange={setViewportMode}
+ *       onZoomChange={setZoom}
+ *       orientation={orientation}
+ *       showRulers={showRulers}
+ *       showSafeArea={showSafeArea}
+ *       theme={theme}
+ *       viewportMode={viewportMode}
+ *       zoom={zoom}
+ *     />
+ *   );
+ * }
+ * ```
  */
 export function PreviewConfigurationPanel({
   devices,
@@ -70,6 +123,8 @@ export function PreviewConfigurationPanel({
   onThemeChange,
   showSafeArea,
   onShowSafeAreaChange,
+  showRulers,
+  onShowRulersChange,
   environment,
   onEnvironmentChange,
   viewportMode,
@@ -79,6 +134,7 @@ export function PreviewConfigurationPanel({
   destinations,
   destinationId,
   onDestinationChange,
+  previewRoot,
   className,
 }: PreviewConfigurationPanelProps) {
   const customWidthId = useId();
@@ -88,6 +144,11 @@ export function PreviewConfigurationPanel({
   const viewportSummaryId = useId();
   const controlsId = useId();
   const appearanceId = useId();
+  const exportId = useId();
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+  const exportTarget =
+    previewRoot?.querySelector<HTMLElement>("[data-rdl-export-root]") ?? null;
   const customLogical =
     orientation === "portrait"
       ? {
@@ -124,6 +185,31 @@ export function PreviewConfigurationPanel({
         permissions: { ...environment.permissions, [name]: state },
       }),
     );
+  };
+
+  const exportPreview = async () => {
+    if (!exportTarget || exporting) return;
+    setExporting(true);
+    setExportError(null);
+    const fileName = `device-preview-${device.id}-${orientation}.png`;
+    try {
+      const blob = await capturePreviewPng(exportTarget, { fileName });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = fileName;
+      anchor.rel = "noopener";
+      anchor.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (error) {
+      setExportError(
+        error instanceof PreviewPngExportError
+          ? error.message
+          : "PNG export failed unexpectedly.",
+      );
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -323,6 +409,14 @@ export function PreviewConfigurationPanel({
           />
           <span>Show safe areas</span>
         </label>
+        <label className="rdl-switch">
+          <input
+            checked={showRulers}
+            onChange={(event) => onShowRulersChange(checked(event))}
+            type="checkbox"
+          />
+          <span>Show rulers</span>
+        </label>
         <label className="rdl-field">
           Package theme
           <select
@@ -336,6 +430,31 @@ export function PreviewConfigurationPanel({
           </select>
         </label>
       </section>
+
+      {previewRoot !== undefined ? (
+        <section className="rdl-config__section" aria-labelledby={exportId}>
+          <h3 id={exportId}>Export</h3>
+          <button
+            aria-busy={exporting}
+            className="rdl-button"
+            disabled={exportTarget === null || exporting}
+            onClick={() => void exportPreview()}
+            title={
+              exportTarget === null
+                ? "PNG export needs a rendered preview stage."
+                : "Download a PNG snapshot of the current preview."
+            }
+            type="button"
+          >
+            {exporting ? "Exporting…" : "Export PNG"}
+          </button>
+          {exportError ? (
+            <p className="rdl-config__export-error" role="alert">
+              {exportError}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       <details className="rdl-scenarios">
         <summary>Environment scenarios</summary>

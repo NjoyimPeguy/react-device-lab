@@ -124,3 +124,14 @@ viewport:
 Orientation swaps logical width and height while retaining the selected device.
 `zoom="fit"` or numeric values such as `0.5`, `0.75`, and `1` affect only outer
 presentation; iframe CSS dimensions remain exact.
+
+## Shareable configuration URLs
+
+The same version 1 configuration exchanged through the bridge can be carried
+in the host page URL. Pass `syncConfigurationToUrl` to `DevicePreviewLab` to
+store the device, orientation, zoom, frame visibility, and environment under
+the `rdl` query parameter (or a custom name) with `history.replaceState`, so
+preview changes never add history entries. A valid payload on load wins over
+defaults but yields to explicitly controlled props. See
+[Shareable configuration URLs](api.md#shareable-configuration-urls) in the API
+guide for the standalone reader and writer helpers.

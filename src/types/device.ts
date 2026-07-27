@@ -199,6 +199,11 @@ export interface DevicePresetGroup {
   readonly category: DeviceCategory;
   /** Human-readable section label. */
   readonly label: string;
+  /**
+   * Platform shared by every device in the section. Present only when the
+   * category splits into per-platform sections; omitted on unsplit sections.
+   */
+  readonly platform?: DevicePlatform;
   /** Presets in source-catalog order. */
   readonly devices: readonly DevicePreset[];
 }

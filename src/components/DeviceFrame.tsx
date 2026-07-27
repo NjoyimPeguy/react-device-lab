@@ -7,6 +7,7 @@ import {
 } from "../frames/frameGeometry.js";
 import { FrameFeatures } from "../frames/FrameFeatures.js";
 import type { DeviceFrameProps } from "../types/frame.js";
+import { PreviewRulers } from "./PreviewRulers.js";
 
 type FrameStyle = CSSProperties & Record<`--rdl-${string}`, string>;
 
@@ -22,6 +23,13 @@ function pixels(value: number): string {
  *
  * @param props - Device, orientation, content, and safe-area presentation.
  * @returns The framed preview content region.
+ *
+ * @example
+ * ```tsx
+ * <DeviceFrame device={DEVICE_PRESETS[0]} showSafeArea>
+ *   <CheckoutPage />
+ * </DeviceFrame>
+ * ```
  */
 export function DeviceFrame({
   device,
@@ -32,6 +40,8 @@ export function DeviceFrame({
   className,
   safeAreaInsets = { top: 0, right: 0, bottom: 0, left: 0 },
   showSafeArea = false,
+  showRulers = false,
+  presentationScale = 1,
 }: DeviceFrameProps) {
   const viewport = getViewportDimensions(device, orientation);
   const geometry = getDeviceFrameGeometry(device, orientation);
@@ -112,6 +122,9 @@ export function DeviceFrame({
               data-rdl-safe-area=""
               style={safeAreaStyle}
             />
+          ) : null}
+          {showRulers ? (
+            <PreviewRulers scale={presentationScale} viewport={viewport} />
           ) : null}
         </div>
       </div>

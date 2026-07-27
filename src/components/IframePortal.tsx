@@ -40,6 +40,16 @@ function getPortalRoot(iframe: HTMLIFrameElement): HTMLElement | null {
  *
  * @param props - Portal content, iframe name, styles, and environment.
  * @returns The iframe and, after its document loads, the React portal content.
+ *
+ * @example
+ * ```tsx
+ * <IframePortal
+ *   styles="body { margin: 0; font-family: system-ui; }"
+ *   title="Checkout preview"
+ * >
+ *   <CheckoutPage />
+ * </IframePortal>
+ * ```
  */
 export function IframePortal({
   children,

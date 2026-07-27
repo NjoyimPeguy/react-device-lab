@@ -12,11 +12,24 @@ The package relies on:
 - React 18.2+ or React 19;
 - iframe `postMessage`, `ResizeObserver`, CSS custom properties, grid, flexbox,
   `color-mix()`, `dvh`, and `:focus-visible`;
+- SVG `foreignObject` rasterization through an offscreen 2D canvas for PNG
+  export. The serialized SVG loads from a `data:` URL because Chromium and
+  WebKit taint canvases drawn from `blob:` URL SVG images that contain a
+  `foreignObject`;
 - same-origin DOM access only where the browser permits it.
 
 Older embedded webviews may require application-level transpilation or CSS
 fallbacks. Cross-origin restrictions are browser security behavior, not a
 compatibility bug.
+
+PNG export follows the same rule. Same-origin iframe documents are serialized
+recursively into the snapshot, while cross-origin iframe regions render as a
+neutral placeholder block with a single console warning per capture. The same
+self-containment rule limits same-origin content: browsers fetch no external
+subresources for an SVG loaded as an image, so `<img>` sources, CSS
+`background-image` URLs, and webfonts export as blank regions or fallback
+fonts. Hosts that refuse the draw or the encode surface a typed
+`PreviewPngExportError` instead of a silent failure.
 
 Release screenshot baselines are generated and compared in the exact, pinned
 Playwright Noble container declared by the CI and release workflows. This keeps

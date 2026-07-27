@@ -178,6 +178,14 @@ function isPreviewEnvironment(value: unknown): value is PreviewEnvironment {
  * @returns A deeply frozen complete environment.
  * @throws `TypeError` when a value is out of range or structurally
  * invalid.
+ *
+ * @example
+ * ```ts
+ * const environment = createPreviewEnvironment({
+ *   colorScheme: "dark",
+ *   virtualKeyboard: { visible: true, height: 300 },
+ * });
+ * ```
  */
 export function createPreviewEnvironment(
   overrides: PreviewEnvironmentOverrides = {},

@@ -13,6 +13,11 @@ const KEY_ROWS = [
  *
  * @param props - Keyboard visibility, height, and optional class.
  * @returns The keyboard visualization, or `null` when hidden.
+ *
+ * @example
+ * ```tsx
+ * <VirtualKeyboard state={{ visible: true, height: 300 }} />
+ * ```
  */
 export function VirtualKeyboard({
   state,

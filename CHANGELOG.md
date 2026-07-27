@@ -6,6 +6,30 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Platform-split device grouping in the selector.
+- Fourteen device presets — iPhone 17e, Pixel 10a, Pixel 10 Pro Fold, Galaxy
+  A56/A57, Galaxy Z Flip8/Z Fold8/Z Fold8 Ultra, and Galaxy Tab S11 — plus an
+  ultrawide-qhd desktop profile.
+- Opt-in shareable configuration URLs via query-parameter synchronization.
+- Keyboard shortcuts for rotate, device cycling, zoom, and frame toggle.
+- Rulers and a measurement overlay on the preview stage.
+- WYSIWYG PNG export of the composed preview.
+- Canonical `showFrame`/`defaultShowFrame` frame-visibility props.
+
+### Changed
+
+- Frame geometry recalibrated for all presets against official proportions.
+- Device-data provenance URLs refreshed against live official sources.
+- Behavior-affecting logical viewport corrections for galaxy-s9-plus and
+  galaxy-a55 density profiles; physical panels unchanged.
+
+### Deprecated
+
+- `frameVisible`/`defaultFrameVisible` aliases in favor of `showFrame` and
+  `defaultShowFrame`.
+
 ## [1.0.0] - 2026-07-26
 
 ### Added

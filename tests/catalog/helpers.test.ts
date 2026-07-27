@@ -42,13 +42,15 @@ describe("catalog helpers", () => {
   it("groups every device once in predictable category order", () => {
     const groups = groupDevicePresets(DEVICE_PRESETS);
 
-    expect(groups.map(({ category }) => category)).toEqual([
-      "phone",
-      "foldable",
-      "tablet",
-      "laptop",
-      "desktop",
-      "ultrawide",
+    expect(groups.map(({ category, label }) => [category, label])).toEqual([
+      ["phone", "Phones — Android"],
+      ["phone", "Phones — iOS"],
+      ["foldable", "Foldables"],
+      ["tablet", "Tablets — Android"],
+      ["tablet", "Tablets — iOS"],
+      ["laptop", "Laptops"],
+      ["desktop", "Desktop displays"],
+      ["ultrawide", "Ultrawide displays"],
     ]);
     expect(groups.flatMap(({ devices }) => devices)).toHaveLength(
       DEVICE_PRESETS.length,
@@ -56,6 +58,45 @@ describe("catalog helpers", () => {
     expect(
       new Set(groups.flatMap(({ devices }) => devices.map(({ id }) => id))).size,
     ).toBe(DEVICE_PRESETS.length);
+  });
+
+  it("splits only two-platform categories, Android first, in catalog order", () => {
+    const groups = groupDevicePresets(DEVICE_PRESETS);
+    const catalogOrder = new Map(
+      DEVICE_PRESETS.map(({ id }, index) => [id, index]),
+    );
+
+    const split = groups.filter(
+      ({ category }) => category === "phone" || category === "tablet",
+    );
+    expect(split.map(({ platform }) => platform)).toEqual([
+      "android",
+      "ios",
+      "android",
+      "ios",
+    ]);
+    for (const group of split) {
+      expect(group.devices.length).toBeGreaterThan(0);
+      expect(
+        group.devices.every(({ platform }) => platform === group.platform),
+      ).toBe(true);
+    }
+
+    const unsplit = groups.filter(
+      ({ category }) => category !== "phone" && category !== "tablet",
+    );
+    expect(unsplit.map(({ category, label }) => [category, label])).toEqual([
+      ["foldable", "Foldables"],
+      ["laptop", "Laptops"],
+      ["desktop", "Desktop displays"],
+      ["ultrawide", "Ultrawide displays"],
+    ]);
+    expect(unsplit.every(({ platform }) => platform === undefined)).toBe(true);
+
+    for (const { devices } of groups) {
+      const indexes = devices.map(({ id }) => catalogOrder.get(id) as number);
+      expect(indexes).toEqual([...indexes].sort((a, b) => a - b));
+    }
   });
 
   it("rejects invalid widths", () => {

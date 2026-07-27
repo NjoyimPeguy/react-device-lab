@@ -12,6 +12,12 @@
   --rdl-text-muted: #5f6877;
   --rdl-focus: #0b1524;
   --rdl-danger: #b4524b;
+  --rdl-ruler-surface: rgb(255 255 255 / 92%);
+  --rdl-ruler-border: rgb(0 0 0 / 14%);
+  --rdl-ruler-tick: rgb(11 21 36 / 46%);
+  --rdl-ruler-text: #5f6877;
+  --rdl-ruler-crosshair: #3d5afe;
+  --rdl-ruler-size: 1.5rem;
   --rdl-frame-outline: rgb(11 21 36 / 20%);
   --rdl-frame-shadow-color: rgb(16 24 40 / 34%);
   --rdl-radius-sm: 0.625rem;
@@ -36,6 +42,11 @@
   --rdl-text-muted: #8b95a8;
   --rdl-focus: #f4f6fb;
   --rdl-danger: #de8b85;
+  --rdl-ruler-surface: rgb(23 26 34 / 92%);
+  --rdl-ruler-border: rgb(255 255 255 / 16%);
+  --rdl-ruler-tick: rgb(244 246 251 / 52%);
+  --rdl-ruler-text: #8b95a8;
+  --rdl-ruler-crosshair: #93a4ff;
   --rdl-frame-outline: rgb(255 255 255 / 34%);
   --rdl-frame-shadow-color: rgb(0 0 0 / 72%);
 }
@@ -516,6 +527,17 @@
   font-size: 0.8125rem;
 }
 
+.rdl-config__section button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.rdl-config__export-error {
+  margin: 0;
+  color: var(--rdl-danger);
+  font: 600 0.75rem/1.4 var(--rdl-font-family);
+}
+
 .rdl-button,
 .rdl-zoom button {
   min-height: 2.75rem;
@@ -764,6 +786,24 @@
   --rdl-frame-metal: #aeb3bb;
   --rdl-frame-metal-edge: #555b64;
   --rdl-frame-highlight: rgb(255 255 255 / 52%);
+}
+
+.rdl-frame[data-rdl-shell-tone="titanium-dark"] {
+  --rdl-frame-metal: #3b3835;
+  --rdl-frame-metal-edge: #1a1815;
+  --rdl-frame-highlight: rgb(255 255 255 / 24%);
+}
+
+.rdl-frame[data-rdl-shell-tone="titanium-light"] {
+  --rdl-frame-metal: #a9a49b;
+  --rdl-frame-metal-edge: #5d5952;
+  --rdl-frame-highlight: rgb(255 255 255 / 45%);
+}
+
+.rdl-frame[data-rdl-shell-tone="porcelain"] {
+  --rdl-frame-metal: #d8d2c4;
+  --rdl-frame-metal-edge: #8a8477;
+  --rdl-frame-highlight: rgb(255 255 255 / 60%);
 }
 
 .rdl-frame__shell {
@@ -1208,6 +1248,137 @@
   border-radius: max(0px, calc(var(--rdl-screen-radius) - 8px));
   background: rgb(49 94 251 / 5%);
   box-shadow: 0 0 0 9999px rgb(49 94 251 / 5%);
+  pointer-events: none;
+}
+
+.rdl-rulers {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  font-family: var(--rdl-font-family);
+  pointer-events: none;
+}
+
+.rdl-rulers__corner {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--rdl-ruler-size);
+  height: var(--rdl-ruler-size);
+  background: var(--rdl-ruler-surface);
+  border-right: 1px solid var(--rdl-ruler-border);
+  border-bottom: 1px solid var(--rdl-ruler-border);
+}
+
+.rdl-rulers__top {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: var(--rdl-ruler-size);
+  background: var(--rdl-ruler-surface);
+  border-bottom: 1px solid var(--rdl-ruler-border);
+}
+
+.rdl-rulers__left {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--rdl-ruler-size);
+  background: var(--rdl-ruler-surface);
+  border-right: 1px solid var(--rdl-ruler-border);
+}
+
+.rdl-rulers__tick {
+  position: absolute;
+  background: var(--rdl-ruler-tick);
+}
+
+.rdl-rulers__top .rdl-rulers__tick {
+  bottom: 0;
+  width: 1px;
+  height: 5px;
+}
+
+.rdl-rulers__top .rdl-rulers__tick--major {
+  height: 9px;
+}
+
+.rdl-rulers__left .rdl-rulers__tick {
+  right: 0;
+  width: 5px;
+  height: 1px;
+}
+
+.rdl-rulers__left .rdl-rulers__tick--major {
+  width: 9px;
+}
+
+.rdl-rulers__label {
+  position: absolute;
+  color: var(--rdl-ruler-text);
+  font: 500 0.5625rem/1 var(--rdl-font-family);
+  white-space: nowrap;
+}
+
+.rdl-rulers__top .rdl-rulers__label {
+  bottom: 10px;
+  left: 3px;
+}
+
+.rdl-rulers__left .rdl-rulers__label {
+  top: 3px;
+  right: 10px;
+}
+
+.rdl-rulers__crosshair {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+}
+
+.rdl-rulers__crosshair-line {
+  position: absolute;
+  background: var(--rdl-ruler-crosshair);
+  opacity: 0.72;
+}
+
+.rdl-rulers__crosshair-line--vertical {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.rdl-rulers__crosshair-line--horizontal {
+  right: 0;
+  left: 0;
+  height: 1px;
+}
+
+.rdl-rulers__overlay {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  cursor: crosshair;
+  pointer-events: auto;
+}
+
+.rdl-rulers__readout {
+  position: absolute;
+  z-index: 5;
+  right: 4px;
+  bottom: 4px;
+  box-sizing: border-box;
+  padding: 2px 6px;
+  color: var(--rdl-accent-contrast);
+  background: var(--rdl-ruler-crosshair);
+  border-radius: var(--rdl-radius-sm);
+  font: 600 0.625rem/1.4 var(--rdl-font-family);
   pointer-events: none;
 }
 

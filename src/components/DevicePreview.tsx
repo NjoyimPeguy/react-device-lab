@@ -536,6 +536,7 @@ export function DevicePreview(props: DevicePreviewProps) {
       <div className="rdl-preview__stage" ref={setStage}>
         <div
           className="rdl-preview__scale-box"
+          data-rdl-export-root=""
           style={{
             width: `${scaledBounds.width}px`,
             height: `${scaledBounds.height}px`,
@@ -555,7 +556,9 @@ export function DevicePreview(props: DevicePreviewProps) {
               device={device}
               frameVisible={frameVisible}
               orientation={orientation}
+              presentationScale={scale}
               safeAreaInsets={environment.safeArea}
+              showRulers={props.showRulers ?? false}
               showSafeArea={props.showSafeArea ?? false}
             >
               {isSource ? (
