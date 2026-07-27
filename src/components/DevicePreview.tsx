@@ -555,7 +555,9 @@ export function DevicePreview(props: DevicePreviewProps) {
               device={device}
               frameVisible={frameVisible}
               orientation={orientation}
+              presentationScale={scale}
               safeAreaInsets={environment.safeArea}
+              showRulers={props.showRulers ?? false}
               showSafeArea={props.showSafeArea ?? false}
             >
               {isSource ? (

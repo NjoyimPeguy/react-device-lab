@@ -45,4 +45,17 @@ export interface DeviceFrameProps {
   readonly safeAreaInsets?: SafeAreaInsets;
   /** Whether to display the safe-area overlay; defaults to `false`. */
   readonly showSafeArea?: boolean;
+  /**
+   * Whether to display logical-pixel rulers and a measurement crosshair over
+   * the viewport; defaults to `false`. Ruler labels always read logical
+   * device pixels. While rulers are visible, the measurement surface captures
+   * pointer input over the framed content.
+   */
+  readonly showRulers?: boolean;
+  /**
+   * Presentation scale applied by an outer zoom wrapper, used to convert
+   * pointer positions into logical ruler coordinates; defaults to `1`.
+   * {@link DevicePreview} supplies its resolved scale.
+   */
+  readonly presentationScale?: number;
 }

@@ -98,6 +98,10 @@ export interface PreviewConfigurationPanelProps {
   readonly showSafeArea: boolean;
   /** Called when safe-area overlay visibility changes. */
   readonly onShowSafeAreaChange: (visible: boolean) => void;
+  /** Whether the pixel rulers and measurement crosshair are currently shown. */
+  readonly showRulers: boolean;
+  /** Called when ruler visibility changes. */
+  readonly onShowRulersChange: (visible: boolean) => void;
   /** Complete preview environment edited by the scenario controls. */
   readonly environment: PreviewEnvironment;
   /** Called with a complete environment after a scenario control changes. */
@@ -192,6 +196,18 @@ interface DevicePreviewLabBaseProps {
   readonly defaultShowSafeArea?: boolean;
   /** Called when safe-area overlay visibility changes. */
   readonly onShowSafeAreaChange?: (visible: boolean) => void;
+  /**
+   * Controlled ruler and measurement-overlay visibility. While rulers are
+   * visible, the measurement surface captures pointer input over the
+   * viewport.
+   */
+  readonly showRulers?: boolean;
+  /**
+   * Initial ruler and measurement-overlay visibility; defaults to `false`.
+   */
+  readonly defaultShowRulers?: boolean;
+  /** Called when ruler and measurement-overlay visibility changes. */
+  readonly onShowRulersChange?: (visible: boolean) => void;
   /**
    * Controlled complete preview environment. When omitted, the lab uses the
    * selected model's suggested environment.

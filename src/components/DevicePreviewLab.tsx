@@ -205,6 +205,11 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     defaultValue: props.defaultShowSafeArea ?? false,
     onChange: props.onShowSafeAreaChange,
   });
+  const [showRulers, setShowRulers] = useControllableState({
+    value: props.showRulers,
+    defaultValue: props.defaultShowRulers ?? false,
+    onChange: props.onShowRulersChange,
+  });
   const [viewportMode, setViewportMode] =
     useControllableState<PreviewViewportMode>({
       value: props.viewportMode,
@@ -438,10 +443,12 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       onFrameVisibleChange={setFrameVisible}
       onOrientationChange={setOrientation}
       onShowSafeAreaChange={setShowSafeArea}
+      onShowRulersChange={setShowRulers}
       onThemeChange={setTheme}
       onViewportModeChange={setViewportMode}
       onZoomChange={setZoom}
       orientation={orientation}
+      showRulers={showRulers}
       showSafeArea={showSafeArea}
       theme={theme}
       viewportMode={viewportMode}
@@ -499,6 +506,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
                 ? { onRouteChange: props.onRouteChange }
                 : {})}
               orientation={orientation}
+              showRulers={showRulers}
               showSafeArea={showSafeArea}
               src={effectiveDestination?.src ?? props.src}
               zoom={zoom}
@@ -515,6 +523,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
                 : {})}
               orientation={orientation}
               portalStyles={props.portalStyles ?? ""}
+              showRulers={showRulers}
               showSafeArea={showSafeArea}
               zoom={zoom}
             >

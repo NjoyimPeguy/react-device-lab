@@ -23,6 +23,7 @@ describe("PreviewConfigurationPanel", () => {
     const onZoomChange = vi.fn();
     const onFrameVisibleChange = vi.fn();
     const onShowSafeAreaChange = vi.fn();
+    const onShowRulersChange = vi.fn();
     const onThemeChange = vi.fn();
 
     render(
@@ -37,11 +38,13 @@ describe("PreviewConfigurationPanel", () => {
         onEnvironmentChange={() => undefined}
         onFrameVisibleChange={onFrameVisibleChange}
         onOrientationChange={onOrientationChange}
+        onShowRulersChange={onShowRulersChange}
         onShowSafeAreaChange={onShowSafeAreaChange}
         onThemeChange={onThemeChange}
         onViewportModeChange={() => undefined}
         onZoomChange={onZoomChange}
         orientation="portrait"
+        showRulers={false}
         showSafeArea={false}
         theme="light"
         viewportMode="device"
@@ -53,12 +56,14 @@ describe("PreviewConfigurationPanel", () => {
     await user.click(screen.getByRole("button", { name: "75%" }));
     await user.click(screen.getByLabelText("Show device frame"));
     await user.click(screen.getByLabelText("Show safe areas"));
+    await user.click(screen.getByLabelText("Show rulers"));
     await user.selectOptions(screen.getByLabelText("Package theme"), "dark");
 
     expect(onOrientationChange).toHaveBeenCalledWith("landscape");
     expect(onZoomChange).toHaveBeenCalledWith(0.75);
     expect(onFrameVisibleChange).toHaveBeenCalledWith(false);
     expect(onShowSafeAreaChange).toHaveBeenCalledWith(true);
+    expect(onShowRulersChange).toHaveBeenCalledWith(true);
     expect(onThemeChange).toHaveBeenCalledWith("dark");
   });
 
@@ -85,11 +90,13 @@ describe("PreviewConfigurationPanel", () => {
         onEnvironmentChange={onEnvironmentChange}
         onFrameVisibleChange={() => undefined}
         onOrientationChange={() => undefined}
+        onShowRulersChange={() => undefined}
         onShowSafeAreaChange={() => undefined}
         onThemeChange={() => undefined}
         onViewportModeChange={onViewportModeChange}
         onZoomChange={() => undefined}
         orientation="portrait"
+        showRulers={false}
         showSafeArea={false}
         theme="light"
         viewportMode="custom"
@@ -163,11 +170,13 @@ describe("PreviewConfigurationPanel", () => {
         onEnvironmentChange={onEnvironmentChange}
         onFrameVisibleChange={() => undefined}
         onOrientationChange={() => undefined}
+        onShowRulersChange={() => undefined}
         onShowSafeAreaChange={() => undefined}
         onThemeChange={() => undefined}
         onViewportModeChange={() => undefined}
         onZoomChange={() => undefined}
         orientation="portrait"
+        showRulers={false}
         showSafeArea={false}
         theme="light"
         viewportMode="device"

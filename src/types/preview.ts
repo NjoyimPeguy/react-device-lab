@@ -128,6 +128,13 @@ interface DevicePreviewBaseProps {
   /** Whether to draw a visual safe-area overlay; defaults to `false`. */
   readonly showSafeArea?: boolean;
   /**
+   * Whether to draw logical-pixel rulers and a measurement crosshair over the
+   * viewport; defaults to `false`. Tick labels always read logical device
+   * pixels regardless of zoom. While rulers are visible, the measurement
+   * surface captures pointer input over the viewport.
+   */
+  readonly showRulers?: boolean;
+  /**
    * Environment values merged with neutral defaults and the device's pointer
    * and hover profile.
    */

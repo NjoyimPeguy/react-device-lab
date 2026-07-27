@@ -70,6 +70,8 @@ export function PreviewConfigurationPanel({
   onThemeChange,
   showSafeArea,
   onShowSafeAreaChange,
+  showRulers,
+  onShowRulersChange,
   environment,
   onEnvironmentChange,
   viewportMode,
@@ -322,6 +324,14 @@ export function PreviewConfigurationPanel({
             type="checkbox"
           />
           <span>Show safe areas</span>
+        </label>
+        <label className="rdl-switch">
+          <input
+            checked={showRulers}
+            onChange={(event) => onShowRulersChange(checked(event))}
+            type="checkbox"
+          />
+          <span>Show rulers</span>
         </label>
         <label className="rdl-field">
           Package theme

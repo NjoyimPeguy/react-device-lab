@@ -124,9 +124,32 @@ if accurate media-query behavior matters.
 The root exports device, orientation, zoom, route, frame, destination, theme,
 environment, accessibility, safe-area, permission, fold, bridge, and component
 prop types. `DevicePreviewLab` supports controlled and uncontrolled device,
-orientation, zoom, frame, theme, safe-area visibility, viewport mode, custom
-dimensions, environment, and destination state. The embedded application owns
-its live route; observe it with `onRouteChange`.
+orientation, zoom, frame, theme, safe-area visibility, ruler visibility,
+viewport mode, custom dimensions, environment, and destination state. The
+embedded application owns its live route; observe it with `onRouteChange`.
+
+## Rulers and measurement
+
+`DevicePreviewLab` accepts `showRulers` — plus `defaultShowRulers` and
+`onShowRulersChange`, following the same controlled/uncontrolled pattern as
+`showSafeArea` — and the configuration panel shows a matching toggle. When on,
+the preview draws top and left rulers whose origin is the viewport's top-left
+corner inside the frame, with labeled major ticks every 50 logical pixels and
+minor ticks every 10. Tick labels always read logical device pixels regardless
+of zoom, while the strip scales visually with the presentation wrapper. A
+pointer crosshair follows the pointer with a logical-coordinate readout and
+disappears when the pointer leaves the viewport. While rulers are visible, the
+transparent measurement surface captures pointer input over the viewport. The
+overlay is `aria-hidden` (the readout is a polite live region) and reserves no
+layout space.
+
+`DevicePreview` accepts the same `showRulers` prop, and `DeviceFrame` adds a
+`presentationScale` prop so custom compositions can convert pointer positions
+when an outer wrapper applies zoom.
+
+```tsx
+<DevicePreviewLab src="https://app.example.test/" defaultShowRulers />
+```
 
 ## Shareable configuration URLs
 
