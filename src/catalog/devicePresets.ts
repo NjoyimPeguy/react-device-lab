@@ -229,7 +229,7 @@ const SAMSUNG_TAB_S10: DeviceDataSource = {
 const SAMSUNG_TAB_S11: DeviceDataSource = {
   kind: "manufacturer",
   url: "https://www.samsungmobilepress.com/media-assets/galaxy-tab-s11-ultra?tab=specs",
-  note: "Manufacturer panel resolution for Galaxy Tab S11 Ultra.",
+  note: "Manufacturer panel resolutions for Galaxy Tab S11 and S11 Ultra.",
 };
 
 const GOOGLE_PIXEL_8: DeviceDataSource = {
@@ -1594,6 +1594,18 @@ const definitions: readonly PresetDefinition[] = [
     frame: TABLET_NOTCH_FRAME,
   },
   {
+    id: "galaxy-tab-s11",
+    name: "Galaxy Tab S11",
+    platform: "android",
+    category: "tablet",
+    family: "Galaxy Tab S11",
+    logical: [640, 1024],
+    physical: [1600, 2560],
+    physicalSource: SAMSUNG_TAB_S11,
+    ratio: 2.5,
+    frame: TABLET_FRAME,
+  },
+  {
     id: "galaxy-tab-s11-ultra",
     name: "Galaxy Tab S11 Ultra",
     platform: "android",
@@ -1671,6 +1683,17 @@ const definitions: readonly PresetDefinition[] = [
     category: "ultrawide",
     family: "Ultrawide display",
     logical: [2560, 1080],
+    physical: null,
+    ratio: 1,
+    frame: ULTRAWIDE_FRAME,
+  },
+  {
+    id: "ultrawide-qhd-desktop",
+    name: "Ultrawide QHD desktop",
+    platform: "desktop",
+    category: "ultrawide",
+    family: "Ultrawide display",
+    logical: [3440, 1440],
     physical: null,
     ratio: 1,
     frame: ULTRAWIDE_FRAME,

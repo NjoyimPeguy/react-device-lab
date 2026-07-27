@@ -78,4 +78,34 @@ describe("frame dimensions", () => {
       height: 869,
     });
   });
+
+  it("frames the Galaxy Tab S11 with the calibrated Tab S9 panel geometry", () => {
+    const tablet = findPreset("Galaxy Tab S11");
+
+    expect(getDeviceFrameDimensions(tablet, "portrait", false)).toEqual({
+      width: 640,
+      height: 1024,
+    });
+    expect(getDeviceFrameDimensions(tablet, "portrait", true)).toEqual({
+      width: 684,
+      height: 1068,
+    });
+    expect(getDeviceFrameDimensions(tablet, "landscape", true)).toEqual({
+      width: 1068,
+      height: 684,
+    });
+  });
+
+  it("frames the Ultrawide QHD profile with the ultrawide monitor chrome", () => {
+    const display = findPreset("Ultrawide QHD desktop");
+
+    expect(getDeviceFrameDimensions(display, "landscape", false)).toEqual({
+      width: 3440,
+      height: 1440,
+    });
+    expect(getDeviceFrameDimensions(display, "landscape", true)).toEqual({
+      width: 3460,
+      height: 1544,
+    });
+  });
 });

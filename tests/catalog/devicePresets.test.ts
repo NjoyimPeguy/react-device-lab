@@ -14,11 +14,11 @@ function findPreset(name: string): DevicePreset {
 }
 
 describe("device presets", () => {
-  it("contains exactly 83 stable, unique ids and names", () => {
+  it("contains exactly 85 stable, unique ids and names", () => {
     const ids = new Set(DEVICE_PRESETS.map(({ id }) => id));
     const names = new Set(DEVICE_PRESETS.map(({ name }) => name));
 
-    expect(DEVICE_PRESETS.length).toBe(83);
+    expect(DEVICE_PRESETS.length).toBe(85);
     expect(ids.size).toBe(DEVICE_PRESETS.length);
     expect(names.size).toBe(DEVICE_PRESETS.length);
     expect(Object.isFrozen(DEVICE_PRESETS)).toBe(true);
@@ -46,6 +46,7 @@ describe("device presets", () => {
     "iPad Air 13-inch",
     "iPad Pro 13-inch",
     "Galaxy Tab S10 Ultra",
+    "Galaxy Tab S11",
     "Galaxy Z Flip 6 — cover",
     "Galaxy Z Flip 6 — unfolded",
     "Galaxy Z Flip 7 — cover",
@@ -62,6 +63,7 @@ describe("device presets", () => {
     "Pixel 9 Pro Fold — unfolded",
     "Pixel 10 Pro Fold — cover",
     "Pixel 10 Pro Fold — unfolded",
+    "Ultrawide QHD desktop",
   ])("includes %s", (name) => {
     expect(findPreset(name).name).toBe(name);
   });
@@ -177,6 +179,7 @@ describe("device presets", () => {
     ["Galaxy Z Fold 8 — unfolded", 1088, 821, 2448, 1848, 2.25],
     ["Galaxy Z Fold 8 Ultra — cover", 360, 840, 1080, 2520, 3],
     ["Galaxy Z Fold 8 Ultra — unfolded", 1003, 1113, 2256, 2504, 2.25],
+    ["Galaxy Tab S11", 640, 1024, 1600, 2560, 2.5],
   ] as const)(
     "documents %s logical viewport, physical panel, and ratio",
     (name, logicalWidth, logicalHeight, physicalWidth, physicalHeight, ratio) => {
@@ -348,6 +351,7 @@ describe("device presets", () => {
   it("does not present generic display modes as hardware panels", () => {
     expect(findPreset("Full HD desktop").physicalResolution).toBeNull();
     expect(findPreset("Ultrawide desktop").physicalResolution).toBeNull();
+    expect(findPreset("Ultrawide QHD desktop").physicalResolution).toBeNull();
   });
 
   it("marks the Pixel Tablet source as an archived official page", () => {
@@ -377,6 +381,7 @@ describe("device presets", () => {
     ["Galaxy Z Flip 8 — unfolded", "galaxy-z-flip8"],
     ["Galaxy Z Fold 8 — unfolded", "galaxy-z-fold8-ultra-fold8-flip8"],
     ["Galaxy Tab S10 Ultra", "galaxy-tab-s10"],
+    ["Galaxy Tab S11", "galaxy-tab-s11-ultra"],
     ["Galaxy A56", "galaxy-a56-5g"],
     ["Galaxy A57", "galaxy-a57-5g"],
     ["iPhone 17e", "/iphone-17e/specs/"],

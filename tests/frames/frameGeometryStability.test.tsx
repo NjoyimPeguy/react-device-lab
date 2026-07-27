@@ -99,7 +99,7 @@ describe("frame geometry stability", () => {
       return { id: device.id, ...orientations };
     });
 
-    expect(records).toHaveLength(83);
+    expect(records).toHaveLength(85);
     expect(records).toMatchSnapshot();
   });
 });

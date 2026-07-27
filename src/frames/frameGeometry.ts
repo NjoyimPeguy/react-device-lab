@@ -429,6 +429,14 @@ const MODEL_OVERRIDES: Readonly<
     cutoutWidth: 105,
     cutoutHeight: 13,
   },
+  "galaxy-tab-s11": {
+    bezel: { top: 22, right: 22, bottom: 22, left: 22 },
+    outerRadius: 15,
+    screenRadius: 10,
+    cutoutWidth: 12,
+    cutoutHeight: 12,
+    shellTone: "graphite",
+  },
   "galaxy-tab-s11-ultra": {
     bezel: { top: 23, right: 23, bottom: 23, left: 23 },
     outerRadius: 18,
