@@ -128,12 +128,47 @@ orientation, zoom, frame, theme, safe-area visibility, viewport mode, custom
 dimensions, environment, and destination state. The embedded application owns
 its live route; observe it with `onRouteChange`.
 
+## Shareable configuration URLs
+
+Pass `syncConfigurationToUrl` to `DevicePreviewLab` so the exact preview state
+— device, orientation, zoom, frame visibility, and the full environment
+scenario — serializes into the page query string and restores on load. `true`
+uses the `rdl` parameter; a string selects a custom parameter name. Updates
+use `history.replaceState`, so configuration churn never spams the browser
+history. A valid payload present on load wins over `default*` props but loses
+to explicitly controlled props. Synchronization is off by default.
+
+```tsx
+<DevicePreviewLab src="https://app.example.test/" syncConfigurationToUrl />
+```
+
+`readPreviewConfigurationFromSearch` and
+`writePreviewConfigurationToSearch` are the standalone helpers behind the
+prop. Both are pure and SSR-safe; the reader never throws and returns `null`
+for missing or invalid payloads, and the writer preserves unrelated query
+parameters. `PREVIEW_CONFIGURATION_URL_PARAM` exposes the default parameter
+name.
+
+```ts
+import {
+  readPreviewConfigurationFromSearch,
+  writePreviewConfigurationToSearch,
+} from "react-device-lab";
+
+const search = writePreviewConfigurationToSearch(
+  window.location.search,
+  configuration,
+);
+const restored = readPreviewConfigurationFromSearch(search);
+```
+
 ## Bridge and environment utilities
 
 - `installPreviewBridge` and `notifyPreviewRoute`
 - guarded message creators and `parsePreviewBridgeMessage`
 - `createPreviewEnvironment`
 - `serializePreviewConfiguration` and `parsePreviewConfiguration`
+- `readPreviewConfigurationFromSearch` and `writePreviewConfigurationToSearch`
 - `applyPreviewEnvironment`
 - `createPreviewRouteState` and `formatPreviewRoute`
 

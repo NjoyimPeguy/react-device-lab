@@ -46,6 +46,11 @@ export {
   createPreviewRouteState,
   formatPreviewRoute,
 } from "./preview/routes.js";
+export {
+  PREVIEW_CONFIGURATION_URL_PARAM,
+  readPreviewConfigurationFromSearch,
+  writePreviewConfigurationToSearch,
+} from "./preview/urlConfiguration.js";
 
 export type {
   AndroidViewportProfile,

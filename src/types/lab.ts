@@ -199,6 +199,16 @@ interface DevicePreviewLabBaseProps {
   readonly fitPadding?: number;
   /** Called whenever the package can determine a new embedded route. */
   readonly onRouteChange?: (route: PreviewRouteState) => void;
+  /**
+   * Opt-in persistence of the preview configuration in the page URL. `true`
+   * stores the device, orientation, zoom, frame visibility, and environment
+   * under the {@link PREVIEW_CONFIGURATION_URL_PARAM} query parameter; a
+   * string selects a custom parameter name. Updates use
+   * `history.replaceState`, so lab changes never add history entries. A valid
+   * payload present on load wins over defaults but yields to explicitly
+   * controlled props. Defaults to `false`.
+   */
+  readonly syncConfigurationToUrl?: boolean | string;
 }
 
 /**

@@ -4,6 +4,7 @@ import { DEVICE_PRESETS } from "../catalog/devicePresets.js";
 import { getViewportWidthClass } from "../catalog/dimensions.js";
 import { createPreviewEnvironment } from "../environment/configuration.js";
 import { useControllableState } from "../hooks/useControllableState.js";
+import { useUrlConfiguration } from "../hooks/useUrlConfiguration.js";
 import type {
   DeviceCategory,
   DeviceOrientation,
@@ -16,7 +17,7 @@ import type {
   PreviewTheme,
   PreviewViewportMode,
 } from "../types/lab.js";
-import type { PreviewZoom } from "../types/preview.js";
+import type { PreviewConfiguration, PreviewZoom } from "../types/preview.js";
 import { DevicePreview } from "./DevicePreview.js";
 import { PreviewConfigurationPanel } from "./PreviewConfigurationPanel.js";
 
@@ -288,6 +289,48 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     selectedDevice,
     setEnvironment,
   ]);
+  const urlConfiguration = useMemo<PreviewConfiguration>(
+    () => ({
+      version: 1,
+      deviceId: selectedDevice.id,
+      orientation,
+      zoom,
+      frameVisible,
+      environment,
+    }),
+    [selectedDevice.id, orientation, zoom, frameVisible, environment],
+  );
+  useUrlConfiguration(
+    props.syncConfigurationToUrl,
+    urlConfiguration,
+    (restored) => {
+      const restoredDevice =
+        props.deviceId === undefined
+          ? devices.find((device) => device.id === restored.deviceId)
+          : undefined;
+      if (restoredDevice !== undefined) {
+        setDeviceId(restoredDevice.id);
+        props.onDeviceChange?.(restoredDevice);
+      }
+      if (props.orientation === undefined) {
+        setOrientation(restored.orientation);
+      }
+      if (props.zoom === undefined) setZoom(restored.zoom);
+      if (props.frameVisible === undefined) {
+        setFrameVisible(restored.frameVisible);
+      }
+      if (props.environment === undefined) {
+        setEnvironment(restored.environment);
+      }
+      // Keep the automatic environment profile aligned with the restored
+      // device and orientation so the restored environment is not replaced.
+      const nextDevice = restoredDevice ?? selectedDevice;
+      automaticEnvironmentProfile.current = `${nextDevice.id}:${
+        props.orientation ?? restored.orientation
+      }`;
+      automaticSafeArea.current = null;
+    },
+  );
   const destinations =
     "src" in props ? (props.destinations ?? []) : [];
   const initialDestinationId =
