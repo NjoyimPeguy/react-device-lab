@@ -123,6 +123,15 @@ export interface PreviewConfigurationPanelProps {
   readonly destinationId?: string;
   /** Called when the selected destination changes. */
   readonly onDestinationChange?: (destination: PreviewDestination) => void;
+  /**
+   * Rendered stage element scanned for the composed preview export root,
+   * supplied automatically by {@link DevicePreviewLab}. The "Export PNG"
+   * action downloads a WYSIWYG snapshot of the current orientation, frame
+   * visibility, zoom, rulers, and safe-area overlays. Cross-origin iframe
+   * pixels are unreachable by design and render as a neutral placeholder
+   * block. Standalone panels omit this prop to hide the action.
+   */
+  readonly previewRoot?: HTMLElement | null;
   /** Optional class added to the panel root. */
   readonly className?: string;
 }

@@ -213,6 +213,38 @@ consumer callbacks for rotate, previous/next device, zoom in/out/reset, and
 frame toggle — so portal-mode consumers can bind the same actions to their own
 state. See [Accessibility](accessibility.md) for the typing-context guard.
 
+## PNG export
+
+`capturePreviewPng(root, options?)` serializes a rendered preview subtree into
+an SVG `foreignObject` with computed styles inlined on every element, then
+rasterizes it through an offscreen canvas at the host's `devicePixelRatio`.
+The composed preview stage carries a `data-rdl-export-root` marker; pass that
+element to snapshot the current orientation, frame visibility, zoom, rulers,
+and safe-area overlays exactly as displayed. The promise resolves with the PNG
+`Blob` only — no download is triggered — or with a named `File` when
+`options.fileName` is supplied.
+
+Same-origin iframe documents, including portal-mode content, are serialized
+recursively. Cross-origin iframe pixels are unreachable by design: the export
+renders a neutral placeholder block in that region and emits a single console
+warning per capture. The function never attempts to read a cross-origin frame.
+Failures reject with a typed `PreviewPngExportError` whose `code`
+distinguishes an empty root, an unavailable canvas, an undecodable serialized
+image, and a refused draw or encode.
+
+`DevicePreviewLab` wires the capture into an "Export PNG" action in the
+configuration panel. The action downloads
+`device-preview-<device>-<orientation>.png`, is disabled with a tooltip until
+the preview stage is rendered, and surfaces typed failures as inline text.
+Standalone panels receive the same action through the `previewRoot` prop.
+
+```ts
+import { capturePreviewPng } from "react-device-lab";
+
+const root = document.querySelector("[data-rdl-export-root]");
+const blob = await capturePreviewPng(root, { fileName: "checkout-preview" });
+```
+
 ## Bridge and environment utilities
 
 - `installPreviewBridge` and `notifyPreviewRoute`

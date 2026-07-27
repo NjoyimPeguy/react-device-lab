@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { DEVICE_PRESETS } from "../catalog/devicePresets.js";
 import { getViewportWidthClass } from "../catalog/dimensions.js";
@@ -362,6 +362,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     () => createCustomPreset(customViewport),
     [customViewport],
   );
+  const [previewStage, setPreviewStage] = useState<HTMLElement | null>(null);
   const activeDevice =
     viewportMode === "custom" ? customDevice : selectedDevice;
   const classes = ["rdl-lab", props.className].filter(Boolean).join(" ");
@@ -448,6 +449,7 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
       onViewportModeChange={setViewportMode}
       onZoomChange={setZoom}
       orientation={orientation}
+      previewRoot={previewStage}
       showRulers={showRulers}
       showSafeArea={showSafeArea}
       theme={theme}
@@ -484,7 +486,11 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
         <div className="rdl-lab__notice">{props.notice}</div>
       ) : null}
       <div className="rdl-lab__workspace">
-        <section aria-label="Preview stage" className="rdl-lab__stage">
+        <section
+          aria-label="Preview stage"
+          className="rdl-lab__stage"
+          ref={setPreviewStage}
+        >
           {"src" in props && props.src !== undefined ? (
             <DevicePreview
               {...(props.allow !== undefined ? { allow: props.allow } : {})}

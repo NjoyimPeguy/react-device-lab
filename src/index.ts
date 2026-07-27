@@ -48,6 +48,14 @@ export {
   resolvePreviewScale,
 } from "./preview/scaling.js";
 export {
+  capturePreviewPng,
+  PreviewPngExportError,
+} from "./preview/exportImage.js";
+export type {
+  PreviewPngExportErrorCode,
+  PreviewPngExportOptions,
+} from "./preview/exportImage.js";
+export {
   createPreviewRouteState,
   formatPreviewRoute,
 } from "./preview/routes.js";

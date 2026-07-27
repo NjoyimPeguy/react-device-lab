@@ -527,6 +527,17 @@
   font-size: 0.8125rem;
 }
 
+.rdl-config__section button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.rdl-config__export-error {
+  margin: 0;
+  color: var(--rdl-danger);
+  font: 600 0.75rem/1.4 var(--rdl-font-family);
+}
+
 .rdl-button,
 .rdl-zoom button {
   min-height: 2.75rem;
