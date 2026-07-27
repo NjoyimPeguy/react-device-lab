@@ -162,6 +162,34 @@ const search = writePreviewConfigurationToSearch(
 const restored = readPreviewConfigurationFromSearch(search);
 ```
 
+## Keyboard shortcuts
+
+`DevicePreviewLab` enables a plain-key keymap by default: `r` rotates the
+viewport, `[` and `]` cycle devices in flattened catalog-group order with
+wrap-around, `+` and `-` step the visual scale between 10% and 200% (starting
+from 100% when the scale is Fit), `0` resets the scale to Fit, and `f` toggles
+the device frame. Bindings never fire while typing in an input, select,
+textarea, or contenteditable element, ignore events whose default was already
+prevented, and ignore Control, Meta, and Alt so browser and OS combos stay
+untouched.
+
+The `keyboardShortcuts` prop controls the keymap: `false` disables every
+binding, a partial `PreviewShortcuts` object overrides individual keys, and a
+`null` value removes one binding.
+
+```tsx
+<DevicePreviewLab
+  keyboardShortcuts={{ nextDevice: "n", toggleFrame: null }}
+  src="https://app.example.test/"
+/>
+```
+
+`usePreviewShortcuts` is the standalone hook behind the prop. It attaches one
+`keydown` listener while mounted and enabled, stays SSR-safe, and invokes
+consumer callbacks for rotate, previous/next device, zoom in/out/reset, and
+frame toggle — so portal-mode consumers can bind the same actions to their own
+state. See [Accessibility](accessibility.md) for the typing-context guard.
+
 ## Bridge and environment utilities
 
 - `installPreviewBridge` and `notifyPreviewRoute`

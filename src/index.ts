@@ -38,6 +38,11 @@ export {
   usePreviewEnvironment,
 } from "./environment/PreviewEnvironmentContext.js";
 export { getDeviceFrameDimensions } from "./frames/frameGeometry.js";
+export { usePreviewShortcuts } from "./hooks/usePreviewShortcuts.js";
+export type {
+  UsePreviewShortcutsCallbacks,
+  UsePreviewShortcutsOptions,
+} from "./hooks/usePreviewShortcuts.js";
 export {
   computeFitScale,
   resolvePreviewScale,
@@ -104,6 +109,7 @@ export type {
   DeviceSelectorProps,
   PreviewConfigurationPanelProps,
   PreviewDestination,
+  PreviewShortcuts,
   PreviewTheme,
   PreviewViewportMode,
   PreviewWorkspaceMode,

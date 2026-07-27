@@ -2,9 +2,12 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { DEVICE_PRESETS } from "../catalog/devicePresets.js";
 import { getViewportWidthClass } from "../catalog/dimensions.js";
+import { groupDevicePresets } from "../catalog/group.js";
 import { createPreviewEnvironment } from "../environment/configuration.js";
 import { useControllableState } from "../hooks/useControllableState.js";
+import { usePreviewShortcuts } from "../hooks/usePreviewShortcuts.js";
 import { useUrlConfiguration } from "../hooks/useUrlConfiguration.js";
+import { resolvePreviewScale } from "../preview/scaling.js";
 import type {
   DeviceCategory,
   DeviceOrientation,
@@ -26,6 +29,8 @@ const CUSTOM_SOURCE = Object.freeze({
   url: "https://github.com/NjoyimPeguy/react-device-lab#custom-viewports",
   note: "Consumer-defined CSS viewport profile.",
 });
+
+const ZOOM_KEYBOARD_STEP = 0.1;
 
 function customCategory(width: number): DeviceCategory {
   const widthClass = getViewportWidthClass(width);
@@ -360,6 +365,54 @@ export function DevicePreviewLab(props: DevicePreviewLabProps) {
     setDeviceId(device.id);
     props.onDeviceChange?.(device);
   };
+
+  const shortcutDevices = useMemo(
+    () => groupDevicePresets(devices).flatMap((group) => group.devices),
+    [devices],
+  );
+
+  const cycleShortcutDevice = (direction: 1 | -1) => {
+    if (shortcutDevices.length < 2) return;
+    const currentIndex = shortcutDevices.findIndex(
+      (device) => device.id === deviceId,
+    );
+    const nextIndex =
+      currentIndex < 0
+        ? 0
+        : (currentIndex + direction + shortcutDevices.length) %
+          shortcutDevices.length;
+    const next = shortcutDevices[nextIndex];
+    if (next !== undefined && next.id !== deviceId) {
+      handleDeviceChange(next);
+    }
+  };
+
+  const stepZoom = (direction: 1 | -1) => {
+    const current = zoom === "fit" ? 1 : zoom;
+    setZoom(
+      resolvePreviewScale(
+        Math.round((current + direction * ZOOM_KEYBOARD_STEP) * 100) / 100,
+        1,
+      ),
+    );
+  };
+
+  usePreviewShortcuts({
+    ...(typeof props.keyboardShortcuts === "object"
+      ? { bindings: props.keyboardShortcuts }
+      : {}),
+    callbacks: {
+      onRotate: () =>
+        setOrientation(orientation === "portrait" ? "landscape" : "portrait"),
+      onPreviousDevice: () => cycleShortcutDevice(-1),
+      onNextDevice: () => cycleShortcutDevice(1),
+      onZoomIn: () => stepZoom(1),
+      onZoomOut: () => stepZoom(-1),
+      onZoomReset: () => setZoom("fit"),
+      onToggleFrame: () => setFrameVisible(!frameVisible),
+    },
+    enabled: props.keyboardShortcuts !== false,
+  });
 
   const panel = (
     <PreviewConfigurationPanel

@@ -46,6 +46,30 @@ export interface DeviceSelectorProps {
   readonly className?: string;
 }
 
+/**
+ * Per-action key overrides for the preview keyboard shortcuts.
+ *
+ * Each property names a plain (modifier-free) key compared against
+ * `KeyboardEvent.key`; single-letter values match either letter case. An
+ * omitted action keeps its default key and `null` removes that binding.
+ */
+export interface PreviewShortcuts {
+  /** Rotate the viewport orientation; defaults to `"r"`. */
+  readonly rotate?: string | null;
+  /** Select the previous device in catalog order; defaults to `"["`. */
+  readonly previousDevice?: string | null;
+  /** Select the next device in catalog order; defaults to `"]"`. */
+  readonly nextDevice?: string | null;
+  /** Increase the visual scale one step; defaults to `"+"`. */
+  readonly zoomIn?: string | null;
+  /** Decrease the visual scale one step; defaults to `"-"`. */
+  readonly zoomOut?: string | null;
+  /** Reset the visual scale to Fit; defaults to `"0"`. */
+  readonly zoomReset?: string | null;
+  /** Toggle device-frame visibility; defaults to `"f"`. */
+  readonly toggleFrame?: string | null;
+}
+
 /** Controlled props for the standalone lab configuration panel. */
 export interface PreviewConfigurationPanelProps {
   /** Complete catalog shown by the device selector. */
@@ -209,6 +233,17 @@ interface DevicePreviewLabBaseProps {
    * controlled props. Defaults to `false`.
    */
   readonly syncConfigurationToUrl?: boolean | string;
+  /**
+   * Keyboard control of the preview; defaults to enabled with the default
+   * {@link PreviewShortcuts} keymap. `false` removes every binding; a partial
+   * object overrides individual keys and a `null` value removes one binding.
+   * Shortcuts use plain keys, never fire while focus is in an input, select,
+   * textarea, or contenteditable element, and ignore events whose default was
+   * already prevented. Device cycling follows flattened catalog-group order
+   * and wraps; zoom steps clamp to 10%–200% and start from 100% when the
+   * current scale is Fit.
+   */
+  readonly keyboardShortcuts?: boolean | PreviewShortcuts;
 }
 
 /**

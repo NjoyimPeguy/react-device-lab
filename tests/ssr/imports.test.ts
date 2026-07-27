@@ -9,6 +9,7 @@ describe("SSR-safe public imports", () => {
     expect(api.DevicePreview).toBeTypeOf("function");
     expect(api.IframePortal).toBeTypeOf("function");
     expect(api.installPreviewBridge).toBeTypeOf("function");
+    expect(api.usePreviewShortcuts).toBeTypeOf("function");
     expect(api.computeFitScale).toBeTypeOf("function");
     expect(api.readPreviewConfigurationFromSearch).toBeTypeOf("function");
     expect(api.writePreviewConfigurationToSearch).toBeTypeOf("function");
