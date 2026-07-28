@@ -6,6 +6,13 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-07-28
+
+### Fixed
+
+- Corrected the README status note, which still described the project as
+  preparing its first public `1.0.0` release after `1.1.0` had shipped.
+
 ## [1.1.0] - 2026-07-27
 
 ### Added
@@ -50,6 +57,7 @@ All notable changes are documented here. The format follows
 - Generic demo, public documentation, agent harness, and packed-consumer
   verification.
 
-[Unreleased]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/NjoyimPeguy/react-device-lab/releases/tag/v1.0.0

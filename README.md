@@ -156,7 +156,7 @@ implementation: it does not copy that project’s code, data, or assets.
 
 ## Status
 
-The project is preparing its first public `1.0.0` release. No package
-publication is performed by ordinary CI, and a maintainer must explicitly
-publish a matching GitHub Release before the trusted-publishing workflow can
-run.
+The first public release, `1.0.0`, shipped on 2026-07-26; the
+[changelog](CHANGELOG.md) tracks the current version. No package publication
+is performed by ordinary CI, and a maintainer must explicitly publish a
+matching GitHub Release before the trusted-publishing workflow can run.
