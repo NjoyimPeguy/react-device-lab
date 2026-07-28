@@ -25,7 +25,10 @@ jobs:
       # CI and Release gates use, so committed baselines always match the
       # gating environment. Never regenerate on a developer machine.
       - run: npx playwright test --update-snapshots
-      - uses: actions/upload-artifact@v4
+      # Baselines are regenerated even when a non-screenshot spec fails, so
+      # always upload; the CI/Release verify jobs remain the real gate.
+      - if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: visual-baselines-${{ github.run_id }}
           path: tests/browser/
