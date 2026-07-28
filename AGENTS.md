@@ -78,6 +78,15 @@ source paths. The supported package entry points are the package root,
 Use `$maintain-device-catalog` whenever preset facts change. Stable ids are
 permanent. Unknown facts remain explicit rather than inferred.
 
+## Release watch
+
+A published GitHub Release starts the `release.yml` run, whose protected
+`publish` job waits for `npm` environment approval. Poll the run every few
+minutes (for example with a session cron) and approve the pending deployment
+as soon as the job enters the waiting state; a single run watch reports only
+run completion and misses the gate. Approval still requires the maintainer's
+explicit authorization for that release.
+
 ## Completion
 
 Completion requires the built npm tarball to install through public exports in a
