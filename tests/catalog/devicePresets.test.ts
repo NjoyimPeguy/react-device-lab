@@ -1,3 +1,7 @@
+import { readFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -22,6 +26,16 @@ describe("device presets", () => {
     expect(ids.size).toBe(DEVICE_PRESETS.length);
     expect(names.size).toBe(DEVICE_PRESETS.length);
     expect(Object.isFrozen(DEVICE_PRESETS)).toBe(true);
+  });
+
+  it("states the current preset count in the README", async () => {
+    const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+    const readme = await readFile(resolve(root, "README.md"), "utf8");
+
+    expect(readme).toContain(`${DEVICE_PRESETS.length} device profiles`);
+    expect(readme).toContain(
+      `${DEVICE_PRESETS.length} phones, foldables, tablets, laptops, desktops, and ultrawide profiles`,
+    );
   });
 
   it.each([
