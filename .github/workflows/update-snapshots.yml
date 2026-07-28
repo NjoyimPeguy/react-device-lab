@@ -1,0 +1,33 @@
+name: Update visual baselines
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  update-snapshots:
+    if: github.repository == 'NjoyimPeguy/react-device-lab'
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22.14.0"
+          package-manager-cache: false
+      - run: npm install --global npm@11.16.0
+      - run: npm ci
+      # Regenerate every toHaveScreenshot baseline in the same container the
+      # CI and Release gates use, so committed baselines always match the
+      # gating environment. Never regenerate on a developer machine.
+      - run: npx playwright test --update-snapshots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-${{ github.run_id }}
+          path: tests/browser/
+          if-no-files-found: error
+          retention-days: 7
