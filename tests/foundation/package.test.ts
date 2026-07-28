@@ -21,7 +21,7 @@ describe("package foundation", () => {
     const packageJson = await readJson("package.json");
 
     expect(packageJson["name"]).toBe("react-device-lab");
-    expect(packageJson["version"]).toBe("1.1.1");
+    expect(packageJson["version"]).toBe("1.1.2");
     expect(packageJson["type"]).toBe("module");
     expect(packageJson["files"]).toEqual(
       expect.arrayContaining(["dist", "LICENSE", "README.md"]),
@@ -54,6 +54,9 @@ describe("package foundation", () => {
       [".claude/skills", "../.agents/skills"],
       [".claude/agents", "../.agents/agents"],
       [".claude/hooks", "../.agents/hooks"],
+      [".kimi-code/skills", "../.agents/skills"],
+      [".kimi-code/agents", "../.agents/agents"],
+      [".kimi-code/hooks", "../.agents/hooks"],
     ]);
 
     for (const [path, target] of expectedSymlinks) {

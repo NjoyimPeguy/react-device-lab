@@ -6,6 +6,19 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-07-28
+
+### Fixed
+
+- Corrected the README device count, which still read 71 after the catalog
+  had grown to 85 presets, and added a test guarding the stated count against
+  the catalog.
+
+### Added
+
+- `.kimi-code/` harness symlinks mirroring the `.claude/` links so Kimi Code
+  sessions resolve the shared `.agents/` skills, agents, and hooks.
+
 ## [1.1.1] - 2026-07-28
 
 ### Fixed
@@ -57,7 +70,8 @@ All notable changes are documented here. The format follows
 - Generic demo, public documentation, agent harness, and packed-consumer
   verification.
 
-[Unreleased]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/NjoyimPeguy/react-device-lab/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/NjoyimPeguy/react-device-lab/releases/tag/v1.0.0

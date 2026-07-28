@@ -157,6 +157,9 @@ await Promise.all([
   expectLink(".claude/skills", "../.agents/skills"),
   expectLink(".claude/agents", "../.agents/agents"),
   expectLink(".claude/hooks", "../.agents/hooks"),
+  expectLink(".kimi-code/skills", "../.agents/skills"),
+  expectLink(".kimi-code/agents", "../.agents/agents"),
+  expectLink(".kimi-code/hooks", "../.agents/hooks"),
   expectFile("AGENTS.md", ["npm run verify", "react-device-lab/styles.css"]),
   expectFile(".agents/skills/maintain-device-catalog/SKILL.md", [
     "official specification",

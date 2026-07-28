@@ -2,7 +2,7 @@
 
 `react-device-lab` is an open-source React toolkit for reviewing responsive web
 applications in exact, named CSS viewports. It combines an iframe-backed preview
-engine, 71 device profiles, independent authored frames, a searchable catalog,
+engine, 85 device profiles, independent authored frames, a searchable catalog,
 orientation and display scaling, route tools, safe-area visualization, and
 configurable browser-environment scenarios.
 
@@ -26,7 +26,7 @@ verify OS-owned behavior on real devices and platform tooling.
 - Exact iframe viewport dimensions with portrait and landscape orientation.
 - Fit, 50%, 75%, 100%, and custom visual scale without changing media-query
   dimensions.
-- 71 phones, foldables, tablets, laptops, desktops, and ultrawide profiles.
+- 85 phones, foldables, tablets, laptops, desktops, and ultrawide profiles.
 - Independently authored CSS/React skins with notches, camera cutouts, buttons,
   fold creases, laptop bases, and monitor stands.
 - Same-origin SPA route inspection and an exact-origin `postMessage` bridge for
