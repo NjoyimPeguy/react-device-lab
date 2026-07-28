@@ -26,6 +26,9 @@ All notable changes are documented here. The format follows
 - Device-data provenance URLs refreshed against live official sources.
 - Behavior-affecting logical viewport corrections for galaxy-s9-plus and
   galaxy-a55 density profiles; physical panels unchanged.
+- Visual baselines are now generated in the pinned CI Playwright container via
+  the dispatchable Update visual baselines workflow; local `test:browser` runs
+  on other hosts may differ and are not release evidence.
 
 ### Deprecated
 
